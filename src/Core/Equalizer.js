@@ -48,7 +48,7 @@ export default class Equalizer{
             this.bands[8].connect(this.bands[9]);
             this.bands[9].connect(this.analyser)
             this.analyser.connect(this.audioCtx.destination);
-
+            this.audioCtx.resume();
 
         }
     }
@@ -57,6 +57,7 @@ export default class Equalizer{
      */
     startEq(){
         this.audio.onplaying = _=> this.connects();
+        
     }
     /***
      * @returns { Array<BiquadFilterNode>}

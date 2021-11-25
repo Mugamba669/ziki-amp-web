@@ -2,6 +2,7 @@
   "name": "ziki-amp",
   "version": "0.1.0",
   "private": true,
+  "main":"./src/frame.js",
   "scripts": {
     "start": "vue-cli-service serve",
     "build": "vue-cli-service build"

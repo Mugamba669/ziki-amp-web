@@ -32,15 +32,18 @@ export default {
         justify-content:center!important;
         align-items:center!important;
     .container {
-        width:350px;
-        height:350px;
+        width:400px;
+        height:400px;
+        border-radius: 50%;
+        box-shadow: 0px -2px 3px 2px gray;
+         overflow:hidden;
         img{ 
           width:100%;
+          height:100%;
           position: relative;
-          border-radius: 50%;
-          animation: spin 15s infinite linear;
-           box-shadow: 0px -2px 3px 2px gray;
+          animation: spin 20s infinite linear;
            object-fit:contain!important;
+
         }
    }
 }
@@ -55,12 +58,15 @@ export default {
     .container {
         width:200px;
         height:200px;
-        animation: spin 15s infinite linear;
+          border-radius: 50%;
+           box-shadow: 0px -2px 3px 2px gray;
+           overflow:hidden;
+
+        animation: spin 20s infinite linear;
         img{ 
           width:100%;
           height:100%;
-          border-radius: 50%;
-           box-shadow: 0px -2px 3px 2px gray;
+        //    box-shadow: 0px -2px 3px 2px gray;
            object-fit:contain!important;
         }
    }

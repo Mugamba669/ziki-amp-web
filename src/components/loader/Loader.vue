@@ -1,30 +1,65 @@
 <template>
     <div class="loader">
-        <button @click="triggerLoader"><b class="material-icons mi-add-to-queue"></b></button>
-       <button @click="this.$emit('showQueue')"><b class="material-icons mi-queue-music"></b></button>
-       <button class="btn" @click="this.$emit('toggleEQ')"><b class="mi mi-equalizer"></b></button>
-       <button @click="this.$emit('showVol')"> <b class="material-icons mi-volume-up"></b> </button>
+        <button v-show="viewDes" @click="triggerLoader"><b class="material-icons mi-add-to-queue"></b></button>
+        <button v-show="viewMob" @click="triggerSingle"><b class="material-icons mi-add"></b></button>
+        <button @click="this.$emit('showQueue')"><b class="material-icons mi-queue-music"></b></button>
+        <button class="btn" @click="this.$emit('toggleEQ')"><b class="mi mi-equalizer"></b></button>
+        <button @click="this.$emit('showVol')"> <b class="material-icons mi-volume-up"></b> </button>
+      
        <input type="file" class="loadMusic" webkitdirectory multiple @change="track" >
+       <input type="file" class="singleMusic" accept="audio/*" @change="trackSingle" >
     </div>
-    
 </template>
 
 <script>
 export default {
     name: 'Loader',
-    
-    mounted(){
-
+    data(){
+        return{
+            viewMob:false,
+            viewDes:false
+        }
     },
     methods: {
+      chooseDeivce(){
+            const ua = navigator.userAgent;
+            if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+                return "tablet";
+            }
+            else if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
+                return "mobile";
+            }
+            return "desktop";
+
+        },
         triggerLoader(){
             document.querySelector(".loadMusic").click();
         },
         track(value){
             const file =  value.target.files;
             this.$emit("trackLoader",file)
+        },
+        triggerSingle(){
+            document.querySelector(".singleMusic").click();
+        },
+        trackSingle(track){
+            this.$emit('loadSingle',track.target.files[0]);
         }
-    }
+    },
+    mounted(){
+       const device = this.chooseDeivce();
+        
+       switch (device) {
+           case "tablet":
+           case "mobile":
+                this.viewMob = true;
+               break;
+       
+           default:
+             this.viewDes = true;
+            break;
+       }
+    },
 }
 </script>
 

@@ -14,14 +14,14 @@
         />
 
       <Loader 
-      v-if="!queueView" 
-      @showQueue="showQueue"
-      v-show="showCover"
-      @trackLoader="loadTrack"
-      @toggleEQ="toggleEQ"
-      @showVol="showVol"
+        v-if="!queueView" 
+        @showQueue="showQueue"
+        v-show="showCover"
+        @trackLoader="loadTrack"
+        @toggleEQ="toggleEQ"
+        @showVol="showVol"
+        @loadSingle="loadSingle"
       />
-
 
          <Volume
          v-if="!queueView"
@@ -29,6 +29,7 @@
          @closeVol="closeVol"
          @changeVol="changeVol"
      />
+
        <Queue 
         @closeQueue="closeQueue"
         @queuePlay="playQueue"
@@ -125,9 +126,15 @@ export default {
   methods: {
     loadTrack(value){
       this.playlist = value;
-        this.showPlay = !this.showPlay;
-         this.showPause = !this.showPause;
+        this.showPlay = false;
+         this.showPause = true;
     //  this.commonComand(value);
+    },
+    loadSingle(file){
+      this.playlist = [...this.playlist,file];
+      this.commonComand(file);
+      this.showPlay = false;
+         this.showPause = true;
     },
     closeEQ(){
       this.showEQ = !this.showEQ;
@@ -242,11 +249,12 @@ export default {
     }
 
     this.audio.onended = ()=>{
-       this.showPlay = true;
-         this.showPause = false;
+      //  this.showPlay = true;
+      //    this.showPause = false;
           this.countPlay +=1;
          this.commonComand(this.playlist[this.countPlay]);
     }
+   
   },
   
   created(){
@@ -254,6 +262,8 @@ export default {
           this.showPlay = false;
          this.showPause = true;
     }
+
+
   }
 }
 </script>

@@ -13,6 +13,7 @@ function createWindow() {
         title: 'My App',
     });
 
+    // win.loadURL('https://www.google.com/');
     win.loadURL('http://127.0.0.1:8080/');
     // win.webContents.openDevTools();
 }

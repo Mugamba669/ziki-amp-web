@@ -29,6 +29,7 @@ export default {
 <style lang="scss" scoped>
  .container{
         display:flex;
+        margin: 10px;
         flex-direction:column;
         justify-content:center;
         align-items:center;
@@ -44,6 +45,7 @@ export default {
         }
         p{
             font:300 17px Ubuntu;
+            margin:0;
             span{
             font-size: 20px;
            }

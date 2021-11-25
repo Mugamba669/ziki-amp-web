@@ -8,8 +8,8 @@
 
 ## ScreenShots
 <div style="display:flex;flex-direction:row;width:400px;">
-<img src="./src/assets/shot1.png" width="400px;"/>
-<img src="./src/assets/shot2.png"width="400px;"/>
+<img src="./src/assets/shot1.png" width="300px;"/>
+<img src="./src/assets/shot2.png"width="300px;"/>
 </div>
 
 ## Tech Stack

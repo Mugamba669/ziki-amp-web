@@ -1,5 +1,10 @@
 <template>
   <div class="home">
+    <!-- Visulizer -->
+    <div v-show="visual" class="visual">
+       <canvas id="canv"></canvas>
+    </div>
+
   <div class="part1">
          <Cover 
          v-if="!queueView" 
@@ -108,6 +113,7 @@ export default {
        queueView:false,
        showV:false,
        vol:0.17,
+       visual:false,
        countPlay:0,
        eqBands:[]
     }
@@ -165,7 +171,7 @@ export default {
       this.showV = !this.showV;
     },
     commonComand(track){
-        const url =  URL.createObjectURL(track);
+      const url =  URL.createObjectURL(track);
       this.audio.src = url;
       this.audio.play();
 
@@ -224,6 +230,7 @@ export default {
     /**default volume = 0.17 */
     this.audio.volume = this.vol;
       const eq = new Equalizer(this.audio);
+      
       eq.startEq();
       this.eqBands = eq.getBands();
   
@@ -254,6 +261,7 @@ export default {
           this.countPlay +=1;
          this.commonComand(this.playlist[this.countPlay]);
     }
+    shu
    
   },
   

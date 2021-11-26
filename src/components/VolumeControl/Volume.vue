@@ -1,14 +1,17 @@
 <template>
 <!-- <div class="panel"> -->
     <div class="volume">
-    <button @click="this.$emit('closeVol')"> <b class="material-icons mi-close"></b> </button>
+    <!-- <button @click="this.$emit('closeVol')"> <b class="material-icons mi-close"></b> </button> -->
 
        <label for="">Volume
-            <span class="val">
+             <span class="val">
             {{Math.floor(Number(volume)*100)}} %
-            </span>
+            </span> --
            </label> 
-      
+           
+           <!-- <round-slider/> -->
+           <!-- <vue3-slider  :formatTooltip="formatedValue" tooltip="true" tooltipText="%v" :max="1" :min="0" step="0.01" color="#2835E7" track-color="#FEFEFE" /> -->
+       
         <input type="range" @input="updateVolume" max="1" min="0" step="0.01" v-model="volume"/>
         
     </div>
@@ -17,18 +20,29 @@
 </template>
 
 <script>
+
+import slider from "vue3-slider";
 export default {
     name: 'Volume',
+    // components: {
+    //      "vue3-slider": slider,
+    // },
     data(){
         return{
             volume:0.17,
         }
     },
      methods:{
+        //  formatedValue(v){
+        //     //  console.log(v)
+        //     this.$emit('changeVol',v);
+        //  },
          updateVolume(){
+            // alert(this);
             this.$emit('changeVol',this.volume);
          }
-     }
+
+     },
 }
 </script>
 
@@ -90,9 +104,9 @@ export default {
                     width:20px;
                 }
             }
-            input:hover{
-                transform: scale(1.04,1.04);
-            }
+            // input:hover{
+            //     transform: scale(1.04,1.04);
+            // }
         }
     
 </style>

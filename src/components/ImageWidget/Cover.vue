@@ -12,6 +12,17 @@ export default {
     name: 'Cover',
   props:{
       source:String,
+      playState:String,
+  },
+  data(){
+    return{
+        playState:"paused"
+    } 
+},
+  methods:{ 
+     created(){
+        document.querySelector('img').style.animationPlayState = "paused";
+    }
   }
 }
 </script>
@@ -42,13 +53,13 @@ export default {
           height:100%;
           position: relative;
           animation: spin 20s infinite linear;
+        //    animation-play-state: paused;
            object-fit:contain!important;
 
         }
    }
 }
 @media(max-width:910px){
-   
     .image{
         margin: 15px;
        display:flex;
@@ -61,8 +72,8 @@ export default {
           border-radius: 50%;
            box-shadow: 0px -2px 3px 2px gray;
            overflow:hidden;
-
-        animation: spin 20s infinite linear;
+           animation: spin 20s infinite linear;
+        //    animation-play-state: paused;
         img{ 
           width:100%;
           height:100%;

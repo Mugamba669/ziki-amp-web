@@ -19,9 +19,9 @@ export default {
   name:'Slider',
   props:{
     max:Number,
-    currentValue:Number,
+    currentValue:String,
     output:Number,
-    duration:Number,
+    duration:String,
     
   },
   methods:{

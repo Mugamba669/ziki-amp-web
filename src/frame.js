@@ -14,7 +14,7 @@ function createWindow() {
     });
 
     // win.loadURL('https://www.google.com/');
-    win.loadURL('http://127.0.0.1:8080/');
+    win.loadURL('http://localhost:8080/');
     // win.webContents.openDevTools();
 }
 

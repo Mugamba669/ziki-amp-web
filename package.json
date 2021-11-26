@@ -2,7 +2,7 @@
   "name": "ziki-amp",
   "version": "0.1.0",
   "private": true,
-  "main":"./src/frame.js",
+  "main": "./src/frame.js",
   "scripts": {
     "start": "vue-cli-service serve",
     "build": "vue-cli-service build"
@@ -10,7 +10,11 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "vue": "^3.0.0",
+    "vue-radial-menu": "^1.1.1",
+    "vue-round-slider": "^1.0.1",
     "vue-router": "^4.0.0-0",
+    "vue-slide-bar": "^1.2.0",
+    "vue3-slider": "^1.6.7",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {

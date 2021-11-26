@@ -1,22 +1,23 @@
 import Visualizer from "./Visualizer";
 
 
-export default class Equalizer extends Visualizer{
+export default class Equalizer{
     /**
      * 
      * @param {HTMLAudioElement} audio 
      * @param {HTMLCanvasElement} canvas
      */
-    constructor(audio,canvas){
-        this.canvas = canvas;
+    constructor(audio){
+        // this.canvas = canvas;
         this.audio = audio;
         this.audioCtx = new AudioContext();
         this.analyser = new AnalyserNode(this.audioCtx,{maxDecibels:-10,minDecibels:-80,smoothingTimeConstant:0.8});
         this.source = new MediaElementAudioSourceNode(this.audioCtx,{mediaElement:this.audio});
-        super(this.analyser,this.canvas);
+        // super(this.analyser,this.canvas);
 
         /**
-         * | Type    | Fc       |    Q | Gain     |
+         * 
+| Type    | Fc       |    Q | Gain     |
 |:--------|:---------|:-----|:---------|
 | Peaking | 31 Hz    | 1.41 | -11.9 dB |
 | Peaking | 62 Hz    | 1.41 | -4.7 dB  |

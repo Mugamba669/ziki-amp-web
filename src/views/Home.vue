@@ -9,10 +9,11 @@
          <Cover 
          v-if="!queueView" 
           v-show="showCover"
-          :source="image"/>
+          :source="image"
+          :playState="playState"
+          />
 
         <EQ
-
           @closeEQ="closeEQ"
           :bandSet="eqBands"
           v-show="showEQ"
@@ -29,10 +30,10 @@
       />
 
          <Volume
-         v-if="!queueView"
-         v-show="showV"
-         @closeVol="closeVol"
-         @changeVol="changeVol"
+          v-if="!queueView"
+          v-show="showV"
+          @closeVol="closeVol"
+          @changeVol="changeVol"
      />
 
        <Queue 
@@ -71,7 +72,6 @@
           :phide="showPlay"
           :pshow="showPause"
           :togglebtn="btnValue"
-          
           />
        </div>
   </div>
@@ -115,7 +115,10 @@ export default {
        vol:0.17,
        visual:false,
        countPlay:0,
-       eqBands:[]
+       eqBands:[],
+       playState:"paused",
+       canvas:document.querySelector('canvas'),
+
     }
   
   },
@@ -135,12 +138,14 @@ export default {
         this.showPlay = false;
          this.showPause = true;
     //  this.commonComand(value);
+    // this.$state.playlist
     },
     loadSingle(file){
       this.playlist = [...this.playlist,file];
       this.commonComand(file);
       this.showPlay = false;
          this.showPause = true;
+
     },
     closeEQ(){
       this.showEQ = !this.showEQ;
@@ -213,7 +218,8 @@ export default {
       this.showCover = !this.showCover;
     },
     playQueue(queue){
-          this.commonComand(queue)
+          this.commonComand(queue[0]);
+          this.countPlay = queue[1];
           this.closeQueue();
       },
     showQueue(){
@@ -230,7 +236,7 @@ export default {
     /**default volume = 0.17 */
     this.audio.volume = this.vol;
       const eq = new Equalizer(this.audio);
-      
+      console.log(document.querySelector('canvas'))
       eq.startEq();
       this.eqBands = eq.getBands();
   
@@ -261,7 +267,6 @@ export default {
           this.countPlay +=1;
          this.commonComand(this.playlist[this.countPlay]);
     }
-    shu
    
   },
   
@@ -323,6 +328,18 @@ export default {
         justify-content: center!important;
         align-items: center!important;
         color:#ddd;
+        .visual{
+          width: 100%;
+          height: 100%;
+          z-index: 1;
+          position: fixed;
+          canvas{
+          width:100%;
+          height: 100%;
+
+        }
+        }
+        
        .prt2,.part1{
           
            display: flex;

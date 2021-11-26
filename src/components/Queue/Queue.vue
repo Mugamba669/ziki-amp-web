@@ -2,7 +2,7 @@
   <div class="queue">
     <center>Now Playing</center>
       <div class="conatiner">
-          <p @click="this.$emit('queuePlay',list)" v-bind:key="list" v-for="list in queueList">
+          <p @click="this.$emit('queuePlay',[list,index])" v-bind:key="list" v-for="(list,index) in queueList">
             <span>{{(list.name).replace(".mp3","")}}</span>
             <b class="material-icons mi-play-circle"></b>
           </p>

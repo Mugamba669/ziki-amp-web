@@ -1,5 +1,6 @@
 <template>
 <div class="widget">
+    <!-- <Presets/> -->
     <div class="conatiner">
         <div class="equalizer">
             <Bands 
@@ -18,10 +19,12 @@
 
 <script>
 import Bands from "./Bands.vue";
+import Presets from "./Presets.vue"
 export default {
     name: 'EQ',
     components:{
         Bands,
+        Presets,
     },
     props: {
         bandSet:Array,

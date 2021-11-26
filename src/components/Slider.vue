@@ -86,4 +86,32 @@ export default {
     }
 }
   
+@media (max-width:480px) {
+  .slider{
+     display:flex;
+     flex-direction:row;
+     justify-content:center;
+     .label{
+       font:300 15px Ubuntu,Arial;
+       margin:8px;
+       background:#222;
+       border-radius:5px;
+     }
+     input{
+       width:200px;
+       appearance:none;
+       margin:10px;
+       height: 4px;
+       background: #B3A1A1;
+       
+       &::-webkit-slider-thumb{
+          appearance:none;
+          width:20px;
+          border-radius: 50%;
+          height:20px;
+          background: #554E4E;
+       }
+     }
+    }
+}
 </style>

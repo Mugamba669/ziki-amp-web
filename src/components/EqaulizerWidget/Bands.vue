@@ -68,8 +68,9 @@ export default {
         display:flex;
         flex-direction: row;
         justify-content: space-around;
-        padding: 9px;
+        padding: 7px;
         width:300px;
+        margin: 0px;
         .label{
             transform:rotate(90deg);
             margin:5px;
@@ -80,7 +81,7 @@ export default {
             }
 
              .label:first-child{
-            font:500 12px Ubuntu;
+            font:300 11px Ubuntu;
             color:#ddd;
             }
         input{

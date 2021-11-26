@@ -74,5 +74,28 @@ export default {
         
     }
 }
-   
+   @media(max-width:480px){
+        .container{
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        margin: 0;
+        padding: 0;
+        .title{
+            width:300px;
+            text-align:center;
+            overflow:hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        p{
+            font:300 17px Ubuntu;
+            span{
+            font-size: 20px;
+           }
+        }
+        
+    }
+   }
 </style>

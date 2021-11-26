@@ -68,6 +68,7 @@ export default {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+
         button{
             margin: 10px;
             border: 1px solid #ddd;
@@ -83,9 +84,38 @@ export default {
                 transform: scale(1.05,1.05);
             }
         }
-         
         input{
             display: none;
         }
     }
+@media (max-width:480px) {
+     .loader{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin: 0;
+        padding: 0;
+        button{
+            margin: 10px;
+            border: 1px solid #ddd;
+            background: rgba(0, 0, 0, 1);
+            color:#ddd;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            transform: scale(1,1);
+            transition: 0.3s ease-in-out;
+            cursor: pointer;
+            &:hover{
+                transform: scale(1.05,1.05);
+            }
+            b{
+                font-size: 16px;
+            }
+        }
+        input{
+            display: none;
+        }
+     }
+}
 </style>

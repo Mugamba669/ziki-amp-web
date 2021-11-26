@@ -44,6 +44,7 @@ export default {
         justify-content: center;
         align-items: center;
  .conatiner {
+
     //  overflow: scroll;
     .equalizer {
          background: #1111115D;
@@ -96,24 +97,23 @@ export default {
     
     //  overflow: scroll;
     .equalizer {
-
          background: #1111115D;
         backdrop-filter: blur(20px);
-        margin: 10px;
-        padding: 15px;
+        // margin: 10px;
+        // padding: 15px;
         border-radius:5px;
-         z-index: 8;
+        //  z-index: 8;
          border: 1px solid #ddd;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        // display: flex;
+        // flex-direction: column;
+        // justify-content: center;
+        // align-items: center;
         // overflow-y: scroll;
         // overflow-x: hidden;
-        width:350px;
-        height: 400px;
+        width:270px;
+        height: 350px;
         // pointer-events: none;
-        transform:rotate(-90deg);
+        // transform:rotate(-90deg);
     }
   }
   .closeEQ{

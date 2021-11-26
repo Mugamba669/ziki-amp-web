@@ -134,18 +134,25 @@ export default {
   },
   methods: {
     loadTrack(value){
-      this.playlist = value;
-        this.showPlay = false;
-         this.showPause = true;
+      for (let i = 0;i < value.length;i++) {
+          this.playlist = [...this.playlist,{id:i,data:value[i],active:false}]
+           this.getTitle(value[i]);
+      }
+        // this.showPlay = false;
+        //  this.showPause = true;
+      // this.queueView = true;
+      // this.showCover = false;
     //  this.commonComand(value);
     // this.$state.playlist
     },
     loadSingle(file){
-      this.playlist = [...this.playlist,file];
+      let id = 0;
+      const listTile = {id:id,data: file,active:false};
+      this.playlist = [...this.playlist,listTile];
       this.commonComand(file);
       this.showPlay = false;
-         this.showPause = true;
-
+      this.showPause = true;
+      id++;
     },
     closeEQ(){
       this.showEQ = !this.showEQ;
@@ -163,7 +170,7 @@ export default {
     },
     shuffleTracks(){
          this.countPlay = Math.floor(Math.random() * this.playlist.length);
-        this.commonComand(this.playlist[this.countPlay]);
+        this.commonComand(this.playlist[this.countPlay].data);
     },
     changeVol(vol){
         this.audio.volume = vol;
@@ -174,6 +181,13 @@ export default {
     },
     showVol(){
       this.showV = !this.showV;
+    },
+    getTitle(file){
+  
+        // mm.parseBlob(file).then(meta =>{
+        //     console.log(meta.common);
+        // });
+
     },
     commonComand(track){
       const url =  URL.createObjectURL(track);
@@ -201,11 +215,13 @@ export default {
     },
     seekNow(){
        this.countPlay +=1;
-       this.commonComand(this.playlist[this.countPlay]);
+       this.commonComand(this.playlist[this.countPlay].data);
+       this.toggleList(this.countPlay);
     },
     prevSeek(){
          this.countPlay -= 1;
-        this.commonComand(this.playlist[this.countPlay]);
+        this.commonComand(this.playlist[this.countPlay].data);
+        this.toggleList(this.countPlay);
     },
     repeatTrack(){
       this.audio.loop = true;
@@ -218,10 +234,15 @@ export default {
       this.showCover = !this.showCover;
     },
     playQueue(queue){
-          this.commonComand(queue[0]);
+          this.commonComand(queue[0].data);
           this.countPlay = queue[1];
           this.closeQueue();
+          this.toggleList(queue[1]);
+          console.log(this.getTitle(queue[0].data));
       },
+        async toggleList(id){
+               this.playlist = this.playlist.map((track) => track.id === id?{...track,active:!track.active}:track)
+            },
     showQueue(){
       // this.showCover = !this.showCover;
         this.queueView = !this.queueView;
@@ -256,7 +277,7 @@ export default {
        this.durlTime = dsec < 10 ?dmin+":0"+dsec:dmin+":"+dsec;
 
     }
-    this.audio.onpaused = ()=>{
+    this.audio.onpause = ()=>{
          this.showPlay = true;
          this.showPause = false;
     }
@@ -266,17 +287,16 @@ export default {
       //    this.showPause = false;
           this.countPlay +=1;
          this.commonComand(this.playlist[this.countPlay]);
+         this.toggleList(this.countPlay);
     }
-   
-  },
-  
-  created(){
-    this.audio.onplaying = ()=>{
+   this.audio.onplay = ()=>{
           this.showPlay = false;
          this.showPause = true;
     }
-
-
+  },
+  
+  created(){
+    
   }
 }
 </script>
@@ -285,14 +305,6 @@ export default {
  *{
    user-select: none;
  }
-    body{
-      background-repeat: no-repeat!important;
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      width: 100%;
-      height: 100%;
-}
    .home {
         backdrop-filter: blur(94px);
         width: 100%;
@@ -339,6 +351,43 @@ export default {
 
         }
         }
+        
+       .prt2,.part1{
+          
+           display: flex;
+          flex-direction: column!important;
+          justify-content: center!important;
+          align-items: center!important;
+        }
+      }
+       
+}
+    
+@media (max-width:480px) {
+   .home{
+        backdrop-filter: blur(94px);
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        background: rgba(0,0,0,0.5);
+        top: 0;
+        left: 0;
+        display: flex!important;
+        flex-direction: column  !important;
+        justify-content: center!important;
+        align-items: center!important;
+        color:#ddd;
+        .visual{
+          width: 100%;
+          height: 100%;
+          z-index: 1;
+          position: fixed;
+          canvas{
+          width:100%;
+          height: 100%;
+
+        }
+    }
         
        .prt2,.part1{
           

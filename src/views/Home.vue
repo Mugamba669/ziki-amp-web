@@ -5,7 +5,7 @@
        <canvas id="canv"></canvas>
     </div>
 
-  <div class="part1">
+  <div v-show="ptr1" class="part1">
          <Cover 
          v-if="!queueView" 
           v-show="showCover"
@@ -45,7 +45,7 @@
   
     
 
-     <div class="prt2">
+     <div v-show="ptr2" class="prt2">
         <Details 
         v-show="showCover"
           :title="title"
@@ -100,6 +100,8 @@ export default {
        album:"",
        showEQ:false,
        showCover:true,
+       ptr1:true,
+       ptr2:true,
        image:"/home/mugamba/Desktop/Vue/musicapp/src/assets/logo.png",
        size:0,
        curlTime:0,
@@ -136,11 +138,11 @@ export default {
     loadTrack(value){
       for (let i = 0;i < value.length;i++) {
           this.playlist = [...this.playlist,{id:i,data:value[i],active:false}]
-           this.getTitle(value[i]);
+          //  this.getTitle(value[i]);
       }
         // this.showPlay = false;
         //  this.showPause = true;
-      // this.queueView = true;
+      this.queueView = true;
       // this.showCover = false;
     //  this.commonComand(value);
     // this.$state.playlist
@@ -286,7 +288,7 @@ export default {
       //  this.showPlay = true;
       //    this.showPause = false;
           this.countPlay +=1;
-         this.commonComand(this.playlist[this.countPlay]);
+         this.commonComand(this.playlist[this.countPlay].data);
          this.toggleList(this.countPlay);
     }
    this.audio.onplay = ()=>{

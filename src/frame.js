@@ -7,7 +7,11 @@ function createWindow() {
         alwaysOnTop:true,
         webPreferences: {
             nodeIntegration: true,
-            enableRemoteModule: true
+            enableRemoteModule: true,
+            contextIsolation:false,
+            nodeIntegrationInSubFrames:true,
+            nodeIntegrationInWorker:true
+
         },
         // icon: path.join(__dirname, 'assets', 'img', 'icon.png'),
         title: 'My App',

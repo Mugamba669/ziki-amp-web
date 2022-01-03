@@ -1,12 +1,13 @@
 <template>
   <div class="queue">
-    <center>Now Playing</center>
+    <center>Your WishList</center>
       <div class="conatiner">
-          <p :class="[list.data.active?'active':'']" v-bind:key="list" v-for="(list,index) in queueList">
-            <b class="material-icons mi-music-note"></b>
+          <p :class="[list.data.active == true?'active':'']" v-bind:key="list" v-for="(list,index) in queueList">
+             <b class="material-icons mi-dehaze"></b>
+            <!-- <b class="material-icons mi-music-note"></b> -->
             <span @click="this.$emit('queuePlay',[list,index])">{{(list.data.name).replace(".mp3","")}}</span>
             <b class="material-icons mi-play-circle"></b>
-            <b class="material-icons mi-more-vert"></b>
+            <!-- <b class="material-icons mi-more-vert"></b> -->
           </p>
       </div>
           <button @click="this.$emit('closeQueue')"><b class="material-icons mi-close"></b></button>
@@ -20,8 +21,8 @@ export default {
   name: "Queue",
   props: {
     queueList:Array,
+
   },
-  methods: { }
 };
 </script>
 
@@ -39,7 +40,7 @@ export default {
       height: 350px;
       display: flex;
       flex-direction: column;
-      justify-content:center;
+      justify-content:flex-start;
       position: relative;
       align-items: center;
       overflow-x: hidden;
@@ -47,13 +48,13 @@ export default {
       margin: 3px;
     p{
       width: 100%;
-      // height: 50px;
+      box-shadow: -4px -0px 0px 0px #eeee;
       background:rgba($color: #948E8E, $alpha:0.4);
       padding: 6px;
       border-radius:5px;
       display: flex;
       cursor: pointer;
-      margin:0.7px;
+      margin:2.8px;
       flex-direction:row;
       transition:0.3s ease-in-out;
       transform:scale(1,1);
@@ -116,7 +117,7 @@ export default {
       height: 170px;
       display: flex;
       flex-direction: column;
-      justify-content:center;
+      justify-content:flex-start;
       align-items: center;
       // overflow-x: hidden;
       margin: 3px;

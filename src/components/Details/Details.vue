@@ -2,14 +2,15 @@
     <div class="container">
             <p class="title">{{(title).replace(".mp3","")}}</p>
             <!-- <div class="more"> -->
-                <div class="more">
+                <marquee direction="left" behavior="slow" class="more">
                     {{artist}}
                     <span>|</span>
                     {{album}}
                     <span>|</span>
                     {{(Number(size).toFixed(2))+" MB"}}
-                </div>
+                </marquee>
             <!-- </div> -->
+            <!-- <marquee behavior="slow" direction="alternate"></marquee> -->
     </div>
 </template>
 
@@ -39,16 +40,11 @@ export default {
             overflow:hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
+            font:100 32px Ubuntu,Arial;
         }
         .more{
             margin: 4px;
-        }
-        p{
-            font:300 17px Ubuntu;
-            margin:0;
-            span{
-            font-size: 20px;
-           }
+            width: 300px;
         }
         
     }
@@ -64,12 +60,7 @@ export default {
             overflow:hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-        }
-        p{
-            font:300 17px Ubuntu;
-            span{
-            font-size: 20px;
-           }
+            font:100 17px Ubuntu,Arial;
         }
         
     }

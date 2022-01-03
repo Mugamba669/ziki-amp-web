@@ -1,6 +1,7 @@
 <template>
 <div class="widget">
     <!-- <Presets/> -->
+    
     <div class="conatiner">
         <div class="equalizer">
             <Bands 

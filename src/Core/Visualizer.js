@@ -21,16 +21,15 @@ export default class Visualizer{
     // bufferLength
   
      barsVisualiser(){
-
          var renderCanvas = ()=>{
          window.requestAnimationFrame(renderCanvas);
-            this.analyser.getByteFrequencyData(this.freqDomain)
+            this.analyser.getByteFrequencyData(this.freqDomain);
 
-            this.canvas.setAttribute("width",window.innerWidth)
-            this.canvas.setAttribute("height",window.innerHeight)
+            this.canvas.setAttribute("width",window.innerWidth);
+            this.canvas.setAttribute("height",window.innerHeight);
             window.onresize = ()=> {
-                this.canvas.setAttribute("width",window.innerWidth)
-                this.canvas.setAttribute("height",window.innerHeight)
+                this.canvas.setAttribute("width",window.innerWidth);
+                this.canvas.setAttribute("height",window.innerHeight);
             } 
         /**
          *Lets start by clearing the canvas

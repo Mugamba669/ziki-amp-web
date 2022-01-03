@@ -4,8 +4,9 @@
   "private": true,
   "main": "./src/frame.js",
   "scripts": {
-    "start": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "start": "vue-cli-service serve && electron .",
+    "build": "vue-cli-service build",
+    "app": ""
   },
   "dependencies": {
     "4lyrics": "^1.1.61",
@@ -18,6 +19,7 @@
     "vue-round-slider": "^1.0.1",
     "vue-router": "^4.0.0-0",
     "vue-slide-bar": "^1.2.0",
+    "vue-sortable": "^0.1.3",
     "vue3-slider": "^1.6.7",
     "vuex": "^4.0.0-0"
   },
@@ -27,6 +29,7 @@
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
+    "electron": "^16.0.5",
     "material-icons": "^1.10.3",
     "music-metadata-browser": "^2.5.0",
     "sass": "^1.26.5",

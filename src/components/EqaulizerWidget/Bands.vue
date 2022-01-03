@@ -1,8 +1,8 @@
 <template>
     <div class="bands">
         <span class="label">
-            {{(frequency > 500)?frequency.toString().replace("000","k"):frequency}}Hz</span>
-
+            {{(frequency > 500)?frequency.toString().replace("000","k"):frequency}}Hz
+        </span>
              <input type="range" v-model="bandValue" @input="updateBand" max="15" min="-15" step="0.01">
         <span class="label">{{Number(bandValue).toFixed(1)}}</span>
    

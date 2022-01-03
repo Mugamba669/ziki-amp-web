@@ -1,10 +1,11 @@
 <template>
     <div class="loader">
-        <button v-show="viewDes" @click="triggerLoader"><b class="material-icons mi-add-to-queue"></b></button>
-        <button v-show="viewMob" @click="triggerSingle"><b class="material-icons mi-add"></b></button>
-        <button @click="this.$emit('showQueue')"><b class="material-icons mi-queue-music"></b></button>
-        <button class="btn" @click="this.$emit('toggleEQ')"><b class="mi mi-equalizer"></b></button>
-        <button @click="this.$emit('showVol')"> <b class="material-icons mi-volume-up"></b> </button>
+        <button v-show="viewDes" @click="triggerLoader"><b class="material-icons mi-post-add" title="Add music playlist"></b></button>
+        <button v-show="viewMob" @click="triggerSingle"><b class="material-icons mi-add" title="Add music playlist"></b></button>
+        <button @click="this.$emit('showQueue')"><b class="material-icons mi-rounded mi-queue-music" title="Open playlist"></b></button>
+        <button class="btn" @click="this.$emit('toggleEQ')"><b class="mi mi-tune mi-rounded" title="Open Equalizer" ></b></button>
+        <button @click="this.$emit('showRoom')"> <b class="material-icons mi-meeting-room mi-rounded" title="show Room Effects"></b> </button>
+        <button @click="this.$emit('showVol')"> <b class="material-icons mi-volume-up mi-rounded" title="Volume control"></b> </button>
       
        <input type="file" class="loadMusic" webkitdirectory multiple @change="track" >
        <input type="file" class="singleMusic" accept="audio/*" @change="trackSingle" >
@@ -21,7 +22,7 @@ export default {
         }
     },
     methods: {
-      chooseDeivce(){
+      chooseDevice(){
             const ua = navigator.userAgent;
             if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
                 return "tablet";
@@ -47,7 +48,7 @@ export default {
         }
     },
     mounted(){
-       const device = this.chooseDeivce();
+       const device = this.chooseDevice();
         
        switch (device) {
            case "tablet":

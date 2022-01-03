@@ -27,6 +27,7 @@
         @toggleEQ="toggleEQ"
         @showVol="showVol"
         @loadSingle="loadSingle"
+        @showRoom="roomEffectsComponent"
       />
 
          <Volume
@@ -46,6 +47,11 @@
     
 
      <div v-show="ptr2" class="prt2">
+       <canvas  ref="canvas"></canvas>
+       <!-- <Search
+       v-show="false"
+        @live="liveS"
+       /> -->
         <Details 
         v-show="showCover"
           :title="title"
@@ -77,7 +83,7 @@
   </div>
 </template>
 <script>
-
+const can = document.querySelector('#canv');
 import Slider from '@/components/Slider.vue'; // @ is an alias to /src
 import Cover from '@/components/ImageWidget/Cover.vue'; // @ is an alias to /src
 import Details from "@/components/Details/Details.vue";
@@ -87,6 +93,7 @@ import Volume from "@/components/VolumeControl/Volume.vue";
 import Equalizer from "../Core/Equalizer";
 import EQ from "@/components/EqaulizerWidget/Equalizer.vue";
 import Queue from "@/components/Queue/Queue.vue"
+import Search from "@/components/Search/Search.vue";
 import * as mm from  "music-metadata-browser";
 export default {
   name: 'Home',
@@ -102,7 +109,7 @@ export default {
        showCover:true,
        ptr1:true,
        ptr2:true,
-       image:"/home/mugamba/Desktop/Vue/musicapp/src/assets/logo.png",
+       image:`@/assets/logo.png`,
        size:0,
        curlTime:0,
        progress:0,
@@ -116,11 +123,12 @@ export default {
        showV:false,
        vol:0.17,
        visual:false,
+       loop:false,
        countPlay:0,
        eqBands:[],
        playState:"paused",
-       canvas:document.querySelector('canvas'),
-
+      canvas:document.querySelector("canvas"),
+       
     }
   
   },
@@ -133,6 +141,7 @@ export default {
     Volume,
     Queue,
     EQ,
+    Search,
   },
   methods: {
     loadTrack(value){
@@ -146,6 +155,14 @@ export default {
       // this.showCover = false;
     //  this.commonComand(value);
     // this.$state.playlist
+    },
+
+    liveS(data){ /// to perform a live search
+        // this.playlist = this.playlist.filter((song) => (song.data.name) == data);
+        console.log(this.playlist);
+    },
+    roomEffectsComponent(){
+
     },
     loadSingle(file){
       let id = 0;
@@ -195,23 +212,22 @@ export default {
       const url =  URL.createObjectURL(track);
       this.audio.src = url;
       this.audio.play();
-
       this.size = ((track.size)/1000000);
       mm.parseBlob(track).then(meta => {
         // console.log(meta);
-      this.title = meta.common.title;
-      this.artist = meta.common.artist;
-      this.album = meta.common.album;
+      this.title = meta.common.title == null ? (track.name).replace(".mp3","") : meta.common.title;
+      this.artist = meta.common.artist == null ? "Unknown artist" : meta.common.artist;
+      this.album = meta.common.album == null ? "Unknown album" : meta.common.album ;
       this.bufferArray = meta.common.picture[0].data;
     document.querySelector("title").value = this.title;
-      const unprocessedData = meta.common.picture[0].data;
+      // const unprocessedData =this.buff;
       /**
        * Track infor processed
        */
-          var data = new Uint8Array(unprocessedData);
+          var data = new Uint8Array(this.bufferArray);
           const blob = new Blob([data],{type:"image/jpeg"});
           const imageURL = URL.createObjectURL(blob);
-          this.image = imageURL;
+          this.image =  this.bufferArray == null ? "@/assets/pAudio.jpeg" : imageURL;
           document.querySelector("body").style.backgroundImage = "url("+imageURL+")";
       })
     },
@@ -226,10 +242,12 @@ export default {
         this.toggleList(this.countPlay);
     },
     repeatTrack(){
-      this.audio.loop = true;
+      this.loop = !this.loop;
+       // toggle audio repeat 
+      this.audio.loop = this.loop == true ? true : false;
     },
     updateSlider(value){
-        this.audio.currentTime = value;
+         this.audio.currentTime = value;
     },
     toggleEQ(){
       this.showEQ = !this.showEQ;
@@ -242,9 +260,9 @@ export default {
           this.toggleList(queue[1]);
           console.log(this.getTitle(queue[0].data));
       },
-        async toggleList(id){
-               this.playlist = this.playlist.map((track) => track.id === id?{...track,active:!track.active}:track)
-            },
+      toggleList(id){
+               this.playlist = this.playlist.map((track) => track.id == id?{...track,active:!track.active}:track)
+      },
     showQueue(){
       // this.showCover = !this.showCover;
         this.queueView = !this.queueView;
@@ -259,10 +277,11 @@ export default {
     /**default volume = 0.17 */
     this.audio.volume = this.vol;
       const eq = new Equalizer(this.audio);
-      console.log(document.querySelector('canvas'))
+      console.log(this.$refs.canvas);
+      
       eq.startEq();
       this.eqBands = eq.getBands();
-  
+    // console.log(can);
   setInterval(()=>{
            this.progress = this.audio.currentTime;
           this.progMax = this.audio.duration;
@@ -296,10 +315,7 @@ export default {
          this.showPause = true;
     }
   },
-  
-  created(){
-    
-  }
+  created(){}
 }
 </script>
  

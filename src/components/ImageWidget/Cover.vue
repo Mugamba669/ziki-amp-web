@@ -16,13 +16,11 @@ export default {
   },
   data(){
     return{
-        playState:"paused"
+        playState:false
     } 
 },
   methods:{ 
-     created(){
-        document.querySelector('img').style.animationPlayState = "paused";
-    }
+     
   }
 }
 </script>
@@ -108,5 +106,8 @@ export default {
    }
 }
 }
+.img.active{
+  animation-play-state: paused;
 
+}
 </style>

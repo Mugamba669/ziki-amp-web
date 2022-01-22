@@ -4,16 +4,19 @@
  * animated-2d graphics with the help of WebAudioApi and Canvas Api
  */
 // const $ = require('jquery');
-export default class Visualizer{
+class Visualizer{
     /**
      * 
      * @param {AnalyserNode } analyser 
      * @param { HTMLCanvasElement } canvas 
+     * @param { CanvasRenderingContext2D } context 
+     * 
      */
-    constructor(analyser,canvas) {
+    constructor(analyser,canvas,context) {
         this.analyser = analyser;
         this.canvas = canvas;
-        this.context = this.canvas.getContext('2d');
+        this.context = context;
+        // this.context = this.canvas.getContext('2d');
         this.bufferLength = this.analyser.frequencyBinCount;
         this.freqDomain = new Uint8Array(this.bufferLength);
         // setup = true;
@@ -447,4 +450,8 @@ spiralVisual()
     }
     update();
    }
+}
+
+module.exports = {
+    Visualizer
 }

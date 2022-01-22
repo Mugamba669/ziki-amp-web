@@ -7,7 +7,7 @@
 export default {
     data() {
         return {
-            tune:""
+            tune:0,
         }
     },
     methods: {

@@ -1,24 +1,23 @@
-export default class Equalizer{
+const { Visualizer } = require("./Visualizer");
+class Equalizer extends Visualizer{
     /**
      * 
      * @param {HTMLAudioElement} audio 
      * @param {HTMLCanvasElement} canvas
+     * @param {CanvasRenderingContext2D} context
      */
-    constructor(audio,canvas){
+    constructor(audio,canvas,context){
+
         this.audio = audio;
+        this.canvas = canvas;
+        this.context = context;
         this.audioCtx = new AudioContext();
         this.analyser = new AnalyserNode(this.audioCtx,{maxDecibels:-10,minDecibels:-80,smoothingTimeConstant:0.8});
+        super(this.analyser,canvas,context)
+       
         this.source = new MediaElementAudioSourceNode(this.audioCtx,{mediaElement:this.audio});
         this.splitter = new ChannelSplitterNode(this.audioCtx,{numberOfOutputs:2});
         this.merger = new ChannelMergerNode(this.audioCtx,{numberOfInputs:2});
-        this.audio = audio;
-        // this.analyser = analyser;
-        // this.canvas = canvas;
-        // this.context = this.canvas.getContext('2d');
-        // this.bufferLength = this.analyser.frequencyBinCount;
-        // this.freqDomain = new Uint8Array(this.bufferLength);
-
-        // super(this.analyser,canvas);
 
         this.delays = [
             new DelayNode(this.audioCtx,{delayTime:0}),
@@ -31,7 +30,6 @@ export default class Equalizer{
             new GainNode(this.audioCtx,{gain:0}),
             // new GainNode(this.audioCtx,{gain:0}),
         ];
-        // super(this.analyser,this.canvas);
         /**
          * 
 | Type    | Fc       |    Q | Gain     |
@@ -62,18 +60,24 @@ export default class Equalizer{
         ];
 
         this.connects = ()=>{
+            let size = this.bands.length;
             this.source.connect(this.bands[0]);
-            this.bands[0].connect(this.bands[1]);
-            this.bands[1].connect(this.bands[2]);
-            this.bands[2].connect(this.bands[3]);
-            this.bands[3].connect(this.bands[4]);
-            this.bands[4].connect(this.bands[5]);
-            this.bands[5].connect(this.bands[6]);
-            this.bands[6].connect(this.bands[7]);
-            this.bands[7].connect(this.bands[8]);
-            this.bands[8].connect(this.bands[9]);
-            this.bands[9].connect(this.bands[10]);
-            this.bands[10].connect(this.analyser);
+            for( let i = 0 ; i < size; i++){
+                if(i <  (this.bands.length-1)){
+                     this.bands[i].connect(this.bands[i+1]);
+                }
+
+            }
+            // this.bands[1].connect(this.bands[2]);
+            // this.bands[2].connect(this.bands[3]);
+            // this.bands[3].connect(this.bands[4]);
+            // this.bands[4].connect(this.bands[5]);
+            // this.bands[5].connect(this.bands[6]);
+            // this.bands[6].connect(this.bands[7]);
+            // this.bands[7].connect(this.bands[8]);
+            // this.bands[8].connect(this.bands[9]);
+            // this.bands[9].connect(this.bands[10]);
+            this.bands[size-1].connect(this.analyser);
             this.analyser.connect(this.audioCtx.destination);
             this.audioCtx.resume();
             this.roomEffect();
@@ -107,43 +111,6 @@ export default class Equalizer{
         this.audio.onplaying = _=> this.connects();
         // this.audio.onplaying = _=> this.roomEffect();
     }
-    /**bars visual */
-    barsVisualiser(){
-//         var renderCanvas = ()=>{
-//         window.requestAnimationFrame(renderCanvas);
-//            this.analyser.getByteFrequencyData(this.freqDomain);
-
-//            this.canvas.setAttribute("width",window.innerWidth);
-//            this.canvas.setAttribute("height",window.innerHeight);
-//            window.onresize = ()=> {
-//                this.canvas.setAttribute("width",window.innerWidth);
-//                this.canvas.setAttribute("height",window.innerHeight);
-//            } 
-//        /**
-//         *Lets start by clearing the canvas
-//         */
-//         this.context.clearRect(0,0,this.canvas.width,this.canvas.height);
-     
-//        // set visual Color: 
-//        this.context.fillStyle = "#FDDD74";
-//        /**
-//         * draw visual bars
-//         */
-//        for (let index = 0; index < this.bufferLength; index++) {
-//            var value = this.freqDomain[index] /300;
-//            var barX = index * 3;//This works on bar spacing
-//            var barWidth = 2;//This handles the barWidth
-//            var height = (this.canvas.height) * value;
-//            var barHeight = this.canvas.height - height - 1;
-//            /**
-//             * Now lets draw the bars basing on the array length
-//             * following this format CanvasRect.fillRect(x: number, y: number, w: number, h: number): void
-//             *              */
-//            this.context.fillRect(barX,barHeight,barWidth,height)
-//        }
-//    }
-renderCanvas()
-   }
     /***
      * @returns { Array<BiquadFilterNode>}
      */
@@ -164,4 +131,8 @@ renderCanvas()
    getFeedBack(){
         return this.feedback;
    }
+}
+
+module.exports = {
+    Equalizer
 }

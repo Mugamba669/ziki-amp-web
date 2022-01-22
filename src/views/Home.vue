@@ -1,9 +1,6 @@
 <template>
   <div class="home">
-    <!-- Visulizer -->
-    <div v-show="visual" class="visual">
-       <canvas id="canv"></canvas>
-    </div>
+   
 
   <div v-show="ptr1" class="part1">
          <Cover 
@@ -42,14 +39,17 @@
         @queuePlay="playQueue"
         v-if="queueView" 
         :queueList="playlist"/>
+
+         <!-- Visulizer -->
+       
   </div>
-  
-    
+     <div class="visual">
+          <canvas ref="canvas"></canvas>
+          <slot></slot>
+       </div>
 
      <div v-show="ptr2" class="prt2">
-       <canvas  ref="canvas"></canvas>
        <!-- <Search
-       v-show="false"
         @live="liveS"
        /> -->
         <Details 
@@ -83,25 +83,25 @@
   </div>
 </template>
 <script>
-const can = document.querySelector('#canv');
 import Slider from '@/components/Slider.vue'; // @ is an alias to /src
 import Cover from '@/components/ImageWidget/Cover.vue'; // @ is an alias to /src
 import Details from "@/components/Details/Details.vue";
 import Control from "@/components/ControlWidget/Control.vue";
 import Loader from "@/components/loader/Loader.vue";
 import Volume from "@/components/VolumeControl/Volume.vue";
-import Equalizer from "../Core/Equalizer";
+import { Equalizer } from "../Core/Equalizer";
 import EQ from "@/components/EqaulizerWidget/Equalizer.vue";
 import Queue from "@/components/Queue/Queue.vue"
 import Search from "@/components/Search/Search.vue";
 import * as mm from  "music-metadata-browser";
+
 export default {
   name: 'Home',
   data(){
     return {
-      audio:new Audio(),
-      playlist:[],
-      bufferArray:[],
+       audio:new Audio(),
+       playlist:[],
+       bufferArray:[],
        title:"tat",
        artist:"",
        album:"",
@@ -109,7 +109,7 @@ export default {
        showCover:true,
        ptr1:true,
        ptr2:true,
-       image:`@/assets/logo.png`,
+       image:`../assets/logo.png`,
        size:0,
        curlTime:0,
        progress:0,
@@ -122,12 +122,13 @@ export default {
        queueView:false,
        showV:false,
        vol:0.17,
-       visual:false,
+       visual:true,
        loop:false,
        countPlay:0,
        eqBands:[],
        playState:"paused",
-      canvas:document.querySelector("canvas"),
+      canvas:null,
+      context:null,
        
     }
   
@@ -157,16 +158,26 @@ export default {
     // this.$state.playlist
     },
 
-    liveS(data){ /// to perform a live search
-        // this.playlist = this.playlist.filter((song) => (song.data.name) == data);
+    liveS(query){ /// to perform a live search
+        this.playlist = this.playlist.filter(song => {
+          return song.findIndex(data => {
+            data.name == query;
+          })
+        });
         console.log(this.playlist);
+
     },
     roomEffectsComponent(){
 
     },
     loadSingle(file){
       let id = 0;
-      const listTile = {id:id,data: file,active:false};
+      const listTile = {
+              id:id,
+              data: file,
+              active:false
+              };
+
       this.playlist = [...this.playlist,listTile];
       this.commonComand(file);
       this.showPlay = false;
@@ -206,7 +217,6 @@ export default {
         // mm.parseBlob(file).then(meta =>{
         //     console.log(meta.common);
         // });
-
     },
     commonComand(track){
       const url =  URL.createObjectURL(track);
@@ -227,7 +237,7 @@ export default {
           var data = new Uint8Array(this.bufferArray);
           const blob = new Blob([data],{type:"image/jpeg"});
           const imageURL = URL.createObjectURL(blob);
-          this.image =  this.bufferArray == null ? "@/assets/pAudio.jpeg" : imageURL;
+          this.image =  this.bufferArray == null ? "../assets/pAudio.jpeg": imageURL;
           document.querySelector("body").style.backgroundImage = "url("+imageURL+")";
       })
     },
@@ -276,9 +286,14 @@ export default {
   mounted(){
     /**default volume = 0.17 */
     this.audio.volume = this.vol;
-      const eq = new Equalizer(this.audio);
-      console.log(this.$refs.canvas);
-      
+
+      /**  Canvas */
+      this.canvas = this.$refs['canvas'];
+      this.context = this.$refs['canvas'].getContext("2d");
+    console.log(this.canvas)
+    console.log(this.context)
+      const eq = new Equalizer(this.audio,this.canvas,this.context);
+
       eq.startEq();
       this.eqBands = eq.getBands();
     // console.log(can);
@@ -301,6 +316,7 @@ export default {
     this.audio.onpause = ()=>{
          this.showPlay = true;
          this.showPause = false;
+         eq.barsVisualiser();
     }
 
     this.audio.onended = ()=>{
@@ -310,6 +326,7 @@ export default {
          this.commonComand(this.playlist[this.countPlay].data);
          this.toggleList(this.countPlay);
     }
+
    this.audio.onplay = ()=>{
           this.showPlay = false;
          this.showPause = true;
@@ -366,12 +383,10 @@ export default {
           canvas{
           width:100%;
           height: 100%;
-
         }
-        }
+      }
         
        .prt2,.part1{
-          
            display: flex;
           flex-direction: column!important;
           justify-content: center!important;

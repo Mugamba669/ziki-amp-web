@@ -21,7 +21,6 @@ export default {
     methods: {
         updateBand(){
             this.filter.gain.value = this.bandValue;
-            // Number().toFixed()
         }
     }
 }

@@ -263,7 +263,7 @@ export default {
           const blob = new Blob([data],{type:"image/jpeg"});
           const imageURL = URL.createObjectURL(blob);
           this.image =  (this.bufferArray == undefined || this.bufferArray == '' || this.bufferArray == null)? image : imageURL;
-          document.querySelector("body").style.backgroundImage = "url("+image+")";
+          document.querySelector("body").style.backgroundImage = (this.bufferArray == undefined || this.bufferArray == '' || this.bufferArray == null)?"url("+image+")":"url("+imageURL+")";
       });
     },
     seekNow(){
@@ -398,11 +398,8 @@ export default {
     }
   },
   created(){
-    // console.log(image)
-    // for (let index = 0; index < localStorage.length -8; index++) {
-    //   const element = localStorage.getItem([index]);
-    //   console.log(element.data)
-    // }
+    this.image = image;
+    document.querySelector("body").style.backgroundImage = "url("+image+")";
   }
 }
 </script>

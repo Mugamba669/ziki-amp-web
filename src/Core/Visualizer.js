@@ -16,7 +16,7 @@ class Visualizer{
         this.analyser = analyser;
         this.canvas = canvas;
         this.context = context;
-        // this.context = this.canvas.getContext('2d');
+    
         this.bufferLength = this.analyser.frequencyBinCount;
         this.freqDomain = new Uint8Array(this.bufferLength);
         // setup = true;
@@ -192,14 +192,12 @@ renderCanvas()
                     let start = 0 //dataArray.find(a=> Math.max.apply('',dataArray));
                     this.context.lineWidth = 1.6;
                     this.context.strokeStyle = '#FFC964'
-                    
                     this.context.clearRect(0,0,this.canvas.width,this.canvas.height)
                     this.context.beginPath();
                  var x = 0;
                     for (var i = start; i < this.bufferLength; i++) {
                         var v = this.freqDomain[i] / 880.0;
-                        var y = v * (this.canvas.height) / 9;
-        
+                        var y = v * (this.canvas.height) / 20;
                         if (i === 0) {
                             this.context.arc(WIDTH,HEIGHT,(x*=i) / ( y * i),0,(Math.PI*2),false)
                         } else {
@@ -210,7 +208,7 @@ renderCanvas()
                             this.context.arc(WIDTH,HEIGHT,(y*i) / ((x*y) * i),0,(Math.PI*2),false)
                             this.context.arc(WIDTH,HEIGHT,(radius/i) / ((x/i) * y),0,(Math.PI*2),false)
                             this.context.arc(WIDTH,HEIGHT,(y*i) / ((x/radius) * i),0,(Math.PI*2),false)
-                        
+
                         x = i * sliceWidth //frequencyBins/analyser.sampleRate;
                     }
                     this.context.stroke();
@@ -219,49 +217,6 @@ renderCanvas()
         rippleWaves();
     }
 
-//    choroFloroVisualiser(){
-
-//    var renderUpDownFrame  = ()=>  {
-//         window.requestAnimationFrame(renderUpDownFrame);
-//         this.analyser.getByteFrequencyData(this.freqDomain);
-       
-//         this.canvas.setAttribute("width",window.innerWidth)
-//         this.canvas.setAttribute("height",window.innerHeight)
-//         window.onresize = ()=> {
-//             this.canvas.setAttribute("width",window.innerWidth)
-//             this.canvas.setAttribute("height",window.innerHeight)
-//         } 
-          
-//            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-//            for(let i = 0;i < this.bufferLength;i++){
-// 			var value = this.freqDomain[i*2] / 400;
-// 			var barx = i * 5.5;
-// 			var barW = 2;
-// 			var height = this.canvas.height * value;
-// 			var barH = this.canvas.height - height - 1;
-
-// 		// Up frame
-// 			this.context.fillStyle = "#E8F572";
-// 			this.context.setTransform(1, 0, 0, 1, 0, 0);
-//             $(window).on('resize',()=>{
-//                 this.context.translate(1300, -400);
-//             })
-// 			this.context.translate(1300, -400);
-// 			this.context.scale(-1, 1)
-// 			this.context.fillRect(barx,barH,barW,height);
-//             // down frame
-// 			this.context.fillStyle = "#E8F572";
-// 			this.context.setTransform(1, 0, 0, 1, 0, 0);
-//             $(window).on('resize',()=>{
-//                 this.context.translate(1300, -400);
-//             })
-// 			this.context.translate(1300, 1080);// 1050, 916
-// 			this.context.scale(-1,-1);
-// 			this.context.fillRect(barx,barH,barW,height);
-// 			}
-//        }
-//        renderUpDownFrame();
-//    }
 /**
  * 
  * @param {*} 
@@ -379,6 +334,7 @@ spiralVisual()
      * @returns responsible for updating the canvas image
      */
     const update = () => {
+        try{
         window.requestAnimationFrame(update);
         /**
          * Canvas props
@@ -403,6 +359,7 @@ spiralVisual()
             buffer2.setAttribute('width',w);
             buffer1.setAttribute('height',h)
        }
+    //    console.log(this.canvas)
        window.onresize = ()=>{
         buffer1.setAttribute('width',w)
         buffer1.setAttribute('height',h);
@@ -416,8 +373,7 @@ spiralVisual()
         
         //copy buffer1 to buffer2
         bctx2.drawImage(buffer1,0,0);
-    
-    
+
         //draw music into buffer 2
         rtick = (rtick+1)%(10);
         gtick = (gtick+2)%(200);
@@ -425,28 +381,32 @@ spiralVisual()
       
         bctx2.strokeStyle =  "rgba("+rtick+","+gtick+","+btick+")";
         bctx2.beginPath();
-        
+
         var s = this.freqDomain.length/2*4;
-        
+        console.log(s)
+
         var l = w/2-s/2;
         var t = h/2-256/2;
         bctx2.moveTo(l, t+128-this.freqDomain[0]+100);
-        
+
         for(var i=0; i<this.freqDomain.length/2; i++) {
             bctx2.lineTo(l+i*4, t+128-this.freqDomain[i]+10);
         }
-        
+
         for(var i=(this.freqDomain.length/2)-1; i>=0; i--) {
             var max = this.freqDomain.length/2-1;
             bctx2.lineTo(l+(max-i)*4, t+128-this.freqDomain[i]+100);
         }
         bctx2.stroke()
-        
+
         //copy buffer2 to buffer1, stretched
         //draw more onto buffer
         bctx1.drawImage(buffer2, 0,0,w,h,-5,-5, w+10,h+10);
         //draw buffer1 back to screen
-        this.context.drawImage(buffer1,0,0);   
+        this.context.drawImage(buffer1,0,0)
+    }catch(e){
+        console.log(e)
+    }
     }
     update();
    }

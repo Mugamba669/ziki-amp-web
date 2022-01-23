@@ -6,7 +6,7 @@
              <b class="material-icons mi-dehaze"></b>
             <!-- <b class="material-icons mi-music-note"></b> -->
             <span @click="this.$emit('queuePlay',[list,index])">{{(list.data.name).replace(".mp3","")}}</span>
-            <b class="material-icons mi-play-circle"></b>
+            <!-- <b class="material-icons mi-play-circle"></b> -->
             <!-- <b class="material-icons mi-more-vert"></b> -->
           </p>
       </div>
@@ -32,6 +32,7 @@ export default {
   width: 100%;
   height: 100%;
   background: #07060648;
+  backdrop-filter: blur(90px);
   border-radius: 7px;
    padding: 10px;
 .conatiner {
@@ -54,7 +55,7 @@ export default {
       border-radius:5px;
       display: flex;
       cursor: pointer;
-      margin:2.8px;
+      margin:4px;
       flex-direction:row;
       transition:0.3s ease-in-out;
       transform:scale(1,1);

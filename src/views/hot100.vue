@@ -1,16 +1,17 @@
 <template>
     <div class="hot100">
-      <div class="container">
+      hot 100
+      <!-- <div class="container">
          <div class="stream" v-bind:key="stream" v-for="stream in streams">
             <img :src="stream.url" :alt="stream.title">
         </div>
       </div>
-        
+         -->
     </div>
 </template>
 
 <script>
-import Axios from "axios";
+import axios from "axios";
 import cheerio from "cheerio";
 import MediaLibrary from "media-library";
 export default {
@@ -28,48 +29,24 @@ export default {
     
     },
     mounted(){
-var library = new MediaLibrary({
-  // persistent storage location (optional)
-  dataPath: '/home/mugamba/Desktop',
-  // the paths to scan
-  paths: [ '/home/mugamba/Music' ]
-});
- 
-// Scanning files (only needed at first start and when paths are added)
-library.scan()
-.on('track', (track) => {
-  console.log(track);
-})
-.on('done', () => {
-    // listing all tracks
-    // library.tracks((err, tracks) => console.log(tracks));
-    // library.scanCovers((err, tracks) => console.log(tracks));
- 
-    // listing artists  
-    // library.artists((err, tracks) => console.log(tracks));
- 
-    // searching tracks
-    // library.find({ artist: 'radiohead', title: 'ok' }, (err, tracks) => {
-    //     console.log(tracks);
-    // });
-});
-      // Axios.request()
-        // Axios.get(this.siteUrl).then((response)=>{
-        //    const ch = cheerio.load(response.data);
-        //     let trackList = ch('.hot100');
-        //     console.log(trackList)
-        //     console.log(fs)
-        // trackList.map((index,element)=>{
-        //     let hot100 = {
-        //         title:`${element.children[0].children[5].children[0].children[0].data}`,
-        //         artist:`${element.children[0].children[5].children[1].children[0].data}`,
-        //         artWork:`${element.children[0].children[3].children[1].attribs.data}`,
-        //         url:`${element.children[2].children[3].children[1].attribs.src}`
-        //     };
-        //     console.log(hot100)
-        //     this.streams = [...this.streams,hot100];
-        // });
-    // });
+        /** axios.defaults.baseURL = 'http://myurl';
+  axios.defaults.headers.post['Content-Type'] ='application/json;charset=utf-8';
+  axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*'; */
+  
+     axios({
+       method:"get",
+       baseURL:this.siteUrl,
+       responseType:"application/json;charset=utf-8",
+       headers:{
+         
+       }
+     }).then((response)=>{
+       console.log(response.data);
+     })
+    console.log("nternet")
+
+   
+
   }
 }
 </script>

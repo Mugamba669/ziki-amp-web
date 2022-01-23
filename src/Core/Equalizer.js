@@ -1,35 +1,30 @@
-const { Visualizer } = require("./Visualizer");
-class Equalizer extends Visualizer{
+class Equalizer{
     /**
      * 
      * @param {HTMLAudioElement} audio 
      * @param {HTMLCanvasElement} canvas
      * @param {CanvasRenderingContext2D} context
      */
-    constructor(audio,canvas,context){
+         constructor(audio){
 
         this.audio = audio;
-        this.canvas = canvas;
-        this.context = context;
         this.audioCtx = new AudioContext();
-        this.analyser = new AnalyserNode(this.audioCtx,{maxDecibels:-10,minDecibels:-80,smoothingTimeConstant:0.8});
-        super(this.analyser,canvas,context)
+        this.analyser = new AnalyserNode(this.audioCtx,{maxDecibels:-15,minDecibels:-75,smoothingTimeConstant:0.8});
+        // super(this.analyser,canvas,context)
        
         this.source = new MediaElementAudioSourceNode(this.audioCtx,{mediaElement:this.audio});
-        this.splitter = new ChannelSplitterNode(this.audioCtx,{numberOfOutputs:2});
-        this.merger = new ChannelMergerNode(this.audioCtx,{numberOfInputs:2});
 
+        this.merger = this.audioCtx.createChannelMerger(2);
+        this.splitter = this.audioCtx.createChannelSplitter(2);
         this.delays = [
             new DelayNode(this.audioCtx,{delayTime:0}),
             new DelayNode(this.audioCtx,{delayTime:0}),
-            // new DelayNode(this.audioCtx,{delayTime:0}),
         ];
 
         this.feedback = [
             new GainNode(this.audioCtx,{gain:0}),
             new GainNode(this.audioCtx,{gain:0}),
-            // new GainNode(this.audioCtx,{gain:0}),
-        ];
+          ];
         /**
          * 
 | Type    | Fc       |    Q | Gain     |
@@ -46,28 +41,47 @@ class Equalizer extends Visualizer{
 | Peaking | 16000 Hz | 1.41 | -11.1 dB |
          */
         this.bands = [
-            new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:25,gain:0}),
-            new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:50,gain:0}),
-            new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:85,gain:0}),
-            new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:150,gain:0}),
-            new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:250,gain:0}),
-            new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:500,gain:0}),
+            new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:20,gain:0}),
+            new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:40,gain:0}),
+            new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:80,gain:0}),
+            new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:100,gain:0}),
+            new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:200,gain:0}),
+            new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:400,gain:0}),
             new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:1000,gain:0}),
             new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:2000,gain:0}),
             new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:4000,gain:0}),
             new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:8000,gain:0}),
             new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:16000,gain:0}),
         ];
+            /**
+             * Room effects
+             */
+             this.roomEffect = ()=> {
+                /** Connect room effect */
+                this.source.connect(this.splitter);
+                this.splitter.connect(this.delays[0],0);
+                this.delays[0].connect(this.feedback[0]);
+                this.feedback[0].connect(this.delays[1]);
 
+                this.splitter.connect(this.delays[1],1);
+                this.delays[1].connect(this.feedback[1]);
+                this.feedback[1].connect(this.delays[0]);
+    
+                this.feedback[0].connect(this.merger,0,0);
+                this.feedback[1].connect(this.merger,0,1);
+    
+                this.merger.connect(this.audioCtx.destination);
+           }
+    /******************************************************* */
         this.connects = ()=>{
             let size = this.bands.length;
             this.source.connect(this.bands[0]);
             for( let i = 0 ; i < size; i++){
-                if(i <  (this.bands.length-1)){
+                if(i < (this.bands.length-1)){
                      this.bands[i].connect(this.bands[i+1]);
                 }
-
             }
+            /* solved on 22nd jan 2022 */
             // this.bands[1].connect(this.bands[2]);
             // this.bands[2].connect(this.bands[3]);
             // this.bands[3].connect(this.bands[4]);
@@ -77,30 +91,13 @@ class Equalizer extends Visualizer{
             // this.bands[7].connect(this.bands[8]);
             // this.bands[8].connect(this.bands[9]);
             // this.bands[9].connect(this.bands[10]);
+
             this.bands[size-1].connect(this.analyser);
             this.analyser.connect(this.audioCtx.destination);
-            this.audioCtx.resume();
             this.roomEffect();
 
-        }
-        this.roomEffect = ()=> {
-             //** Connect room effect */
+            this.audioCtx.resume();
 
-             this.source.connect(this.splitter);
-             this.splitter.connect(this.delays[0],0);
-             this.delays[0].connect(this.feedback[0]);
-             this.feedback[0].gain.value = 0;
-             this.delays[0].delayTime.value = 0;
- 
-             this.splitter.connect(this.delays[1],1);
-             this.delays[1].connect(this.feedback[1]);
-             this.feedback[1].gain.value = 0;
-             this.delays[1].delayTime.value = 0;
- 
-             this.feedback[1].connect(this.merger,0,0);
-             this.feedback[1].connect(this.merger,0,1);
- 
-             this.merger.connect(this.audioCtx.destination);
         }
     }
    

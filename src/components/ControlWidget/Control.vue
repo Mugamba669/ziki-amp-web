@@ -39,6 +39,11 @@ export default {
                 width: 40px;
                 height: 40px;
                 border: 1px solid #444;
+                transition: 0.3s ease-in-out;
+                  transform: scale(1,1);
+                &:hover{
+                      transform: scale(1.05,1.05);
+                }
             }
             .play,.pause{
                 width:60px;
@@ -46,8 +51,13 @@ export default {
                 border-radius:50%;
                 font-size:42px;
                 line-height:20px;
+                transition: 0.3s ease-in-out;
+                  transform: scale(1,1);
                 border: 1px solid #444;
                 cursor: pointer;
+                  &:hover{
+                      transform: scale(1.05,1.05);
+                }
             }
         }
 

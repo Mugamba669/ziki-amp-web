@@ -1,26 +1,28 @@
 <template>
 <div class="image">
      <div class="container">
-        <img :src="source" alt="coverArt" srcset="">
+        <img ref="images" :src="source" alt="coverArt" srcset="">
     </div>
 </div>
    
 </template>
 
 <script>
+  const image = document.querySelector("img");
+
 export default {
     name: 'Cover',
   props:{
       source:String,
-      playState:String,
+      audio:HTMLAudioElement,
   },
-  data(){
-    return{
-        playState:false
-    } 
-},
-  methods:{ 
-     
+  methods:{},
+  mounted(){
+    
+    this.audio.onplay = ()=>{
+
+       image.style.animationPlayState = this.audio.paused? "paused":"running";
+    }
   }
 }
 </script>
@@ -28,7 +30,7 @@ export default {
 <style lang="scss" scoped>
  @keyframes spin {
         0%{
-            transform: rotate(0deg);
+            transform:rotate(0deg);
         }
         100%{
             transform:rotate(359deg);
@@ -40,16 +42,23 @@ export default {
         flex-direction:column;
         justify-content:center!important;
         align-items:center!important;
+        // perspective: 200px;
+        // transform-style: preserve-3d;
+        
     .container {
         width:400px;
+        // transform: ;
         height:400px;
+         transform-style: preserve-3d;
         border-radius: 50%;
         box-shadow: 0px -2px 3px 2px gray;
          overflow:hidden;
         img{ 
+          cursor: no-drop;
           width:100%;
           height:100%;
           position: relative;
+          // transform: translate3d(200px);
           animation: spin 20s infinite linear;
         //    animation-play-state: paused;
            object-fit:contain!important;

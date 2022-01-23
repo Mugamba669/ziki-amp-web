@@ -1,42 +1,44 @@
 <template lang="html">
     <div>
-        <label>{{tune}}dB</label>
-      <input type="range" max="5" step="0.01" min="0" @input="changeTuner" v-model="tune"/>
+        <label>{{valueTune}}dB</label>
+     <input type="range" max="5" step="0.01" min="0" @input="changeTuner" v-model="valueTune"/>
     </div>
 </template>
 <script>
 export default {
-    name:'Tuner',
+    name:'Feedback',
     props:{
-        tune:Number,
-        delay:DelayNode,
+        valueTune:Number,
+        feedback:GainNode,
     },
     methods: {
         changeTuner(){
-            this.delay.delayTime.value = this.tune;
+            // console.log(this.feedback.gain);
+          this.feedback.gain.value = this.valueTune;
         }
     },
 }
 </script>
 <style lang="scss" scoped>
-  div{
-     display:flex;
+    div{
+        // transform: rotate(90deg);
+        display:flex;
         flex-direction:row-reverse;
-        justify-content: center;
+        justify-content:center;
         align-items:center;
         label{
             font:100 14px Arial;
-            transform:rotate(90deg);
-            margin:0px;
+            margin: 8px;
+             transform:rotate(90deg);
         }
-    [type="range"]{
+   [type="range"]{
         appearance:none;
-        margin:30px;
-        width:260px;
+        width:250px;
         background:#736cdd;
         overflow: hidden;
         border-radius: 10px;
         height: 10px;
+        margin:30px;
         &::-webkit-slider-thumb{
              appearance:none;
             width:20px;
@@ -45,5 +47,5 @@ export default {
             border-radius: 10px;
         }
     }
-}
+    }
 </style>

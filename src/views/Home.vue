@@ -1,13 +1,14 @@
 <template>
+ <div class="visual">
+       <canvas v-show="displayVisual" ref="canvas"></canvas>
+    </div>
   <div class="home">
-   
-
   <div v-show="ptr1" class="part1">
          <Cover 
          v-if="!queueView" 
           v-show="showCover"
           :source="image"
-          :playState="playState"
+          :audio="audio"
           />
 
         <EQ
@@ -25,6 +26,7 @@
         @showVol="showVol"
         @loadSingle="loadSingle"
         @showRoom="roomEffectsComponent"
+        @showVisual="toggleVisualWidget"
       />
 
          <Volume
@@ -43,12 +45,20 @@
          <!-- Visulizer -->
        
   </div>
-     <div class="visual">
-          <canvas ref="canvas"></canvas>
-          <slot></slot>
-       </div>
+  <!-- <router-link to="/hot100">Hot 100</router-link> -->
+      <Room
+        v-show="roomView"
+        :delays="delayArr"
+        :feedback="feedBackArr"
+        @closeRoom="closeRoom"
+       />
 
      <div v-show="ptr2" class="prt2">
+      
+       <Dropdown
+       v-show="displayVisual"
+       @choice="chooseVisual"
+       />
        <!-- <Search
         @live="liveS"
        /> -->
@@ -93,25 +103,32 @@ import { Equalizer } from "../Core/Equalizer";
 import EQ from "@/components/EqaulizerWidget/Equalizer.vue";
 import Queue from "@/components/Queue/Queue.vue"
 import Search from "@/components/Search/Search.vue";
+import Dropdown from "@/components/Dropdown/Dropdown.vue";
+import Room from "@/components/Room/Room.vue";
 import * as mm from  "music-metadata-browser";
-
+const { Visualizer } = require("../Core/Visualizer");
+const { image } = require("../Core/default");
 export default {
   name: 'Home',
   data(){
     return {
+      displayVisual:false,
        audio:new Audio(),
        playlist:[],
        bufferArray:[],
-       title:"tat",
-       artist:"",
-       album:"",
+       delayArr:[],
+       feedBackArr:[],
+       title:"....",
+       artist:"....",
+       album:"...",
        showEQ:false,
        showCover:true,
        ptr1:true,
        ptr2:true,
-       image:`../assets/logo.png`,
+       image:null,
        size:0,
        curlTime:0,
+       roomView:false,
        progress:0,
        progMax:1,
        trackData:File,
@@ -126,10 +143,13 @@ export default {
        loop:false,
        countPlay:0,
        eqBands:[],
-       playState:"paused",
       canvas:null,
       context:null,
-       
+      visualize:null,
+      shuffle:false,
+      selected:0,
+      vise:null,
+      eq:null,
     }
   
   },
@@ -141,21 +161,19 @@ export default {
     Control,
     Volume,
     Queue,
+    Dropdown,
     EQ,
+    Room,
     Search,
   },
   methods: {
     loadTrack(value){
       for (let i = 0;i < value.length;i++) {
           this.playlist = [...this.playlist,{id:i,data:value[i],active:false}]
-          //  this.getTitle(value[i]);
+      localStorage.setItem(i,{id:i,data:value[i],active:false});
+
       }
-        // this.showPlay = false;
-        //  this.showPause = true;
       this.queueView = true;
-      // this.showCover = false;
-    //  this.commonComand(value);
-    // this.$state.playlist
     },
 
     liveS(query){ /// to perform a live search
@@ -167,8 +185,16 @@ export default {
         console.log(this.playlist);
 
     },
+  toggleVisualWidget(){
+      this.displayVisual = ! this.displayVisual;
+  },
     roomEffectsComponent(){
-
+        this.ptr1 = !this.ptr1;
+        this.ptr2 = !this.ptr2;
+        this.roomView = !this.roomView;
+    },
+    closeRoom(){
+      this.roomEffectsComponent();
     },
     loadSingle(file){
       let id = 0;
@@ -196,11 +222,11 @@ export default {
     pauseNow(){
      this.showPlay = true;
          this.showPause = false;
+         
       this.audio.pause();
     },
     shuffleTracks(){
-         this.countPlay = Math.floor(Math.random() * this.playlist.length);
-        this.commonComand(this.playlist[this.countPlay].data);
+         this.shuffle = !this.shuffle;
     },
     changeVol(vol){
         this.audio.volume = vol;
@@ -213,10 +239,9 @@ export default {
       this.showV = !this.showV;
     },
     getTitle(file){
-  
-        // mm.parseBlob(file).then(meta =>{
-        //     console.log(meta.common);
-        // });
+        mm.parseBlob(file).then(meta =>{
+            console.log(meta.common);
+        });
     },
     commonComand(track){
       const url =  URL.createObjectURL(track);
@@ -229,7 +254,7 @@ export default {
       this.artist = meta.common.artist == null ? "Unknown artist" : meta.common.artist;
       this.album = meta.common.album == null ? "Unknown album" : meta.common.album ;
       this.bufferArray = meta.common.picture[0].data;
-    document.querySelector("title").value = this.title;
+       document.querySelector("title").value = this.title;
       // const unprocessedData =this.buff;
       /**
        * Track infor processed
@@ -237,9 +262,9 @@ export default {
           var data = new Uint8Array(this.bufferArray);
           const blob = new Blob([data],{type:"image/jpeg"});
           const imageURL = URL.createObjectURL(blob);
-          this.image =  this.bufferArray == null ? "../assets/pAudio.jpeg": imageURL;
-          document.querySelector("body").style.backgroundImage = "url("+imageURL+")";
-      })
+          this.image =  (this.bufferArray == undefined || this.bufferArray == '' || this.bufferArray == null)? image : imageURL;
+          document.querySelector("body").style.backgroundImage = "url("+image+")";
+      });
     },
     seekNow(){
        this.countPlay +=1;
@@ -268,7 +293,7 @@ export default {
           this.countPlay = queue[1];
           this.closeQueue();
           this.toggleList(queue[1]);
-          console.log(this.getTitle(queue[0].data));
+          // console.log(this.getTitle(queue[0].data));
       },
       toggleList(id){
                this.playlist = this.playlist.map((track) => track.id == id?{...track,active:!track.active}:track)
@@ -278,9 +303,41 @@ export default {
         this.queueView = !this.queueView;
     },
     closeQueue(){
-      //  this.showCover = !this.showCover;
         this.queueView = !this.queueView;
-       }
+       },
+     chooseVisual(eventValue){
+         switch(parseInt(eventValue)){
+           case 1:
+             this.vise.barsVisualiser();
+             break;
+
+             case 2:
+               this.vise.dustyParticles()
+               break;
+             case 3:
+               this.vise.histogramVisualiser()
+               break;
+
+             case 4:
+               this.vise.sineWaveVisualiser()
+               break;
+             case 5:
+               this.vise.rippleWaveVisualiser()
+               break;
+              
+             case 6:
+               this.vise.glassTilesVisualiser()
+               break;
+              
+             case 7:
+               this.vise.floatingBars()
+               break;
+
+                case 8:
+               this.vise.colorstetchVisualiser()
+               break;
+         }
+     }
   },
   
   mounted(){
@@ -290,13 +347,16 @@ export default {
       /**  Canvas */
       this.canvas = this.$refs['canvas'];
       this.context = this.$refs['canvas'].getContext("2d");
-    console.log(this.canvas)
-    console.log(this.context)
-      const eq = new Equalizer(this.audio,this.canvas,this.context);
+    
+      this.eq = new Equalizer(this.audio);
+      this.vise = new Visualizer(this.eq.analyser,this.canvas,this.context);
+  
+      this.eq.startEq();
+      this.eqBands = this.eq.getBands();
+      this.delayArr = this.eq.getDelayBands();
+      this.feedBackArr = this.eq.getFeedBack();
 
-      eq.startEq();
-      this.eqBands = eq.getBands();
-    // console.log(can);
+    // console.log(localStorage);
   setInterval(()=>{
            this.progress = this.audio.currentTime;
           this.progMax = this.audio.duration;
@@ -314,25 +374,36 @@ export default {
 
     }
     this.audio.onpause = ()=>{
-         this.showPlay = true;
-         this.showPause = false;
-         eq.barsVisualiser();
+         this.showPlay =!this.showPlay;
+         this.showPause = !this.showPause;
+         
+        //  eq.barsVisualiser();
     }
 
     this.audio.onended = ()=>{
-      //  this.showPlay = true;
-      //    this.showPause = false;
-          this.countPlay +=1;
-         this.commonComand(this.playlist[this.countPlay].data);
-         this.toggleList(this.countPlay);
+        if(this.shuffle == true){
+            this.countPlay = Math.floor(Math.random() * this.playlist.length);
+            this.commonComand(this.playlist[this.countPlay].data);
+        }else{
+           this.countPlay +=1;
+          this.commonComand(this.playlist[this.countPlay].data);
+          this.toggleList(this.countPlay);
+        }
+         
     }
 
    this.audio.onplay = ()=>{
-          this.showPlay = false;
-         this.showPause = true;
+          this.showPlay =!this.showPlay;
+         this.showPause = !this.showPause;
     }
   },
-  created(){}
+  created(){
+    // console.log(image)
+    // for (let index = 0; index < localStorage.length -8; index++) {
+    //   const element = localStorage.getItem([index]);
+    //   console.log(element.data)
+    // }
+  }
 }
 </script>
  
@@ -340,24 +411,43 @@ export default {
  *{
    user-select: none;
  }
+   .visual{
+          width: 100%;
+          height: 100%;
+           backdrop-filter: blur(94px)!important;
+          z-index: -1!important;
+          position: fixed;
+          top: 0;
+          left: 0;
+          pointer-events:none;
+          background: rgba(0,0,0,0.3);
+          canvas{
+            z-index: -1!important;
+          width:100%;
+          height: 100%;
+
+        }
+    }
    .home {
-        backdrop-filter: blur(94px);
+      top: 0;
+      left: 0;
+       background: rgba(0,0,0,0.4);
         width: 100%;
         height: 100%;
+        z-index:2!important;
         position: fixed;
          display: flex!important;
         flex-direction:row!important;
         justify-content: space-around!important;
         align-items: center!important;
-        background: rgba(0,0,0,0.3);
-        top: 0;
-        left: 0;
         color:#ddd;
       .prt2,.part1{
           margin: 15px;
-           display: flex;
+          // position:absolute;
+          display: flex;
           flex-direction: column!important;
           justify-content: center!important;
+          z-index: 3!important;
           align-items: center!important;
         }
       }
@@ -378,7 +468,7 @@ export default {
         .visual{
           width: 100%;
           height: 100%;
-          z-index: 1;
+          z-index: 3!important;
           position: fixed;
           canvas{
           width:100%;
@@ -391,9 +481,8 @@ export default {
           flex-direction: column!important;
           justify-content: center!important;
           align-items: center!important;
-        }
-      }
-       
+       }
+   }
 }
     
 @media (max-width:480px) {
@@ -410,17 +499,6 @@ export default {
         justify-content: center!important;
         align-items: center!important;
         color:#ddd;
-        .visual{
-          width: 100%;
-          height: 100%;
-          z-index: 1;
-          position: fixed;
-          canvas{
-          width:100%;
-          height: 100%;
-
-        }
-    }
         
        .prt2,.part1{
           
@@ -430,7 +508,6 @@ export default {
           align-items: center!important;
         }
       }
-       
 }
     
  </style>

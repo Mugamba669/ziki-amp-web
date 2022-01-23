@@ -6,6 +6,7 @@
         <button class="btn" @click="this.$emit('toggleEQ')"><b class="mi mi-tune mi-rounded" title="Open Equalizer" ></b></button>
         <button @click="this.$emit('showRoom')"> <b class="material-icons mi-meeting-room mi-rounded" title="show Room Effects"></b> </button>
         <button @click="this.$emit('showVol')"> <b class="material-icons mi-volume-up mi-rounded" title="Volume control"></b> </button>
+        <button @click="this.$emit('showVisual')"> <b class="material-icons mi-graphic-eq mi-rounded" title="Visual effects control"></b> </button>
       
        <input type="file" class="loadMusic" webkitdirectory multiple @change="track" >
        <input type="file" class="singleMusic" accept="audio/*" @change="trackSingle" >

@@ -25,9 +25,11 @@ export default {
     
   },
   methods:{
-    updateSlider(value){
-      this.$emit("updateChange",value);
+    updateSlider(){
+      this.$emit("updateChange",this.output);
     }
+  },
+  created(){
   }
 }
 </script>
@@ -39,9 +41,10 @@ export default {
      flex-direction:row;
      justify-content:center;
      .label{
-       font:300 17px Ubuntu,Arial;
-       background:#222;
+       font:300 14px Arial;
+       background:#000;
        border-radius:5px;
+       padding: 10px;
        margin:8px;
      }
      input{

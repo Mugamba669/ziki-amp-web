@@ -250,9 +250,9 @@ export default {
       this.size = ((track.size)/1000000);
       mm.parseBlob(track).then(meta => {
         // console.log(meta);
-      this.title = meta.common.title == null ? (track.name).replace(".mp3","") : meta.common.title;
-      this.artist = meta.common.artist == null ? "Unknown artist" : meta.common.artist;
-      this.album = meta.common.album == null ? "Unknown album" : meta.common.album ;
+      this.title = meta.common.title == null || meta.common.title == undefined ? (track.name).replace(".mp3","") : meta.common.title;
+      this.artist = meta.common.artist == null || meta.common.artist == undefined ? "Unknown artist" : meta.common.artist;
+      this.album = meta.common.album == null || meta.common.album == undefined ? "Unknown album" : meta.common.album ;
       this.bufferArray = meta.common.picture[0].data;
        document.querySelector("title").value = this.title;
       // const unprocessedData =this.buff;

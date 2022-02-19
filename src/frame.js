@@ -14,11 +14,12 @@ function createWindow() {
             nodeIntegrationInWorker:true
 
         },
-        icon: path.join(__dirname, './assets/pAudio.jpeg'),
+        icon: path.join(__dirname, './assets/pAudio.png'),
     });
 
     // win.loadURL('https://www.google.com/');
     win.loadURL('http://localhost:8080/');
+    // win.loadURL('https://lw-web.netlify.app/');
     // win.webContents.openDevTools();
 }
 app.whenReady().then(createWindow);

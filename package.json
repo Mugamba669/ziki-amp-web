@@ -4,7 +4,7 @@
   "private": true,
   "main": "./src/frame.js",
   "scripts": {
-    "start": "vue-cli-service serve && electron .",
+    "start": "vue-cli-service serve && npm run app",
     "build": "vue-cli-service build",
     "app": "electron ."
   },
@@ -14,6 +14,7 @@
     "cheerio": "^1.0.0-rc.10",
     "core-js": "^3.6.5",
     "media-library": "^1.2.4",
+    "particles.js": "^2.0.0",
     "vue": "^3.0.0",
     "vue-radial-menu": "^1.1.1",
     "vue-round-slider": "^1.0.1",
@@ -34,6 +35,9 @@
     "material-icons": "^1.10.3",
     "music-metadata-browser": "^2.5.0",
     "sass": "^1.26.5",
-    "sass-loader": "^8.0.2"
+    "sass-loader": "^8.0.2",
+    "three": "^0.137.1",
+    "vue-particlejs": "^1.1.0",
+    "vue-tour": "^2.0.0"
   }
 }

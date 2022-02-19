@@ -1,16 +1,17 @@
 <template>
     <div class="loader">
-        <button v-show="viewDes" @click="triggerLoader"><b class="material-icons mi-post-add" title="Add music playlist"></b></button>
-        <button v-show="viewMob" @click="triggerSingle"><b class="material-icons mi-add" title="Add music playlist"></b></button>
-        <button @click="this.$emit('showQueue')"><b class="material-icons mi-rounded mi-queue-music" title="Open playlist"></b></button>
-        <button class="btn" @click="this.$emit('toggleEQ')"><b class="mi mi-tune mi-rounded" title="Open Equalizer" ></b></button>
-        <button @click="this.$emit('showRoom')"> <b class="material-icons mi-meeting-room mi-rounded" title="show Room Effects"></b> </button>
-        <button @click="this.$emit('showVol')"> <b class="material-icons mi-volume-up mi-rounded" title="Volume control"></b> </button>
-        <button @click="this.$emit('showVisual')"> <b class="material-icons mi-graphic-eq mi-rounded" title="Visual effects control"></b> </button>
+        <button id="addMusic" v-show="viewDes" @click="triggerLoader"><b class="material-icons mi-post-add" title="Add music playlist"></b></button>
+        <button id="addMusic" v-show="viewMob" @click="triggerSingle"><b class="material-icons mi-add" title="Add music playlist"></b></button>
+        <button id="playlist" @click="this.$emit('showQueue')"><b class="material-icons mi-rounded mi-queue-music" title="Open playlist"></b></button>
+        <button id="eq" class="btn" @click="this.$emit('toggleEQ')"><b class="mi mi-tune mi-rounded" title="Open Equalizer" ></b></button>
+        <button id="player" @click="this.$emit('showRoom')"> <b class="material-icons mi-meeting-room mi-rounded" title="show Room Effects"></b> </button>
+        <button id="volume" @click="this.$emit('showVol')"> <b class="material-icons mi-volume-up mi-rounded" title="Volume control"></b> </button>
+        <button id="vis" @click="this.$emit('showVisual')"> <b class="material-icons mi-graphic-eq mi-rounded" title="Visual effects control"></b> </button>
       
        <input type="file" class="loadMusic" webkitdirectory multiple @change="track" >
        <input type="file" class="singleMusic" accept="audio/*" @change="trackSingle" >
     </div>
+    <!-- <v-tour name="guide" :steps="steps"></v-tour> -->
 </template>
 
 <script>
@@ -19,7 +20,17 @@ export default {
     data(){
         return{
             viewMob:false,
-            viewDes:false
+            viewDes:false,
+            steps:[
+                 {
+                    target: '#addMusic',  // We're using document.querySelector() under the hood
+                    content: `Discover <strong>Vue Tour</strong>!`
+                },
+                {
+                    target: '#vs',
+                    content: 'An awesome plugin made with Vue.js!'
+                },
+            ]
         }
     },
     methods: {
@@ -50,7 +61,6 @@ export default {
     },
     mounted(){
        const device = this.chooseDevice();
-        
        switch (device) {
            case "tablet":
            case "mobile":
@@ -62,6 +72,10 @@ export default {
             break;
        }
     },
+    computed(){
+        //  this.$tours['guides'].start();
+
+    }
 }
 </script>
 

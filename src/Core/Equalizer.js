@@ -95,7 +95,6 @@ class Equalizer{
             this.bands[size-1].connect(this.analyser);
             this.analyser.connect(this.audioCtx.destination);
             this.roomEffect();
-
             this.audioCtx.resume();
 
         }

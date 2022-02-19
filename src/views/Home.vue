@@ -70,7 +70,7 @@
           :size="size"
         />
         <Slider
-        v-show="showCover"
+            v-show="showCover"
             @updateChange="updateSlider"
             :max="progMax"
             :currentValue="curlTime"
@@ -93,6 +93,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
 import Slider from '@/components/Slider.vue'; // @ is an alias to /src
 import Cover from '@/components/ImageWidget/Cover.vue'; // @ is an alias to /src
 import Details from "@/components/Details/Details.vue";
@@ -118,9 +119,9 @@ export default {
        bufferArray:[],
        delayArr:[],
        feedBackArr:[],
-       title:"....",
-       artist:"....",
-       album:"...",
+       title:"*",
+       artist:"*",
+       album:"*",
        showEQ:false,
        showCover:true,
        ptr1:true,
@@ -138,7 +139,7 @@ export default {
        btnValue:"EQ",
        queueView:false,
        showV:false,
-       vol:0.17,
+       vol:0,
        visual:true,
        loop:false,
        countPlay:0,
@@ -206,8 +207,8 @@ export default {
 
       this.playlist = [...this.playlist,listTile];
       this.commonComand(file);
-      this.showPlay = false;
-      this.showPause = true;
+      this.showPlay = !this.showPlay;
+      this.showPause = !this.showPause;
       id++;
     },
     closeEQ(){
@@ -220,8 +221,8 @@ export default {
          this.audio.play();
     },
     pauseNow(){
-     this.showPlay = true;
-         this.showPause = false;
+     this.showPlay = !this.showPlay;
+         this.showPause = !this.showPause;
          
       this.audio.pause();
     },
@@ -262,8 +263,8 @@ export default {
           var data = new Uint8Array(this.bufferArray);
           const blob = new Blob([data],{type:"image/jpeg"});
           const imageURL = URL.createObjectURL(blob);
-          this.image =  (this.bufferArray == undefined || this.bufferArray == '' || this.bufferArray == null)? image : imageURL;
-          document.querySelector("body").style.backgroundImage = "url("+image+")";
+          this.image =  (this.bufferArray == undefined ||this.bufferArray == null)? image : imageURL;
+          document.querySelector("body").style.backgroundImage =(this.bufferArray == undefined ||this.bufferArray == null)?"url("+image+")":"url("+imageURL+")";
       });
     },
     seekNow(){
@@ -341,6 +342,8 @@ export default {
   },
   
   mounted(){
+      
+
     /**default volume = 0.17 */
     this.audio.volume = this.vol;
 
@@ -374,7 +377,7 @@ export default {
 
     }
     this.audio.onpause = ()=>{
-         this.showPlay =!this.showPlay;
+         this.showPlay = !this.showPlay;
          this.showPause = !this.showPause;
          
         //  eq.barsVisualiser();
@@ -393,16 +396,16 @@ export default {
     }
 
    this.audio.onplay = ()=>{
-          this.showPlay =!this.showPlay;
+          this.showPlay = !this.showPlay;
          this.showPause = !this.showPause;
     }
   },
   created(){
-    // console.log(image)
-    // for (let index = 0; index < localStorage.length -8; index++) {
-    //   const element = localStorage.getItem([index]);
-    //   console.log(element.data)
-    // }
+    // ...mapGetters({vol:"getVolume"});
+  },
+  computed:{
+    ...mapGetters({vol:"getVolume"}),
+
   }
 }
 </script>

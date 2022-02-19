@@ -1,7 +1,22 @@
 <template>
-  <router-view></router-view>
-</template>
 
+  <router-view></router-view>
+  
+</template>
+<script>
+export default {
+  data(){
+    return{
+      steps:[
+        {
+          target:'#view',
+          content:"Content description"
+        }
+      ]
+    }
+  }
+}
+</script>
 <style lang="scss" scoped>
 @font-face {
   font-family: 'Ubuntu';

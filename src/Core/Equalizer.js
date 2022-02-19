@@ -41,11 +41,11 @@ class Equalizer{
 | Peaking | 16000 Hz | 1.41 | -11.1 dB |
          */
         this.bands = [
-            new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:20,gain:0}),
-            new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:40,gain:0}),
-            new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:80,gain:0}),
-            new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:100,gain:0}),
-            new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:200,gain:0}),
+            new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:25,gain:0}),
+            new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:55,gain:0}),
+            new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:85,gain:0}),
+            new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:150,gain:0}),
+            new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:250,gain:0}),
             new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:400,gain:0}),
             new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:1000,gain:0}),
             new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:2000,gain:0}),

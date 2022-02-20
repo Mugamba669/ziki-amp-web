@@ -115,7 +115,7 @@ export default {
                 this.btn = !this.btn;
                 console.log("done");
            }else{
-            lead += 5;
+            lead += 2;
             this.$refs['progress'].value = lead;
            }
         },800)

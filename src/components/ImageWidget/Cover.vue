@@ -1,29 +1,20 @@
 <template>
 <div class="image">
-     <div class="container">
-        <img ref="images" :src="source" alt="coverArt" srcset="">
+     <div :class="[playing == true?'active':'','container']">
+        <img ref="images" :src="[source]" alt="coverArt" srcset="">
     </div>
 </div>
    
 </template>
 
 <script>
-  const image = document.querySelector("img");
 
 export default {
     name: 'Cover',
   props:{
       source:String,
-      audio:HTMLAudioElement,
+      playing:Boolean,
   },
-  methods:{},
-  mounted(){
-    
-    this.audio.onplay = ()=>{
-
-       image.style.animationPlayState = this.audio.paused? "paused":"running";
-    }
-  }
 }
 </script>
 
@@ -46,12 +37,17 @@ export default {
         // transform-style: preserve-3d;
         
     .container {
-        width:400px;
+        width:200px;
         // transform: ;
-        height:400px;
+         transition:0.3s ease-in-out;
+        height:200px;
          transform-style: preserve-3d;
         border-radius: 50%;
         box-shadow: 0px -2px 3px 2px gray;
+          animation: spin 20s infinite linear;
+         animation-play-state: paused;
+
+
          overflow:hidden;
         img{ 
           cursor: no-drop;
@@ -59,12 +55,17 @@ export default {
           height:100%;
           position: relative;
           // transform: translate3d(200px);
-          animation: spin 20s infinite linear;
-        //    animation-play-state: paused;
+          
            object-fit:contain!important;
 
         }
    }
+    .container.active{
+       width:400px;
+        height:400px;
+           animation-play-state: running;
+
+    }
 }
 @media(max-width:910px){
     .image{
@@ -74,13 +75,14 @@ export default {
         justify-content:center!important;
         align-items:center!important;
     .container {
-        width:200px;
-        height:200px;
+        width:50px;
+        height:50px;
           border-radius: 50%;
            box-shadow: 0px -2px 3px 2px gray;
            overflow:hidden;
            animation: spin 20s infinite linear;
-        //    animation-play-state: paused;
+            transition:0.3s ease-in-out;
+           animation-play-state: paused;
         img{ 
           width:100%;
           height:100%;
@@ -88,6 +90,12 @@ export default {
            object-fit:contain!important;
         }
    }
+    .container.active{
+       width:200px;
+        height:200px;
+           animation-play-state: running;
+
+    }
 }
 }
 
@@ -99,13 +107,14 @@ export default {
         justify-content:center!important;
         align-items:center!important;
     .container {
-        width:170px;
-        height:170px;
+        width:50px;
+        height:50px;
           border-radius: 50%;
            box-shadow: 0px -2px 3px 2px gray;
            overflow:hidden;
            animation: spin 20s infinite linear;
-        //    animation-play-state: paused;
+           transition:0.3s ease-in-out;
+           animation-play-state: paused;
         img{ 
           width:100%;
           height:100%;
@@ -113,6 +122,12 @@ export default {
            object-fit:contain!important;
         }
    }
+    .container.active{
+       width:170px;
+        height:170px;
+           animation-play-state: running;
+
+    }
 }
 }
 .img.active{

@@ -3,7 +3,8 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     volume:0.17,
-    playlist:[]
+    playlist:[],
+    player:new Audio()
   },
   mutations: {
     setVolume(state,payload){

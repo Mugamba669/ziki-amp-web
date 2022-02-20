@@ -8,7 +8,7 @@
          v-if="!queueView" 
           v-show="showCover"
           :source="image"
-          :audio="audio"
+          :playing="checker"
           />
 
         <EQ
@@ -126,7 +126,7 @@ export default {
        showCover:true,
        ptr1:true,
        ptr2:true,
-       image:null,
+       image:image,
        size:0,
        curlTime:0,
        roomView:false,
@@ -139,7 +139,7 @@ export default {
        btnValue:"EQ",
        queueView:false,
        showV:false,
-       vol:0,
+       vol:0.17,
        visual:true,
        loop:false,
        countPlay:0,
@@ -148,6 +148,7 @@ export default {
       context:null,
       visualize:null,
       shuffle:false,
+      checker:false,
       selected:0,
       vise:null,
       eq:null,
@@ -171,7 +172,7 @@ export default {
     loadTrack(value){
       for (let i = 0;i < value.length;i++) {
           this.playlist = [...this.playlist,{id:i,data:value[i],active:false}]
-      localStorage.setItem(i,{id:i,data:value[i],active:false});
+      // localStorage.setItem(i,{id:i,data:value[i],active:false});
 
       }
       this.queueView = true;
@@ -183,7 +184,7 @@ export default {
             data.name == query;
           })
         });
-        console.log(this.playlist);
+        // console.log(this.playlist);
 
     },
   toggleVisualWidget(){
@@ -222,7 +223,7 @@ export default {
     },
     pauseNow(){
      this.showPlay = !this.showPlay;
-         this.showPause = !this.showPause;
+     this.showPause = !this.showPause;
          
       this.audio.pause();
     },
@@ -273,7 +274,7 @@ export default {
       });
     },
     seekNow(){
-       this.countPlay +=1;
+       this.countPlay += 1;
        this.commonComand(this.playlist[this.countPlay].data);
        this.toggleList(this.countPlay);
     },
@@ -299,10 +300,12 @@ export default {
           this.countPlay = queue[1];
           this.closeQueue();
           this.toggleList(queue[1]);
+          // this.checker = !this.checker;
           // console.log(this.getTitle(queue[0].data));
       },
       toggleList(id){
-               this.playlist = this.playlist.map((track) => track.id == id?{...track,active:!track.active}:track)
+        // console.log(id);
+              //  this.playlist = this.playlist.map((track) => console.log(track.id) /*track.id == id?{...track,active:!track.active}:track*/)
       },
     showQueue(){
       // this.showCover = !this.showCover;
@@ -349,7 +352,7 @@ export default {
   mounted(){
     document.querySelector("body").style.backgroundImage = "url("+image+")";
       
-
+    // this.$
     /**default volume = 0.17 */
     this.audio.volume = this.vol;
 
@@ -383,13 +386,15 @@ export default {
 
     }
     this.audio.onpause = ()=>{
-         this.showPlay = !this.showPlay;
-         this.showPause = !this.showPause;
+      this.checker = !this.checker;
+        //  this.showPlay = !this.showPlay;
+        //  this.showPause = !this.showPause;
          
         //  eq.barsVisualiser();
     }
 
     this.audio.onended = ()=>{
+      // this.playing = !this.playing;
         if(this.shuffle == true){
             this.countPlay = Math.floor(Math.random() * this.playlist.length);
             this.commonComand(this.playlist[this.countPlay].data);
@@ -402,8 +407,9 @@ export default {
     }
 
    this.audio.onplay = ()=>{
-          this.showPlay = !this.showPlay;
-         this.showPause = !this.showPause;
+     this.checker = !this.checker;
+          this.showPlay = false;
+         this.showPause = true;
     }
   },
 

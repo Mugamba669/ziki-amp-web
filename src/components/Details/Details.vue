@@ -2,7 +2,7 @@
     <div class="container">
             <p class="title">{{(title).replace(".mp3","")}}</p>
             <!-- <div class="more"> -->
-                <marquee direction="left" behavior="slow" class="more">
+                <marquee direction="left" behavior="slow" loop='3' class="more">
                     {{artist}}
                     <span>|</span>
                     {{album}}

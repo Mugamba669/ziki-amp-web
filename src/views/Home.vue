@@ -349,6 +349,8 @@ export default {
   },
   
   mounted(){
+       mapGetters({vol:"getVolume"});
+
     document.querySelector("body").style.backgroundImage = "url("+image+")";
       
     // this.$
@@ -414,7 +416,7 @@ export default {
   },
 
   computed:{
-    ...mapGetters({vol:"getVolume"}),
+ 
   //  this.image = image;
 
   }

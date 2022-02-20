@@ -2,7 +2,7 @@
     <div class="container">
             <p class="title">{{(title).replace(".mp3","")}}</p>
             <!-- <div class="more"> -->
-                <marquee direction="left" behavior="slow" loop='3' class="more">
+                <marquee direction="left" behavior="slow"  class="more">
                     {{artist}}
                     <span>|</span>
                     {{album}}
@@ -10,7 +10,7 @@
                     {{(Number(size).toFixed(2))+" MB"}}
                 </marquee>
             <!-- </div> -->
-            <!-- <marquee behavior="slow" direction="alternate"></marquee> -->
+            <!-- <marquee behavior="slow" direction="alternate"></marquee> loop='3'-->
     </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template lang="html">
     <div>
-        <label>{{tune}}dB</label>
+        <label>{{(parseFloat(tune)).toFixed(1)}}dB</label>
       <input type="range" max="5" step="0.01" min="0" @input="changeTuner" v-model="tune"/>
     </div>
 </template>
@@ -27,18 +27,19 @@ export default {
         label{
             font:100 14px Arial;
             transform:rotate(90deg);
-            margin:0px;
+            margin:8px;
         }
     [type="range"]{
         appearance:none;
         margin:30px;
-        width:260px;
+        width:250px;
         background:#736cdd;
-        overflow: hidden;
+        // overflow: hidden;
         border-radius: 10px;
-        height: 10px;
+        height: 5px;
         &::-webkit-slider-thumb{
              appearance:none;
+            cursor:pointer;
             width:20px;
             background:#1506e7;
             height: 20px;

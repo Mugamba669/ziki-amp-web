@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="presets">
-            <select name="">
+            <select ref="choose" @change="getRoomPreset" >
                 <option value="">Choose Preset</option>
                 <option value="auditorium">Auditorium</option>
                 <option value="scene">Scene</option>
@@ -37,7 +37,7 @@
 <script>
 import Tuner from "./Tuner.vue";
 import Feedback from "./Feedback.vue";
-
+import { Rooms } from "../../Core/Presets"
 export default {
     name:"Room",
     components:{
@@ -48,8 +48,22 @@ export default {
         delays:Array,
         feedback:Array
     },
+    // data(){
+    //     return{
+    //         feedback:[0,0],
+    //         delay:[0,0]
+    //     }
+    // },
     methods:{
-
+        getRoomPreset(){
+            // console.log()
+            switch(this.$refs['choose'].value){
+                case 'echo':
+                    this.feedback = Rooms.Echo.feedback;
+                    this.delay = Rooms.Echo.delay;
+                    break;
+            }
+        }
     }
 }
 </script>

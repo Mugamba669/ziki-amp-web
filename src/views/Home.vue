@@ -300,7 +300,6 @@ export default {
           this.countPlay = queue[1];
           this.closeQueue();
           this.toggleList(queue[1]);
-          // this.checker = !this.checker;
           // console.log(this.getTitle(queue[0].data));
       },
       toggleList(id){
@@ -386,7 +385,7 @@ export default {
 
     }
     this.audio.onpause = ()=>{
-      this.checker = !this.checker;
+      this.checker = false;
         //  this.showPlay = !this.showPlay;
         //  this.showPause = !this.showPause;
          
@@ -394,7 +393,8 @@ export default {
     }
 
     this.audio.onended = ()=>{
-      // this.playing = !this.playing;
+               this.checker = false;
+
         if(this.shuffle == true){
             this.countPlay = Math.floor(Math.random() * this.playlist.length);
             this.commonComand(this.playlist[this.countPlay].data);
@@ -407,7 +407,7 @@ export default {
     }
 
    this.audio.onplay = ()=>{
-     this.checker = !this.checker;
+     this.checker = true;
           this.showPlay = false;
          this.showPause = true;
     }

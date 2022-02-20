@@ -1,7 +1,7 @@
 <template lang="html">
     <div>
-        <label>{{parseFloat(valueTune).toFixed(2)}}dB</label>
-     <input type="range" max="5" step="0.01" min="0" @input="changeTuner" v-model="valueTune"/>
+        <label>{{(valueTune).toFixed(2)}}dB</label>
+     <input type="range" max="1" step="0.01" min="0" @input="changeTuner" v-model="valueTune"/>
     </div>
 </template>
 <script>
@@ -11,12 +11,17 @@ export default {
         valueTune:Number,
         feedback:GainNode,
     },
+      created(){
+              this.feedback.gain.value = this.valueTune;
+        },
     methods: {
         changeTuner(){
-            // console.log(this.feedback.gain);
+           
           this.feedback.gain.value = this.valueTune;
-        }
+        },
+       
     },
+   
 }
 </script>
 <style lang="scss" scoped>
@@ -27,8 +32,12 @@ export default {
         justify-content:center;
         align-items:center;
         label{
-            font:100 14px Arial;
+            font:300 12px Arial;
             margin: 8px;
+            background:#222;
+            color:#fff;
+            border-radius: 10px;
+            padding: 5px;
              transform:rotate(90deg);
         }
    [type="range"]{

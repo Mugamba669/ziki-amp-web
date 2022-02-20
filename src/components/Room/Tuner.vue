@@ -1,6 +1,6 @@
 <template lang="html">
     <div>
-        <label>{{(parseFloat(tune)).toFixed(1)}}dB</label>
+        <label>{{((tune)).toFixed(2)}}dB</label>
       <input type="range" max="5" step="0.01" min="0" @input="changeTuner" v-model="tune"/>
     </div>
 </template>
@@ -14,8 +14,11 @@ export default {
     methods: {
         changeTuner(){
             this.delay.delayTime.value = this.tune;
-        }
+        },
     },
+     created(){
+          this.delay.delayTime.value = this.tune;
+        }
 }
 </script>
 <style lang="scss" scoped>
@@ -25,9 +28,13 @@ export default {
         justify-content: center;
         align-items:center;
         label{
-            font:100 14px Arial;
-            transform:rotate(90deg);
-            margin:8px;
+           font:300 12px Arial;
+            margin: 8px;
+            background:#222;
+            color:#fff;
+            border-radius: 10px;
+            padding: 5px;
+             transform:rotate(90deg);
         }
     [type="range"]{
         appearance:none;

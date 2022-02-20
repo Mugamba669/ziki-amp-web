@@ -16,17 +16,17 @@
         </div>
          <div class="nodes">
         <Tuner
-        v-for="delay in delays"
-        :key="delay"
-        :tune="delay.delayTime.value"
+        v-for="(delay,index) in delays"
+        :key="index"
+        :tune="replay[index]"
         :delay="delay"
         />
 
 
          <Feedback
-        v-for="feed in feedback"
+        v-for="(feed,index) in feedback"
         :key="feed"
-        :valueTune="feed.gain.value"
+        :valueTune="power[index]"
         :feedback="feed"
         />
     </div>
@@ -48,19 +48,35 @@ export default {
         delays:Array,
         feedback:Array
     },
-    // data(){
-    //     return{
-    //         feedback:[0,0],
-    //         delay:[0,0]
-    //     }
-    // },
+    data(){
+        return{
+            power:[0,0],
+            replay:[0,0]
+        }
+    },
     methods:{
         getRoomPreset(){
             // console.log()
             switch(this.$refs['choose'].value){
                 case 'echo':
-                    this.feedback = Rooms.Echo.feedback;
-                    this.delay = Rooms.Echo.delay;
+                    this.power = Rooms.Echo.feedback;
+                    this.replay = Rooms.Echo.delay;
+                    break;
+                 case 'scene':
+                    this.power = Rooms.Scene.feedback;
+                    this.replay = Rooms.Scene.delay;
+                    break;
+                 case 'auditorium':
+                    this.power = Rooms.Audit.feedback;
+                    this.replay = Rooms.Audit.delay;
+                    break;
+                 case 'great':
+                    this.power = Rooms.GtH.feedback;
+                    this.replay = Rooms.GtH.delay;
+                    break;
+              case 'smallroom':
+                    this.power = Rooms.Sm.feedback;
+                    this.replay = Rooms.Sm.delay;
                     break;
             }
         }

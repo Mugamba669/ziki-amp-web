@@ -73,6 +73,18 @@ export default {
                 },{
                 'name':"Techno",
                 'value':'tec'
+                },{
+                'name':"Loud",
+                'value':'loud'
+                },{
+                'name':"Live",
+                'value':'live'
+                },{
+                'name':"Flat",
+                'value':'flat'
+                },{
+                'name':"Folk",
+                'value':'folk'
                 }
             ]
         }
@@ -120,8 +132,25 @@ export default {
                     case 'tec':
                     this.eqBand(this.bandSet,Presets.Techno);
                     break;
-                      case 'reg':
+                    
+                    case 'reg':
                     this.eqBand(this.bandSet,Presets.Reggae);
+                    break;
+
+                    case 'flat':
+                    this.eqBand(this.bandSet,Presets.Flat);
+                    break;
+
+                    case 'folk':
+                    this.eqBand(this.bandSet,Presets.Folk);
+                    break;
+
+                    case 'loud':
+                    this.eqBand(this.bandSet,Presets.Loud);
+                    break;
+
+                    case 'live':
+                    this.eqBand(this.bandSet,Presets.Live);
                     break;
             
                 default:

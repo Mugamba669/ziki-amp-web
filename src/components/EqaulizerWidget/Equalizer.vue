@@ -1,34 +1,134 @@
 <template>
+
 <div class="widget">
+      
     <!-- <Presets/> -->
     
-    <div class="conatiner">
+    <!-- <div class="conatiner"> -->
+      
         <div class="equalizer">
             <Bands 
-                :filter="band"
-                :key="band" 
+                :key="index"
+                :id="index"
                 :frequency="band.frequency.value"
-                :bandValue="band.gain.value"
-                v-for="band in bandSet"/>
+                :bandValue="update[index]"
+                v-for="(band,index) in bandSet"
+                />
         </div>
+    <!-- </div> -->
+<div class="side">
+    <button class="closeEQ" @click="this.$emit('closeEQ')">Close</button>
+        <select ref="choice" @change="updateBand">
+            <option 
+                v-for="(preset,index) in presets"
+                 v-bind:key="index" 
+                 :value="preset.value" >{{preset.name}}</option>
+        </select>
     </div>
 
-<button class="closeEQ" @click="this.$emit('closeEQ')">Close</button>
 </div>
 
 </template>
 
 <script>
 import Bands from "./Bands.vue";
-import Presets from "./Presets.vue"
+import { Presets } from "../../Core/Presets"
 export default {
     name: 'EQ',
     components:{
         Bands,
         Presets,
     },
+    data(){
+        return{
+            update:[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+            presets:[
+                {
+                'name':"Normal",
+                'value':'normal'
+                },{
+                'name':"Bass",
+                'value':'bass'
+                },{
+                'name':"Rock",
+                'value':'rock'
+                },{
+                'name':"Classic",
+                'value':'classic'
+                },{
+                'name':"Soft bass",
+                'value':'soft_b'
+                },{
+                'name':"Pop",
+                'value':'pop'
+                },{
+                'name':"Soft Treble",
+                'value':'soft_t'
+                },{
+                'name':"Treble",
+                'value':'treble'
+                },{
+                'name':"Reggea",
+                'value':'reg'
+                },{
+                'name':"Techno",
+                'value':'tec'
+                }
+            ]
+        }
+    },
     props: {
         bandSet:Array,
+    },methods:{
+        eqBand(bands,array){
+            this.update = array;
+            console.log(array)
+            for (let index = 0; index < bands.length; index++) {
+                bands[index].gain.value = array[index];
+                this.out = array[index];
+                
+            }
+        },
+        updateBand(){
+            switch (this.$refs['choice'].value) {
+                case 'normal':
+                    this.eqBand(this.bandSet,Presets.Normal);
+                    break;
+
+                    case 'bass':
+                    this.eqBand(this.bandSet,Presets.Bass);
+                    break;
+                    case 'soft_b':
+                    this.eqBand(this.bandSet,Presets.SoftBass);
+                    break;
+                    case 'classic':
+                    this.eqBand(this.bandSet,Presets.Classic);
+                    break;
+                    case 'rock':
+                    this.eqBand(this.bandSet,Presets.Rock);
+                    break;
+                    case 'pop':
+                    this.eqBand(this.bandSet,Presets.Pop);
+                    break;
+                    case 'soft_t':
+                    this.eqBand(this.bandSet,Presets.SoftTreble);
+                    break;
+
+                      case 'treble':
+                    this.eqBand(this.bandSet,Presets.Treble);
+                    break;
+                    case 'tec':
+                    this.eqBand(this.bandSet,Presets.Techno);
+                    break;
+                      case 'reg':
+                    this.eqBand(this.bandSet,Presets.Reggae);
+                    break;
+            
+                default:
+                    break;
+            }
+           
+        }
     }
 }
 </script>
@@ -42,11 +142,15 @@ export default {
         left: 0;
         display: flex;
         flex-direction: row;
-        justify-content: center;
+        justify-content: space-evenly;
         align-items: center;
- .conatiner {
+ .side{
+     display: flex;
+     flex-direction:column;
+     justify-content:space-around!important;
+     align-items: center  !important;
 
-    //  overflow: scroll;
+ }
     .equalizer {
          background: #1111115D;
         backdrop-filter: blur(20px);
@@ -64,24 +168,23 @@ export default {
         transform:rotate(-90deg);
     }
   }
-  .closeEQ{
-      border:1px solid #eee;
-      width:100px;
-      background:transparent;
-      position: absolute;
-      color:#ddd;
-      right:50px;
-      padding:10px;
-      border-radius:10px;
-      transform: scale(1,1);
-      font:300 16px Ubuntu,Arial;
-      transition:0.3s ease-in-out;
-      cursor:pointer;
-  }
-  .closeEQ:hover{
-      transform: scale(1.1,1.1);
-  }
-}
+//   .closeEQ{
+//       border:1px solid #eee;
+//       width:100px;
+//       background:transparent;
+//       position: absolute;
+//       color:#ddd;
+//       right:50px;
+//       padding:10px;
+//       border-radius:10px;
+//       transform: scale(1,1);
+//       font:300 16px Ubuntu,Arial;
+//       transition:0.3s ease-in-out;
+//       cursor:pointer;
+//   }
+//   .closeEQ:hover{
+//       transform: scale(1.1,1.1);
+// }
 @media(max-width:910px) {
     
 .widget{
@@ -94,9 +197,7 @@ export default {
         flex-direction: column;
         justify-content: center;
         align-items: center;
- .conatiner {
-    
-    //  overflow: scroll;
+
     .equalizer {
          background: #1111115D;
         backdrop-filter: blur(20px);
@@ -116,7 +217,7 @@ export default {
         // pointer-events: none;
         // transform:rotate(-90deg);
     }
-  }
+  
   .closeEQ{
       border:1px solid #eee;
       width:100px;

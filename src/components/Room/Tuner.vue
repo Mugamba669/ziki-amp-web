@@ -1,6 +1,6 @@
 <template lang="html">
     <div>
-        <label>{{((tune)).toFixed(2)}}dB</label>
+        <label>{{Number(tune).toFixed(2)}} dB</label>
       <input type="range" max="5" step="0.01" min="0" @input="changeTuner" v-model="tune"/>
     </div>
 </template>
@@ -9,16 +9,14 @@ export default {
     name:'Tuner',
     props:{
         tune:Number,
-        delay:DelayNode,
+        delay:Number,
     },
     methods: {
         changeTuner(){
-            this.delay.delayTime.value = this.tune;
+            this.$store.commit('changeDelays',[this.delay ,this.tune]);
+            // this.$store.commit('',{node:this.delay.delayTime.value,value:this.tune});
         },
     },
-     created(){
-          this.delay.delayTime.value = this.tune;
-        }
 }
 </script>
 <style lang="scss" scoped>

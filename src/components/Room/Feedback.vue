@@ -1,6 +1,6 @@
 <template lang="html">
     <div>
-        <label>{{(valueTune).toFixed(2)}}dB</label>
+        <label>{{Number(valueTune).toFixed(2)}} dB</label>
      <input type="range" max="1" step="0.01" min="0" @input="changeTuner" v-model="valueTune"/>
     </div>
 </template>
@@ -9,15 +9,14 @@ export default {
     name:'Feedback',
     props:{
         valueTune:Number,
-        feedback:GainNode,
+        feedback:Number,
     },
-      created(){
-              this.feedback.gain.value = this.valueTune;
-        },
+
     methods: {
         changeTuner(){
+              this.$store.commit('changeFeedBack',[this.feedback,this.valueTune]);
            
-          this.feedback.gain.value = this.valueTune;
+        //   this.feedback.gain.value = this.valueTune;
         },
        
     },

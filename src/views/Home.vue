@@ -114,14 +114,14 @@ export default {
   data(){
     return {
       displayVisual:false,
-       audio:new Audio(),
+       audio:null,
        playlist:[],
        bufferArray:[],
        delayArr:[],
        feedBackArr:[],
-       title:"*",
-       artist:"*",
-       album:"*",
+       title:"",
+       artist:"",
+       album:"",
        showEQ:false,
        showCover:true,
        ptr1:true,
@@ -139,7 +139,7 @@ export default {
        btnValue:"EQ",
        queueView:false,
        showV:false,
-       vol:0.17,
+       vol:0,
        visual:true,
        loop:false,
        countPlay:0,
@@ -172,6 +172,7 @@ export default {
     loadTrack(value){
       for (let i = 0;i < value.length;i++) {
           this.playlist = [...this.playlist,{id:i,data:value[i],active:false}]
+          // this.store.commit('updatePlaylist',{id:i,data:value[i],active:false})
       // localStorage.setItem(i,{id:i,data:value[i],active:false});
 
       }
@@ -185,7 +186,6 @@ export default {
           })
         });
         // console.log(this.playlist);
-
     },
   toggleVisualWidget(){
       this.displayVisual = ! this.displayVisual;
@@ -205,7 +205,7 @@ export default {
               data: file,
               active:false
               };
-
+    // this.store.commit('updatePlaylist',listTile)
       this.playlist = [...this.playlist,listTile];
       this.commonComand(file);
       this.showPlay = !this.showPlay;
@@ -232,7 +232,7 @@ export default {
     },
     changeVol(vol){
         this.audio.volume = vol;
-        this.vol = vol;
+        // this.vol = vol;
     },
     closeVol(){
       this.showV = !this.showV;
@@ -349,19 +349,17 @@ export default {
   },
   
   mounted(){
-       mapGetters({vol:"getVolume"});
+      //  mapGetters({vol:"getVolume"});
 
     document.querySelector("body").style.backgroundImage = "url("+image+")";
       
     // this.$
     /**default volume = 0.17 */
-    this.audio.volume = this.vol;
 
       /**  Canvas */
       this.canvas = this.$refs['canvas'];
       this.context = this.$refs['canvas'].getContext("2d");
-    
-      this.eq = new Equalizer(this.audio);
+  
       this.vise = new Visualizer(this.eq.analyser,this.canvas,this.context);
   
       this.eq.startEq();
@@ -415,11 +413,13 @@ export default {
     }
   },
 
-  computed:{
- 
-  //  this.image = image;
-
-  }
+  created() {
+    this.audio = this.$store.getters.getPlayer;
+    this.audio.volume = this.$store.getters.getVolume;
+    this.playlist = this.$store.getters.showPlaylist;
+    this.eq = this.$store.getters.getEqualiser;
+    
+  },
 }
 </script>
  

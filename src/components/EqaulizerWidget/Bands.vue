@@ -13,14 +13,14 @@
 export default {
     name: 'Bands',
     props: {
+        id:Number,
         bandValue:Number,
         frequency:Number,
         bandGain:Number,
-        filter:BiquadFilterNode,
     },
     methods: {
         updateBand(){
-            this.filter.gain.value = this.bandValue;
+            this.$store.commit('updateBands',[this.id,this.bandValue])
         }
     }
 }

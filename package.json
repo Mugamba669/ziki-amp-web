@@ -4,7 +4,7 @@
   "private": true,
   "main": "./src/frame.js",
   "scripts": {
-    "start": "vue-cli-service serve && npm run app",
+    "start": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "app": "electron ."
   },
@@ -38,6 +38,8 @@
     "sass-loader": "^8.0.2",
     "three": "^0.137.1",
     "vue-particlejs": "^1.1.0",
-    "vue-tour": "^2.0.0"
-  }
+    "vue-tour": "^2.0.0",
+    "ws": "^8.5.0"
+  },
+  "build": {}
 }

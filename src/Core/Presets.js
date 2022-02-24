@@ -34,7 +34,10 @@
 };
 
  const Rooms = {
-
+     'Preset':{
+        delay:[0,0],
+        feedback:[0,0]
+     },
 'Echo':{
     delay:[0.11,0.10],
     feedback:[0.36,0.50]
@@ -54,7 +57,7 @@
 'Sm':{
     feedback:[0.46,0.51],
     delay:[0.03,0.012]
-},//[0.03,0.46,0.012,0.51],
+},
 
 'GtH':{
     feedback:[0.53,0.60],

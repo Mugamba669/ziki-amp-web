@@ -19,10 +19,22 @@ import * as mi from "material-icons"
 export default {
     name: 'Details',
     props: {
-        title:String,
-        artist:String,
-        album:String,
-        size:Number,
+        title:{
+            type:String,
+            default:"Track title"
+        },
+        artist:{
+            type:String,
+            default:"Artist"
+        },
+        album:{
+            type:String,
+            default:"Album"
+        },
+        size:{
+            type:Number,
+            default:0
+            },
     },
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
 
   <router-view></router-view>
-  
+  <!-- <b>Footer here</b> -->
 </template>
 <script>
 export default {

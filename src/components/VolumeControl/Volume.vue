@@ -12,7 +12,7 @@
            <!-- <round-slider/> -->
            <!-- <vue3-slider  :formatTooltip="formatedValue" tooltip="true" tooltipText="%v" :max="1" :min="0" step="0.01" color="#2835E7" track-color="#FEFEFE" /> -->
        
-        <input type="range" @input="updateVolume" max="1" min="0" step="0.01" v-model="volume"/>
+        <input type="range" @input="adjustVolume" max="1" min="0" step="0.01" v-model="volume"/>
         
     </div>
 <!-- </div> -->
@@ -22,27 +22,20 @@
 <script>
 
 import slider from "vue3-slider";
+import { mapActions } from 'vuex';
 export default {
     name: 'Volume',
-    // components: {
-    //      "vue3-slider": slider,
-    // },
     data(){
         return{
-            volume:0.17,
+            volume:this.$store.getters.getVolume,
         }
     },
      methods:{
-        //  formatedValue(v){
-        //     //  console.log(v)
-        //     this.$emit('changeVol',v);
-        //  },
-         updateVolume(){
-            // alert(this);
-            this.$emit('changeVol',this.volume);
-         }
-
+       adjustVolume(){
+           this.$store.commit('setVolume',this.volume);
+       }
      },
+    
 }
 </script>
 

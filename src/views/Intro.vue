@@ -1,4 +1,5 @@
 <template>
+
     <div  class="container">
        
         <h2>Welcome to Lw-Amp Web</h2>
@@ -115,12 +116,10 @@ export default {
                 this.btn = !this.btn;
                 console.log("done");
            }else{
-            lead += 2;
+            lead += 5;
             this.$refs['progress'].value = lead;
            }
-        },800)
-        
-  
+        },500); 
     }
 }
 </script>
@@ -148,16 +147,15 @@ export default {
     
 
     /**Main Container for intro window */
-    div.container{
-        #demo {
+           #demo {
   width: 100%;
   height: 100%;
   position:absolute;
   z-index:-1;
-  background: #0c0101fb;
-  animation: color 5s 0s infinite alternate forwards;
+  background: #570808fb;
+  animation: color 3s 0s infinite alternate forwards;
 }
-
+    div.container{
         z-index: 10!important;
         width: 100%;
         height: 100%;
@@ -168,8 +166,8 @@ export default {
         flex-direction: column!important;
         justify-content: center!important;
         align-items: center!important;
-        backdrop-filter:blur(50px);
-        background: rgb(7, 7, 7);
+        // backdrop-filter:blur(50px);
+        background: rgba(7, 7, 7, 0.493);
         p{
             text-align: center;
             

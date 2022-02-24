@@ -8,6 +8,7 @@
                 <option value="smallroom">Small Room</option>
                 <option value="great">Great Hall</option>
                 <option value="echo">Echo</option>
+                <option value="reset">No preset</option>
             </select>
 
             <div>
@@ -18,16 +19,16 @@
         <Tuner
         v-for="(delay,index) in delays"
         :key="index"
-        :tune="replay[index]"
-        :delay="delay"
+        :tune="d[index]"
+        :delay="index"
         />
 
 
          <Feedback
         v-for="(feed,index) in feedback"
         :key="feed"
-        :valueTune="power[index]"
-        :feedback="feed"
+        :valueTune="f[index]"
+        :feedback="index"
         />
     </div>
     </div>
@@ -48,35 +49,57 @@ export default {
         delays:Array,
         feedback:Array
     },
-    data(){
-        return{
-            power:[0,0],
-            replay:[0,0]
-        }
-    },
+data(){
+    return{
+        f:[0,0],
+        d:[0,0]
+    }
+},
     methods:{
+        /*
+         * 
+         * replay  Array<Number>
+        */
+        manuplateFeedBack(replay,tuner){
+            this.f = tuner;
+                for (let index = 0; index < replay.length; index++) {
+                     replay[index].gain.value = tuner[index];
+                    
+                }
+        },
+        manuplateDelay(delay,tuner){
+            this.d = tuner;
+              for (let index = 0; index < delay.length; index++) {
+                     delay[index].delayTime.value = tuner[index];
+                }
+        },
         getRoomPreset(){
             // console.log()
             switch(this.$refs['choose'].value){
                 case 'echo':
-                    this.power = Rooms.Echo.feedback;
-                    this.replay = Rooms.Echo.delay;
+                    this.manuplateFeedBack(this.$store.getters.getFeedback, Rooms.Echo.feedback);
+                    this.manuplateDelay(this.$store.getters.getDelays, Rooms.Echo.delay);
                     break;
                  case 'scene':
-                    this.power = Rooms.Scene.feedback;
-                    this.replay = Rooms.Scene.delay;
+                    this.manuplateFeedBack(this.$store.getters.getFeedback, Rooms.Scene.feedback);
+                    this.manuplateDelay(this.$store.getters.getDelays, Rooms.Scene.delay);
                     break;
                  case 'auditorium':
-                    this.power = Rooms.Audit.feedback;
-                    this.replay = Rooms.Audit.delay;
+                    this.manuplateFeedBack(this.$store.getters.getFeedback, Rooms.Audit.feedback);
+                    this.manuplateDelay(this.$store.getters.getDelays, Rooms.Audit.delay);
                     break;
                  case 'great':
-                    this.power = Rooms.GtH.feedback;
-                    this.replay = Rooms.GtH.delay;
+                   this.manuplateFeedBack(this.$store.getters.getFeedback, Rooms.GtH.feedback);
+                    this.manuplateDelay(this.$store.getters.getDelays, Rooms.GtH.delay);
                     break;
               case 'smallroom':
-                    this.power = Rooms.Sm.feedback;
-                    this.replay = Rooms.Sm.delay;
+                   this.manuplateFeedBack(this.$store.getters.getFeedback, Rooms.Sm.feedback);
+                    this.manuplateDelay(this.$store.getters.getDelays, Rooms.Sm.delay);
+                    break;
+
+            case 'reset':
+                this.manuplateFeedBack(this.$store.getters.getFeedback, Rooms.Preset.feedback);
+                    this.manuplateDelay(this.$store.getters.getDelays, Rooms.Preset.delay);
                     break;
             }
         }

@@ -3,7 +3,7 @@
     <div  class="container">
        
         <h2>Welcome to Lw-Amp Web</h2>
-                <img src="@/assets/pAudio.png" alt="" srcset="">
+                <img :src="[image]" alt="" srcset="">
               <p v-show="!btn">Loading....</p>
          <progress ref="progress" v-show="!btn" value="0" max="100" min="0"></progress>
          <p></p>
@@ -21,6 +21,7 @@
 
 
 <script>
+import { image } from '@/Core/default';
 import VueParticle from "vue-particlejs";
 
 export default {
@@ -30,26 +31,27 @@ export default {
     },
     data() {
         return {
+          image:image,
             btn:false,
         particleConfig: {
         particles: {
-          number: { value: 300, density: { enable: true, value_area: 800 } },
+          number: { value: 100, density: { enable: true, value_area: 290 } },
           color: { value: "#63cdff" },
           shape: {
             type: "cicle",
             stroke: { width: 13, color: "#000000" },
-            polygon: { nb_sides: 8 },
+            polygon: { nb_sides: 6 },
             image: { src: "img/github.svg", width: 300, height: 100 }
           },
           opacity: {
             value: 0.9,
             random: false,
-            anim: { enable: false, speed: 1, opacity_min: 0.1, sync: false }
+            anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
           },
           size: {
             value: 3,
             random: true,
-            anim: { enable: true, speed: 40, size_min: 0.1, sync: true }
+            anim: { enable: true, speed: 10, size_min: 0.1, sync: true }
           },
           line_linked: {
             enable: true,
@@ -102,9 +104,9 @@ export default {
     
         }
     },
-    methods: {
+    methods: { 
         loadPlayer(){
-            this.$router.replace('/player');
+            this.$router.push('/player');
         },
     },
     mounted(){
@@ -119,7 +121,7 @@ export default {
             lead += 5;
             this.$refs['progress'].value = lead;
            }
-        },500); 
+        },500);
     }
 }
 </script>

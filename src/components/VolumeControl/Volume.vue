@@ -8,10 +8,11 @@
             {{Math.floor(Number(volume)*100)}} %
             </span> --
            </label> 
-           
-           <!-- <round-slider/> -->
-           <!-- <vue3-slider  :formatTooltip="formatedValue" tooltip="true" tooltipText="%v" :max="1" :min="0" step="0.01" color="#2835E7" track-color="#FEFEFE" /> -->
-       
+       <v-slider
+  hint="Im a hint"
+  max="50"
+  min="-50"
+></v-slider>
         <input type="range" @input="adjustVolume" max="1" min="0" step="0.01" v-model="volume"/>
         
     </div>
@@ -21,7 +22,6 @@
 
 <script>
 
-import slider from "vue3-slider";
 import { mapActions } from 'vuex';
 export default {
     name: 'Volume',

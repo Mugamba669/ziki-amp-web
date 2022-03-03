@@ -43,9 +43,9 @@
         :queueList="playlist"/>
 
          <!-- Visulizer -->
-       
+       <Lyrics title="Panda" artist="designer"/>
   </div>
-  <!-- <router-link to="/hot100">Hot 100</router-link> -->
+  <router-link to="/hot100">Hot 100</router-link>
       <Room
         v-show="roomView"
         :delays="delayArr"
@@ -100,13 +100,13 @@ import Details from "@/components/Details/Details.vue";
 import Control from "@/components/ControlWidget/Control.vue";
 import Loader from "@/components/loader/Loader.vue";
 import Volume from "@/components/VolumeControl/Volume.vue";
-import { Equalizer } from "../Core/Equalizer";
 import EQ from "@/components/EqaulizerWidget/Equalizer.vue";
 import Queue from "@/components/Queue/Queue.vue"
 import Search from "@/components/Search/Search.vue";
 import Dropdown from "@/components/Dropdown/Dropdown.vue";
 import Room from "@/components/Room/Room.vue";
 import * as mm from  "music-metadata-browser";
+import Lyrics from "@/components/Lyrics/Lyrics.vue"
 const { Visualizer } = require("../Core/Visualizer");
 const { image } = require("../Core/default");
 export default {
@@ -158,6 +158,7 @@ export default {
   components: {
     Slider,
     Loader,
+    Lyrics,
     Cover,
     Details,
     Control,
@@ -224,7 +225,6 @@ export default {
     pauseNow(){
      this.showPlay = !this.showPlay;
      this.showPause = !this.showPause;
-         
       this.audio.pause();
     },
     shuffleTracks(){

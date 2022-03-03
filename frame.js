@@ -7,18 +7,36 @@ function createWindow() {
         width: 800,
         alwaysOnTop:true,
         webPreferences: {
-            nodeIntegration: true,
+            nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
             enableRemoteModule: true,
             contextIsolation:false,
             nodeIntegrationInSubFrames:true,
             nodeIntegrationInWorker:true
 
         },
-        icon: path.join(__dirname, './assets/pAudio.png'),
+        icon: path.join(__dirname, './dist/pAudio.png'),
     });
+    // win.loadFile(path.join(__dirname,"./dist/index.html"));
+      win.loadURL('http://localhost:8080/');
+    if (process.env.WEBPACK_DEV_SERVER_URL) {
 
+        // Load the url of the dev server if in development mode
+        win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
+        if (!process.env.IS_TEST) win.webContents.openDevTools()
+    } else {
+        createProtocol('app')
+            // Load the index.html when not in development
+            // win.loadURL(
+            //     url.format({
+            //       pathname: path.join(__dirname, `./dist/index.html`),
+            //       protocol: "file:",
+            //       slashes: true
+            //     })
+            //   );
+
+    }
     // win.loadURL('https://www.google.com/');
-    win.loadURL('http://localhost:8080/');
+    // win.loadURL('http://localhost:8080/');
     // win.loadURL('https://lw-web.netlify.app/');
     // win.webContents.openDevTools();
 }

@@ -23,9 +23,9 @@ class Visualizer{
     }
     // bufferLength
   
-     barsVisualiser(){
+     barsVisualiser(cancel){
          var renderCanvas = ()=>{
-         window.requestAnimationFrame(renderCanvas);
+        const anime = window.requestAnimationFrame(renderCanvas);
             this.analyser.getByteFrequencyData(this.freqDomain);
 
             this.canvas.setAttribute("width",window.innerWidth);
@@ -54,10 +54,14 @@ class Visualizer{
              * Now lets draw the bars basing on the array length
              * following this format CanvasRect.fillRect(x: number, y: number, w: number, h: number): void
              *              */
-            this.context.fillRect(barX,barHeight,barWidth,height)
+            this.context.fillRect(barX,barHeight,barWidth,height);
         }
+        return anime;
     }
-renderCanvas()
+
+   var anime = renderCanvas();
+     
+    cancel == 1?window.cancelAnimationFrame(anime):null;
     }
 
     /**

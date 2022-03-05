@@ -45,7 +45,7 @@
          <!-- Visulizer -->
        <Lyrics title="Panda" artist="designer"/>
   </div>
-  <router-link to="/hot100">Hot 100</router-link>
+  <!-- <router-link to="/hot100">Hot 100</router-link> -->
       <Room
         v-show="roomView"
         :delays="delayArr"

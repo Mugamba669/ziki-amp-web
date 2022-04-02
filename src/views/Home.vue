@@ -93,6 +93,7 @@
   </div>
 </template>
 <script>
+// const { remote } = require('electron');
 import { mapGetters } from "vuex";
 import Slider from '@/components/Slider.vue'; // @ is an alias to /src
 import Cover from '@/components/ImageWidget/Cover.vue'; // @ is an alias to /src
@@ -172,7 +173,20 @@ export default {
   methods: {
     loadTrack(value){
       for (let i = 0;i < value.length;i++) {
-          this.playlist = [...this.playlist,{id:i,data:value[i],active:false}]
+        mm.parseBlob(value[i]).then(meta => {
+          const raw = meta.common.picture[0].data;
+           var data = new Uint8Array(raw);
+          const blob = new Blob([data],{type:"image/jpeg"});
+          const imageURL = URL.createObjectURL(blob);
+          this.playlist = [...this.playlist,
+                  {id:i+1,
+                    data:value[i],
+                    active:false,
+                    artwork:(raw == undefined ||raw == null)? image : imageURL,
+                    title:meta.common.title == null || meta.common.title == undefined ? (value[i].name).replace(".mp3","") : meta.common.title,
+                    artist:meta.common.artist == null || meta.common.artist == undefined ? "Unknown artist" : meta.common.artist
+                    }]
+           });
           // this.store.commit('updatePlaylist',{id:i,data:value[i],active:false})
       // localStorage.setItem(i,{id:i,data:value[i],active:false});
 
@@ -245,6 +259,9 @@ export default {
             console.log(meta.common);
         });
     },
+    showId3(jam){
+
+    },
     commonComand(track){
       const url =  URL.createObjectURL(track);
       this.audio.src = url;
@@ -257,6 +274,7 @@ export default {
       this.album = meta.common.album == null || meta.common.album == undefined ? "Unknown album" : meta.common.album ;
       this.bufferArray = meta.common.picture[0].data;
        document.querySelector("title").value = this.title;
+  
       // const unprocessedData =this.buff;
       /**
        * Track infor processed
@@ -438,7 +456,7 @@ export default {
           pointer-events:none;
           background: rgba(0,0,0,0.3);
           canvas{
-            z-index: -1!important;
+            z-index: 2!important;
           width:100%;
           height: 100%;
 

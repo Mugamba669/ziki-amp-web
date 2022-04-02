@@ -199,7 +199,7 @@ class Visualizer{
                     this.context.clearRect(0,0,this.canvas.width,this.canvas.height)
                     this.context.beginPath();
                  var x = 0;
-                    for (var i = start; i < this.bufferLength; i++) {
+                    for (var i = start; i < 20; i++) {
                         var v = this.freqDomain[i] / 880.0;
                         var y = v * (this.canvas.height) / 20;
                         if (i === 0) {

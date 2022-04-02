@@ -8,7 +8,7 @@
     "build": "vue-cli-service build",
     "app": "electron ."
   },
-    "author": "Mugamba Bruno <brunohectre@gmail.com>",
+  "author": "Mugamba Bruno <brunohectre@gmail.com>",
   "dependencies": {
     "4lyrics": "^1.1.61",
     "axios": "^0.24.0",

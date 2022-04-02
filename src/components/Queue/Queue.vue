@@ -1,16 +1,18 @@
 <template>
   <div class="queue">
-    <center>Your WishList</center>
-      <div class="conatiner">
-          <p :class="[list.data.active == true?'active':'']" v-bind:key="list" v-for="(list,index) in queueList">
-             <b class="material-icons mi-dehaze"></b>
-            <!-- <b class="material-icons mi-music-note"></b> -->
-            <span @click="this.$emit('queuePlay',[list,index])">{{(list.data.name).replace(".mp3","")}}</span>
-            <!-- <b class="material-icons mi-play-circle"></b> -->
+    <center>Your WishList </center>
+      <div ref='scrolls' class="conatiner">
+          <p :class="[list.data.active == true?'active':'']" v-bind:key="index" v-for="(list,index) in queueList">
+             <!--b class="material-icons mi-dehaze"></b-->
+             <img :src="list.artwork" class="cover"/>
+            <b class="material-icons mi-music-note"></b> <!--={{(list.data.name).replace(".mp3","")}}-->
+            <span @click="this.$emit('queuePlay',[list,index])">{{list.title}}</span>
+            <b class="material-icons mi-play-circle"></b>
             <!-- <b class="material-icons mi-more-vert"></b> -->
           </p>
       </div>
           <button @click="this.$emit('closeQueue')"><b class="material-icons mi-close"></b></button>
+         
 
   </div>
       
@@ -21,8 +23,9 @@ export default {
   name: "Queue",
   props: {
     queueList:Array,
-
-  },
+  },mounted(){
+    this.$refs['scrolls'].scrollTo = 16;
+  }
 };
 </script>
 
@@ -35,6 +38,12 @@ export default {
   backdrop-filter: blur(90px);
   border-radius: 7px;
    padding: 10px;
+   .cover{
+     width:40px;
+     height: 40px;
+     border-radius:10px;
+     box-shadow: -3px -2px 1px 0px #eee;
+   }
 .conatiner {
     padding: 10px;
       width: 400px;
@@ -48,14 +57,16 @@ export default {
       // overflow-y: scroll;
       margin: 3px;
     p{
-      width: 100%;
-      box-shadow: -4px -0px 0px 0px #eeee;
+      width: 390px;
+      line-height: -20px;
+      // box-shadow: -4px -0px 0px 0px #eeee;
       background:rgba($color: #948E8E, $alpha:0.4);
-      padding: 6px;
+      padding: 4px;
       border-radius:5px;
+      
       display: flex;
       cursor: pointer;
-      margin:4px;
+      margin:5px;
       flex-direction:row;
       transition:0.3s ease-in-out;
       transform:scale(1,1);
@@ -76,20 +87,27 @@ export default {
         background:rgba($color: #CABCBC, $alpha:0.6);
     }
     p:hover{
-        transform:scale(1.02,1.02);
-        background:rgba($color: #CABCBC, $alpha:0.6);
+       box-shadow: -4px 0px 0px 0px #eeee,
+                   4px 0px 0px 0px #eeee;
+                          // transform:scale(1.01,1.01);
+        background:rgba($color: #CABCBC, $alpha:0.3);
      }
   }
   .conatiner::-webkit-scrollbar{
     appearance: none;
-    background: #948E8E;
-    width: 4px;
+    background: #948e8e00;
+    // width: px;
+    // height:5px;
     border-radius:10px;
   }
    .conatiner::-webkit-scrollbar-thumb{
     appearance: none;
-    background: #0E0808;
+    border-radius:10px;
+    // margin: 10px;
+    box-shadow: 0px -2px 0px 0px #dddd;
+    background:linear-gradient(-180deg , rgba(224, 217, 217, 0.815),rgba(12, 70, 97, 0.959));
     width: 4px;
+      //  height:px;
   }
       button {
         width: 40px;
@@ -154,7 +172,7 @@ export default {
   }
   .conatiner::-webkit-scrollbar{
     appearance: none;
-    background: #948E8E;
+    background: #05050500;
     width: 2px;
   }
       button {

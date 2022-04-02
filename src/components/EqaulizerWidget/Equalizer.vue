@@ -50,6 +50,9 @@ export default {
                 'name':"Bass",
                 'value':'bass'
                 },{
+                'name':"BassTreble",
+                'value':'bt'
+                },{
                 'name':"Rock",
                 'value':'rock'
                 },{
@@ -58,6 +61,9 @@ export default {
                 },{
                 'name':"Soft bass",
                 'value':'soft_b'
+                },{
+                'name':"Dance",
+                'value':'dance'
                 },{
                 'name':"Pop",
                 'value':'pop'
@@ -149,7 +155,15 @@ export default {
                     this.eqBand(this.bandSet,Presets.Loud);
                     break;
 
-                    case 'live':
+                    case 'bt':
+                    this.eqBand(this.bandSet,Presets.BassTreble);
+                    break;
+
+                      case 'dance':
+                    this.eqBand(this.bandSet,Presets.Dance);
+                    break;
+
+                      case 'live':
                     this.eqBand(this.bandSet,Presets.Live);
                     break;
             

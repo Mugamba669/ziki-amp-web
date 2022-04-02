@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="header">
-            <p><center>Lyrics</center></p>
+            
         </div>
         <div class="content">
 

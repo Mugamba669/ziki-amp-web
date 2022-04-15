@@ -101,7 +101,7 @@
 </template>
 <script>
 // const { remote } = require('electron');
-import { mapGetters } from "vuex";
+// import { mapGetters } from "vuex";
 import Slider from '@/components/Slider.vue'; // @ is an alias to /src
 import Cover from '@/components/ImageWidget/Cover.vue'; // @ is an alias to /src
 import Details from "@/components/Details/Details.vue";
@@ -197,11 +197,12 @@ export default {
                     artist:meta.common.artist == null || meta.common.artist == undefined ? "Unknown artist" : meta.common.artist
                     }]
            });
-          // this.store.commit('updatePlaylist',{id:i,data:value[i],active:false})
+          this.$store.commit('updatePlaylist',{id:i,data:value[i],active:false})
       // localStorage.setItem(i,{id:i,data:value[i],active:false});
 
       }
       this.queueView = true;
+      this.prt2 = !this.prt2;
     },
 
     liveS(query){ /// to perform a live search
@@ -336,10 +337,11 @@ export default {
               //  this.playlist = this.playlist.map((track) => console.log(track.id) /*track.id == id?{...track,active:!track.active}:track*/)
       },
     showQueue(){
-      // this.showCover = !this.showCover;
+      this.ptr2 = false;
         this.queueView = !this.queueView;
     },
     closeQueue(){
+        this.ptr2 = true;
         this.queueView = !this.queueView;
        },
      chooseVisual(eventValue){

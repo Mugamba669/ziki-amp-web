@@ -20,6 +20,7 @@ export default createStore({
       state.player.volume = payload;
     },
     updatePlaylist(state,payload){
+      console.log(payload)
       state.playlist = [...state.playlist,payload];
     },
     changeFeedBack(state,payload){

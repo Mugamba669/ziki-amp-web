@@ -10,6 +10,8 @@ export default createStore({
     delays:eq.getDelayBands(),
     feedback:eq.getFeedBack(),
     bands:eq.getBands(),
+    bass:eq.getBass(),
+    treble:eq.getTreble(),
     equalizer:eq
   },
   mutations: {
@@ -31,6 +33,14 @@ export default createStore({
     },
     updateBands(state,payload){
       state.bands[payload[0]].gain.value = payload[1];
+    },
+    tuneBass(state,payload){
+      // console.log('payload '+payload);
+      state.bass.gain.value = payload;
+    },
+    tuneTreble(state,payload){
+      console.log('treble '+payload)
+      state.treble.gain.value = payload;
     }
   },
 
@@ -41,6 +51,7 @@ export default createStore({
     getBands: (state) => state.bands,
     getFeedback :(state) => state.feedback,
     getDelays: (state) => state.delays,
-    getEqualiser:(state) => state.equalizer
+    getEqualiser:(state) => state.equalizer,
+    getCurrentBass :(state) => state.bass,
   }
 })

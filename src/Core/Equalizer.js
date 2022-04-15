@@ -52,6 +52,14 @@ class Equalizer{
             new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:8000,gain:0}),
             new BiquadFilterNode(this.audioCtx,{type:'peaking',frequency:16000,gain:0}),
         ];
+        // base nknob
+        this.bass = new BiquadFilterNode(this.audioCtx, {type:'lowpass',frequency:80,gain:0});
+        this.bassBooster = new GainNode(this.audioCtx,{gain:0});
+        /**
+         * Stereo band boost
+         */
+        this.treble = new BiquadFilterNode(this.audioCtx,{type:'highpass',frequency:3000,gain:0});
+        this.trebleBooster = new GainNode(this.audioCtx,{gain:0});
             /**
              * Room effects
              */
@@ -92,20 +100,30 @@ class Equalizer{
             // this.bands[9].connect(this.bands[10]);
 
             this.bands[size-1].connect(this.analyser);
+            
             this.analyser.connect(this.audioCtx.destination);
+            //**bass connections */
+            this.source.connect(this.bass);
+            this.bass.connect(this.bassBooster)
+            this.bassBooster.connect(this.analyser);
+            this.analyser.connect(this.audioCtx.destination);
+
+             //**treble connections */
+             this.source.connect(this.treble);
+             this.treble.connect(this.trebleBooster)
+             this.trebleBooster.connect(this.analyser);
+             this.analyser.connect(this.audioCtx.destination);
+             
             this.roomEffect();
             this.audioCtx.resume();
-
         }
     }
    
     /**
      * Sample methods
      */
-    startEq(){
-        this.audio.onplaying = _=> this.connects();
-        // this.audio.onplaying = _=> this.roomEffect();
-    }
+    startEq () {this.audio.onplaying = _=> this.connects()};
+    
     /***
      * @returns { Array<BiquadFilterNode>}
      */
@@ -125,6 +143,15 @@ class Equalizer{
     */
    getFeedBack(){
         return this.feedback;
+   }
+   /**
+    * Get bass knob control
+    */
+   getBass(){
+       return this.bassBooster;
+   }
+   getTreble(){
+       return this.trebleBooster;
    }
 }
 

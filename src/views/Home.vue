@@ -36,11 +36,18 @@
           @changeVol="changeVol"
      />
 
-       <Queue 
+       <!-- <Queue 
         @closeQueue="closeQueue"
         @queuePlay="playQueue"
         v-if="queueView" 
-        :queueList="playlist"/>
+        :queueList="playlist"/> -->
+
+         <GridView 
+          v-if="queueView" 
+            :listTrack="playlist"
+            @gridPlay="playQueue"
+            @closeQueue="closeQueue"
+            />
 
          <!-- Visulizer -->
        <Lyrics title="Panda" artist="designer"/>
@@ -107,12 +114,14 @@ import Search from "@/components/Search/Search.vue";
 import Dropdown from "@/components/Dropdown/Dropdown.vue";
 import Room from "@/components/Room/Room.vue";
 import * as mm from  "music-metadata-browser";
-import Lyrics from "@/components/Lyrics/Lyrics.vue"
+import Lyrics from "@/components/Lyrics/Lyrics.vue";
+import GridView from "@/components/Queue/Grid.vue"
 const { Visualizer } = require("../Core/Visualizer");
 const { image } = require("../Core/default");
 export default {
   name: 'Home',
   data(){
+  
     return {
       displayVisual:false,
        audio:null,
@@ -162,6 +171,7 @@ export default {
     Lyrics,
     Cover,
     Details,
+    GridView,
     Control,
     Volume,
     Queue,
@@ -273,8 +283,9 @@ export default {
       this.artist = meta.common.artist == null || meta.common.artist == undefined ? "Unknown artist" : meta.common.artist;
       this.album = meta.common.album == null || meta.common.album == undefined ? "Unknown album" : meta.common.album ;
       this.bufferArray = meta.common.picture[0].data;
-       document.querySelector("title").value = this.title;
+       document.querySelector("title").textContent = `${this.title} - ${this.artist}`;
   
+      // new Notification({titlle:this.title,subtitle:this.artist}).show();
       // const unprocessedData =this.buff;
       /**
        * Track infor processed

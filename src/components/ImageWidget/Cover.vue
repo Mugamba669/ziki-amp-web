@@ -2,7 +2,13 @@
 <div class="image">
     <center :class="[playing == true?'active':'']"></center>
      <div :class="[playing == true?'active':'','container']">
-        <img ref="images" :src="[source]" alt="coverArt" srcset="">
+        <img 
+        ref="images" 
+        :src="[source]"
+         alt="coverArt" 
+         srcset="" 
+         @wheel="wheelUpdate" 
+         @touchmove="updateTouch"/>
     </div>
 </div>
    
@@ -16,6 +22,20 @@ export default {
       source:String,
       playing:Boolean,
   },
+  data() {
+    return {
+      
+    }
+  },
+  methods:{
+    wheelUpdate(e){
+      e.preventDefault();
+       console.log( this.$refs['images'].value)
+    },
+    touchUpdate(){
+      console.log( this.$refs['images'].value)
+    }
+  }
 }
 </script>
 
@@ -53,8 +73,8 @@ $dur : 50s;
         flex-direction:column;
         justify-content:center!important;
         align-items:center!important;
-         transform-style: preserve-3d;
-      transform-origin: right;
+        transform-style: preserve-3d;
+        transform-origin: right;
         
         perspective: 200px;
         // transform-style: preserve-3d;
@@ -62,11 +82,12 @@ $dur : 50s;
             &::after{
          content:'';
         position: absolute!important;
-        width: 80%;
+        width: 00%;
         height:20px;
         z-index: 13!important;
         border-radius: 5px;
-        background: linear-gradient(-90deg,#555,#000);
+        box-shadow:0px -7px 1px 0px #222,0px -4px 6px 0px #444;
+        // background: linear-gradient(-90deg,#555,#000);
         transform: rotate(360deg) translateY(57px);
       }
           width: 130px;
@@ -76,7 +97,7 @@ $dur : 50s;
                        0px 0px 0px 50px rgba(112, 112, 71, 0.514);
           border-radius:50%;
           z-index: 10!important;
-          transition: $transdur cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          transition: $transdur 4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           background:black;
           position: absolute;
           //  animation: bounce 1.5s infinite linear;
@@ -95,8 +116,9 @@ $dur : 50s;
                 width: 200px;
                 height:18px;
                 z-index: 13!important;
+                box-shadow:0px -2px 1px 0px #222,0px -4px 6px 0px #444;
                 border-radius: 10px;
-                background: linear-gradient(-90deg,#555,#000);
+                //background: linear-gradient(-90deg,#555,#000);
                 transform: rotate(360deg) translateY(37px);
               }
             width: 100px;
@@ -112,14 +134,13 @@ $dur : 50s;
          transition:0.3s ease-in-out;
         height:200px;
         border-radius: 50%;
-       
         animation: spin $dur infinite linear;
          animation-play-state: paused;
 
          overflow:hidden;
         img{ 
         
-          cursor: no-drop;
+          cursor:grab;
           width:100%;
           height:100%;
           transform: rotate3d(70deg);
@@ -133,6 +154,7 @@ $dur : 50s;
        width:400px;
         box-shadow: 7px 0px 0px 0px gray,-7px 0px 0px 0px #ddd;
         height:400px;
+       animation-delay: 5s;
         animation-play-state: running;
 
     }

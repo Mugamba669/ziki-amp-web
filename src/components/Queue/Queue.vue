@@ -2,12 +2,13 @@
   <div class="queue">
     <center>Your WishList </center>
       <div ref='scrolls' class="conatiner">
-          <p :class="[list.data.active == true?'active':'']" v-bind:key="index" v-for="(list,index) in queueList">
-             <!--b class="material-icons mi-dehaze"></b-->
-             <img :src="list.artwork" class="cover"/>
-            <b class="material-icons mi-music-note"></b> <!--={{(list.data.name).replace(".mp3","")}}-->
-            <span @click="this.$emit('queuePlay',[list,index])">{{list.title}}</span>
-            <b class="material-icons mi-play-circle"></b>
+         
+          <p @click="this.$emit('queuePlay',[list,index])" :class="[list.data.active == true?'active':'']" v-bind:key="index" v-for="(list,index) in queueList">
+             <!-- <b class="material-icons mi-dehaze"></b> -->
+              <img :src="list.artwork" class="cover"/>
+            <!-- <b class="material-icons mi-music-note"></b> {{(list.data.name).replace(".mp3","")}} -->
+            <span>{{list.title}}</span>
+            <b class="material-icons mi-play-circle"></b> 
             <!-- <b class="material-icons mi-more-vert"></b> -->
           </p>
       </div>
@@ -19,12 +20,16 @@
 </template>
 
 <script>
+import GridView from "@/components/Queue/Grid.vue";
 export default {
   name: "Queue",
+  components:{
+    GridView,
+  },
   props: {
     queueList:Array,
   },mounted(){
-    this.$refs['scrolls'].scrollTo = 16;
+    // this.$refs['scrolls'].scrollTo = 16;
   }
 };
 </script>

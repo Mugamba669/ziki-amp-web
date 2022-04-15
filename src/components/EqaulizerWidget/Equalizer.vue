@@ -2,10 +2,6 @@
 
 <div class="widget">
       
-    <!-- <Presets/> -->
-    
-    <!-- <div class="conatiner"> -->
-      
         <div class="equalizer">
             <Bands 
                 :key="index"
@@ -26,6 +22,20 @@
         </select>
     </div>
 
+    <div class="more">
+        <p>
+            <b>Bass {{Number((_bass/16)*100).toFixed(1)}} dB</b>
+        <input type="range" @input="updateBass" max="16" min="0" step="0.01" v-model="_bass"/>
+
+        </p>
+
+          <p>
+              <b>Treble {{Number((_treble/16) * 100).toFixed(1)}} dB</b>
+        <input type="range" @input="trebleUpdate" max="16" min="0" step="0.01" v-model="_treble"/>
+
+        </p>
+    </div>
+
 </div>
 
 </template>
@@ -41,6 +51,8 @@ export default {
     },
     data(){
         return{
+            _bass:0,
+            _treble:0,
             update:[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
             presets:[
                 {
@@ -106,6 +118,14 @@ export default {
                 this.out = array[index];
                 
             }
+        },
+        trebleUpdate(){
+              console.log(this._bass);
+            this.$store.commit('tuneTreble',this._treble);
+        },
+        updateBass(){
+            // console.log(this._bass);
+            this.$store.commit('tuneBass',this._bass);
         },
         updateBand(){
             switch (this.$refs['choice'].value) {

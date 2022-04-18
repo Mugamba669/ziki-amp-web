@@ -8,12 +8,7 @@
             {{Math.floor(Number(volume)*100)}} %
             </span> --
            </label> 
-       <v-slider
-  hint="Im a hint"
-  max="50"
-  min="-50"
-></v-slider>
-        <input type="range" @input="adjustVolume" max="1" min="0" step="0.01" v-model="volume"/>
+        <input type="range" class="slider" @input="adjustVolume" max="1" min="0" step="0.01" v-model="volume"/>
         
     </div>
 <!-- </div> -->
@@ -21,8 +16,6 @@
 </template>
 
 <script>
-
-import { mapActions } from 'vuex';
 export default {
     name: 'Volume',
     data(){
@@ -79,27 +72,29 @@ export default {
                         margin:10px;
                     }
                 }
-            input{
-                appearance:none;
-                height:4px;
-                background:#C09917;
-                border-radius: 6px;
-                width:80%;
-                margin:15px;
-                transform: scale(1,1);
-                transition:0.3s ease-in-out;
-                &::-webkit-slider-thumb{
-                    appearance:none;
-                    cursor: pointer;
-                    height:20px;
-                    background:#C09917;
-                    border-radius: 50%;
-                    width:20px;
-                }
-            }
-            // input:hover{
-            //     transform: scale(1.04,1.04);
-            // }
+     
+    
+     input{
+       width:100%;
+       appearance:none;
+    //    overflow: hidden;
+       border-radius:10px;
+       height: 10px;
+       background: #eee;
+       box-shadow:inset 0px 0px 5px 2px #111111;
+       &::-webkit-slider-thumb{
+          appearance:none;
+          overflow: visible;
+          width:15px;
+          transform: rotate(0deg);
+          border-radius:5px;
+          height:25px;
+          clip-path:stroke-boxl;
+          background: rgba(221, 221, 221, 0.986);
+         box-shadow:inset -3px 0px 5px -2px #030303,inset -4px 0px 5px -2px #353232 ,inset -3px 0px 10px 2px #030303;
+       }
+     }
+
         }
     
 </style>

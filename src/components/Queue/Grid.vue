@@ -1,16 +1,24 @@
 <template>
-<div class="container"> <center>Your WishList ({{listTrack.length}}) songs</center>
+<div class="container"> <center>Your WishList  ({{listTrack.length}}) songs</center>
+   
     <div class="grid">
          
        <div @click="this.$emit('gridPlay',[a,index])" class="tile" v-for="(a,index) in listTrack" :key="index">
            <img :src="a.artwork"/>
+           <button class="play">
+               <b class="mi mi-play-arrow"></b>
+           </button>
            <div class="data">
             <b>{{a.title}}</b>
             <b>{{a.artist}}</b>
           </div>
        </div>
     </div>
-    <button @click="this.$emit('closeQueue')"><b class="material-icons mi-close"></b></button>
+    <div :class="[(listTrack.length < -1 || listTrack.length < 10)?'active':'','loader']">
+        <div class="progress"></div>
+        <p>Please wait..</p>
+    </div>
+    <button class="btn" @click="this.$emit('closeQueue')"><b class="material-icons mi-close"></b></button>
 
 </div>
     
@@ -24,17 +32,66 @@ export default {
         total:0,
         listTrack:Array
     },
+    data() {
+        return {
+            showProgress:false,
+        }
+    },
     components:{},
-    mounted(){}
+    
+    mounted(){
+        
+    }
 }
 </script>
 <style lang="scss" scoped>
+@keyframes spin {
+    0%{
+        transform: rotate(0deg);
+        filter: hue-rotate(0deg);
+    }
+
+     100%{
+        transform: rotate(365deg);
+        filter: hue-rotate(365deg);
+
+    }
+}
+    .loader{
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        background: #50484841;
+        border: 1px solid rgba(56, 42, 42, 0.39);
+        backdrop-filter: blur(20px);
+        display: flex;
+        flex-direction: column;
+        visibility: hidden;
+        top: -40%;
+        align-items: center;
+        transition:0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+        border-radius: 10px;
+        z-index: 10!important;
+        justify-content: center;
+        .progress{
+            width: 80px;
+            height: 80px;
+            border-radius:50%;
+            animation: spin 0.8s infinite linear;
+            border-top: 5px solid #b45c0a;
+            border-bottom:5px solid #b68a10;
+        }
+       
+    }
+     .loader.active{
+        visibility: visible;
+
+            top: 100%;
+        }
     .container{
         padding:0;
         margin: 20px!important;
-        background:#000;
-        // width: 500px!important;
-        // height:500px!important;
+        background:rgba(0, 0, 0, 0.082);
         display: flex;
         // position: absolute;
         flex-direction: column;
@@ -44,13 +101,14 @@ export default {
         top: 10px;
         z-index: 10!important;
         padding:14px;
+        backdrop-filter: blur(20px);
         border-radius: 5px;
-        background: #000;
+        background: rgba(0, 0, 0, 0.801);
     }
-         button {
+         .btn {
              position: absolute;
-            width: 70px;
-            height: 70px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             border: 1px solid #3333;
             background: #dddd;
@@ -64,8 +122,22 @@ export default {
          transform: scale(1.1,1.1);
        }
       }
-      
-  
+      .play{
+          position: absolute;
+          width: 40px;
+          height: 40px;
+          top: 20px;
+          border-radius:50%;
+          border: 1px solid #3333;
+          cursor: pointer;
+          right: -40px;
+          z-index: 10 !important;
+          background: linear-gradient(30deg,#0705055e,#c7b9b991);
+          backdrop-filter: blur(20px);
+          transition:0.3s ease-in-out;
+          b{color:#eee;}
+      }
+   
     .grid{
         margin: 20px!important;
         display: grid !important;
@@ -75,8 +147,6 @@ export default {
         overflow-y: scroll!important;
                backdrop-filter: blur(20px);
         position: absolute;
-        // left: 20px;
-        // right: 20px;
         top:10px;
         width:100%;
         height:90%;
@@ -113,8 +183,8 @@ export default {
             margin: 5px;
             height:50px;
             z-index: 15!important;
-            backdrop-filter: blur(0px);
-            background: #000;
+            backdrop-filter: blur(20px);
+            background: rgba(0, 0, 0, 0.678);
             position:absolute;
             display: flex;
             border-radius: 4px;
@@ -145,6 +215,15 @@ export default {
             transform:scale(1,1);
             transition:0.3s ease-in-out;
            
+        }
+        &:hover{
+            cursor: pointer;
+        box-shadow: -20px 0px 0px -20px #ddd;
+        }
+        &:hover .play{
+
+        right: 50px;
+    
         }
          &:hover img{
                 transform: scale(1.1,1.1);

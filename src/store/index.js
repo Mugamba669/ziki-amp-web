@@ -1,5 +1,7 @@
+
 import { createStore } from 'vuex'
 import { Equalizer } from '../Core/Equalizer';
+const { image } = require("../Core/default");
 const audio = new Audio();
 const eq = new Equalizer(audio);
 export default createStore({
@@ -12,7 +14,11 @@ export default createStore({
     bands:eq.getBands(),
     bass:eq.getBass(),
     treble:eq.getTreble(),
-    equalizer:eq
+    equalizer:eq,
+    now:{ title:"title",
+    artist:"",
+    album:"",
+    artwork:image,}
   },
   mutations: {
     setVolume(state,payload){
@@ -20,8 +26,15 @@ export default createStore({
       state.player.volume = payload;
     },
     updatePlaylist(state,payload){
-      console.log(payload)
       state.playlist = [...state.playlist,payload];
+      // localStorage.setItem("playlist",JSON.stringify(state.playlist));
+    },
+    loadPlaylist(state,payload){
+      console.log(payload);
+        state.playlist = payload;
+    },
+    nowPlaying(state,payload){
+        state.now = payload;
     },
     changeFeedBack(state,payload){
         state.feedback[payload[0]].gain.value = payload[1];
@@ -29,7 +42,6 @@ export default createStore({
     },
     changeDelays(state,payload){
       console.log(payload);
-
         state.delays[payload[0]].delayTime.value = payload[1];
     },
     updateBands(state,payload){
@@ -40,19 +52,20 @@ export default createStore({
       state.bass.gain.value = payload;
     },
     tuneTreble(state,payload){
-      console.log('treble '+payload)
+      // console.log('treble '+payload)
       state.treble.gain.value = payload;
     }
   },
 
   getters:{
     getVolume : (state) => state.volume,
-    showPlaylist:(state) => state.playlist,
+    getPlaylist:(state) => state.playlist,
     getPlayer: (state) => state.player,
     getBands: (state) => state.bands,
     getFeedback :(state) => state.feedback,
     getDelays: (state) => state.delays,
     getEqualiser:(state) => state.equalizer,
     getCurrentBass :(state) => state.bass,
+    getNowPlaying:(state)=> state.now
   }
 })

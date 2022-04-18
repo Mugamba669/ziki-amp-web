@@ -3,7 +3,7 @@
        <canvas v-show="displayVisual" ref="canvas"></canvas>
     </div>
   <div class="home">
-  <div v-show="ptr1" class="part1">
+  <div :class="[ptr1?'active':'','part1']">
          <Cover 
          v-if="!queueView" 
           v-show="showCover"
@@ -12,9 +12,10 @@
           />
 
         <EQ
+        :class="[showEQ?'active':'','EQ']"
           @closeEQ="closeEQ"
           :bandSet="eqBands"
-          v-show="showEQ"
+          
         />
 
       <Loader 
@@ -30,37 +31,38 @@
       />
 
          <Volume
-          v-if="!queueView"
-          v-show="showV"
+         :class="[showV?'active':'','volume']"
           @closeVol="closeVol"
-          @changeVol="changeVol"
+          
      />
 
-       <!-- <Queue 
-        @closeQueue="closeQueue"
-        @queuePlay="playQueue"
-        v-if="queueView" 
-        :queueList="playlist"/> -->
+       <Queue 
+       :class="[listView?'active':'','listView']"
+        @closeQueue="closeLQueue"
+        @queuePlay="playL"
+        :queueList="playlist"/>
 
          <GridView 
-          v-if="queueView" 
+          :class="[queueView?'active':'','gView']"
             :listTrack="playlist"
             @gridPlay="playQueue"
             @closeQueue="closeQueue"
             />
-
+            
          <!-- Visulizer -->
        <Lyrics title="Panda" artist="designer"/>
   </div>
+
   <!-- <router-link to="/hot100">Hot 100</router-link> -->
       <Room
-        v-show="roomView"
+      :class="[roomView?'active':'','room']"
+        
         :delays="delayArr"
         :feedback="feedBackArr"
         @closeRoom="closeRoom"
        />
 
-     <div v-show="ptr2" class="prt2">
+     <div :class="[ptr2?'active':'','prt2']">
       
        <Dropdown
        v-show="displayVisual"
@@ -69,6 +71,13 @@
        <!-- <Search
         @live="liveS"
        /> -->
+       <div  class="b">
+         <button v-show="!showEQ" @click="viewOpt">View</button>
+       </div>
+       <div :class="[showOpt?'active':'','options']">
+         <p @click="listShow">ListView</p>
+         <p @click="gridShow">GirdView</p>
+       </div>
         <Details 
         v-show="showCover"
           :title="title"
@@ -97,11 +106,18 @@
           :togglebtn="btnValue"
           />
        </div>
+        <BottomSheet
+          :class="[showNext?'active':'','bottom']"
+          :playlist="nextTrack"
+          @closeB="closeB"
+          />
   </div>
+
+ 
+ 
 </template>
 <script>
-// const { remote } = require('electron');
-// import { mapGetters } from "vuex";
+
 import Slider from '@/components/Slider.vue'; // @ is an alias to /src
 import Cover from '@/components/ImageWidget/Cover.vue'; // @ is an alias to /src
 import Details from "@/components/Details/Details.vue";
@@ -116,6 +132,7 @@ import Room from "@/components/Room/Room.vue";
 import * as mm from  "music-metadata-browser";
 import Lyrics from "@/components/Lyrics/Lyrics.vue";
 import GridView from "@/components/Queue/Grid.vue"
+import BottomSheet from "@/components/model/BottomSheet.vue";
 const { Visualizer } = require("../Core/Visualizer");
 const { image } = require("../Core/default");
 export default {
@@ -132,10 +149,22 @@ export default {
        title:"",
        artist:"",
        album:"",
+       nPlay:{     title:"title",
+                  artist:"",
+                  album:"",
+                  artwork:image},
+
+      nextTrack:{
+        title:"",
+        artist:"",
+        image:image
+      },
        showEQ:false,
        showCover:true,
+       listView:false,
        ptr1:true,
        ptr2:true,
+       showNext:false,
        image:image,
        size:0,
        curlTime:0,
@@ -146,6 +175,7 @@ export default {
        durlTime:"",
        showPlay:true,
        showPause:false,
+       showOpt:false,
        btnValue:"EQ",
        queueView:false,
        showV:false,
@@ -171,6 +201,7 @@ export default {
     Lyrics,
     Cover,
     Details,
+    BottomSheet,
     GridView,
     Control,
     Volume,
@@ -186,25 +217,26 @@ export default {
         mm.parseBlob(value[i]).then(meta => {
           const raw = meta.common.picture[0].data;
            var data = new Uint8Array(raw);
-          const blob = new Blob([data],{type:"image/jpeg"});
+          const blob = new Blob([data]);
           const imageURL = URL.createObjectURL(blob);
-          this.playlist = [...this.playlist,
-                  {id:i+1,
-                    data:value[i],
-                    active:false,
-                    artwork:(raw == undefined ||raw == null)? image : imageURL,
-                    title:meta.common.title == null || meta.common.title == undefined ? (value[i].name).replace(".mp3","") : meta.common.title,
-                    artist:meta.common.artist == null || meta.common.artist == undefined ? "Unknown artist" : meta.common.artist
-                    }]
-           });
-          this.$store.commit('updatePlaylist',{id:i,data:value[i],active:false})
+          const processed = {id:i+1, data:value[i],active:false,
+                              artwork:(raw == undefined ||raw == null)? image : imageURL,
+                            title:(meta.common.title == null || meta.common.title == undefined) ? (value[i].name).replace(".mp3","") : meta.common.title,
+                           artist:(meta.common.artist == null || meta.common.artist == undefined )? "Unknown artist" : meta.common.artist
+                    };
+             this.playlist = [...this.playlist,processed ];
+
+          this.$store.commit('updatePlaylist',processed);
+           }).finally(() => console.log(this.$store.getters.getPlaylist));
       // localStorage.setItem(i,{id:i,data:value[i],active:false});
 
       }
-      this.queueView = true;
-      this.prt2 = !this.prt2;
+          this.ptr2 = false;
+        this.queueView = !this.queueView;
     },
-
+    viewOpt(){
+      this.showOpt = true;
+    },
     liveS(query){ /// to perform a live search
         this.playlist = this.playlist.filter(song => {
           return song.findIndex(data => {
@@ -216,9 +248,12 @@ export default {
   toggleVisualWidget(){
       this.displayVisual = ! this.displayVisual;
   },
+  closeB(){
+    this.showNext = false;
+  },
     roomEffectsComponent(){
-        this.ptr1 = !this.ptr1;
-        this.ptr2 = !this.ptr2;
+        // this.ptr1 = !this.ptr1;
+        // this.ptr2 = !this.ptr2;
         this.roomView = !this.roomView;
     },
     closeRoom(){
@@ -231,7 +266,6 @@ export default {
               data: file,
               active:false
               };
-    // this.store.commit('updatePlaylist',listTile)
       this.playlist = [...this.playlist,listTile];
       this.commonComand(file);
       this.showPlay = !this.showPlay;
@@ -267,11 +301,13 @@ export default {
     },
     getTitle(file){
         mm.parseBlob(file).then(meta =>{
-            console.log(meta.common);
+            // console.log(meta.common);
         });
     },
-    showId3(jam){
-
+    imageProcess(buffer){
+         var data = new Uint8Array(buffer);
+          const blob = new Blob([data]);
+          return URL.createObjectURL(blob);
     },
     commonComand(track){
       const url =  URL.createObjectURL(track);
@@ -285,33 +321,49 @@ export default {
       this.album = meta.common.album == null || meta.common.album == undefined ? "Unknown album" : meta.common.album ;
       this.bufferArray = meta.common.picture[0].data;
        document.querySelector("title").textContent = `${this.title} - ${this.artist}`;
-  
-      // new Notification({titlle:this.title,subtitle:this.artist}).show();
-      // const unprocessedData =this.buff;
+      const imageURL = this.imageProcess(this.bufferArray);
       /**
        * Track infor processed
        */
-          var data = new Uint8Array(this.bufferArray);
-          const blob = new Blob([data],{type:"image/jpeg"});
-          const imageURL = URL.createObjectURL(blob);
+         
 
           this.image =  (this.bufferArray == undefined ||this.bufferArray == null)? image : imageURL;
           document.querySelector("body").style.backgroundImage =(this.bufferArray == undefined ||this.bufferArray == null)?"url("+image+")":"url("+imageURL+")";
 
           this.image =  (this.bufferArray == undefined || this.bufferArray == '' || this.bufferArray == null)? image : imageURL;
+          
           document.querySelector("body").style.backgroundImage = (this.bufferArray == undefined || this.bufferArray == '' || this.bufferArray == null)?"url("+image+")":"url("+imageURL+")";
+          
+          const link = document.querySelector("link");
+   link.href.replace(this.image,"");
+  link.href = this.image;
+      const notify = new Notification(this.title,{body:this.artist,icon:this.image});
+      notify.onclose = ()=>{
+          
+      }
+     const currentTrack = {
+       title:this.title,
+       artist:this.artist,
+       album:this.album,
+       artwork:this.image
+      };
 
+      this.$store.commit('nowPlaying',currentTrack);
+
+  // console.log(link.href)
       });
     },
     seekNow(){
        this.countPlay += 1;
        this.commonComand(this.playlist[this.countPlay].data);
+       this.executeNext(this.playlist[this.countPlay+1].data);
        this.toggleList(this.countPlay);
     },
     prevSeek(){
          this.countPlay -= 1;
         this.commonComand(this.playlist[this.countPlay].data);
         this.toggleList(this.countPlay);
+        this.executeNext(this.playlist[this.countPlay+1].data)
     },
     repeatTrack(){
       this.loop = !this.loop;
@@ -325,12 +377,36 @@ export default {
       this.showEQ = !this.showEQ;
       this.showCover = !this.showCover;
     },
+    executeNext(file){
+         mm.parseBlob(file).then((meta)=>{
+           const buff = meta.common.picture[0].data;
+           this.nextTrack.image = buff == null || buff == undefined ?this.image:this.imageProcess(buff);
+            this.nextTrack.title = meta.common.title == null || meta.common.title == undefined ? (track.name).replace(".mp3","") : meta.common.title;
+             this.nextTrack.artist = meta.common.artist == null || meta.common.artist == undefined ? "Unknown artist" : meta.common.artist;
+          })
+    },
+    listShow(){
+      this.showOpt = false;
+        this.listView = !this.listView;
+    },
+    gridShow(){
+      this.showOpt = false;
+      this.showQueue();
+    },
     playQueue(queue){
           this.commonComand(queue[0].data);
           this.countPlay = queue[1];
           this.closeQueue();
           this.toggleList(queue[1]);
-          // console.log(this.getTitle(queue[0].data));
+         this.executeNext(this.playlist[this.countPlay+1]);// console.log(this.getTitle(queue[0].data));
+      },
+        playL(queue){
+          this.commonComand(queue[0].data);
+          this.countPlay = queue[1];
+          this.closeLQueue();
+          this.toggleList(queue[1]);
+          // this.listView = !this.listView;
+         this.executeNext(this.playlist[this.countPlay+1]);// console.log(this.getTitle(queue[0].data));
       },
       toggleList(id){
         // console.log(id);
@@ -339,10 +415,15 @@ export default {
     showQueue(){
       this.ptr2 = false;
         this.queueView = !this.queueView;
+        this.playlist = this.$store.getters.getPlaylist;
     },
     closeQueue(){
         this.ptr2 = true;
         this.queueView = !this.queueView;
+       },
+        closeLQueue(){
+        // this.ptr1 = true;
+        this.listView = !this.listView;
        },
      chooseVisual(eventValue){
          switch(parseInt(eventValue)){
@@ -380,10 +461,10 @@ export default {
   },
   
   mounted(){
-      //  mapGetters({vol:"getVolume"});
 
-    document.querySelector("body").style.backgroundImage = "url("+image+")";
-      
+    this.playlist = this.$store.getters.getPlaylist;
+    this.nPlay = this.$store.getters.getNowPlaying;
+    document.querySelector("body").style.backgroundImage = "url("+this.nPlay.artwork+")";
     // this.$
     /**default volume = 0.17 */
 
@@ -410,28 +491,39 @@ export default {
        const sec = Math.floor(this.audio.currentTime % 60 );
        this.curlTime = sec < 10 ? min+":0"+sec:min+":"+sec;
 /**Display the track duration */
-       const dmin = Math.floor((this.audio.duration / 60) % 60)
-       const dsec = Math.floor(this.audio.duration % 60 );
+       const dmin = Math.floor(((this.audio.duration - this.audio.currentTime) / 60) % 60)
+       const dsec = Math.floor((this.audio.duration - this.audio.currentTime) % 60 );
        this.durlTime = dsec < 10 ?dmin+":0"+dsec:dmin+":"+dsec;
+    /**Logic for next track */
+     const monitor = Math.floor((this.audio.duration) -this.audio.currentTime);
+            if(monitor == 60){
+              this.showNext = true;
+            //    const notify = new Notification(this.title,{body:this.artist,icon:this.playlist[this.trackId]});
+            } else if(monitor == 30){
+               this.showNext = false
+            // console.log((monitor));
+            }else if(monitor < 30 || monitor > 60){
+               this.showNext = false
+            consol.log((monitor));
+            }
 
     }
+  
     this.audio.onpause = ()=>{
       this.checker = false;
-        //  this.showPlay = !this.showPlay;
-        //  this.showPause = !this.showPause;
-         
-        //  eq.barsVisualiser();
     }
-
+ 
     this.audio.onended = ()=>{
                this.checker = false;
 
         if(this.shuffle == true){
             this.countPlay = Math.floor(Math.random() * this.playlist.length);
             this.commonComand(this.playlist[this.countPlay].data);
+            this.executeNext(this.playlist[this.countPlay+1].data);
         }else{
            this.countPlay +=1;
           this.commonComand(this.playlist[this.countPlay].data);
+          this.executeNext(this.playlist[this.countPlay + 1].data);
           this.toggleList(this.countPlay);
         }
          
@@ -447,9 +539,7 @@ export default {
   created() {
     this.audio = this.$store.getters.getPlayer;
     this.audio.volume = this.$store.getters.getVolume;
-    this.playlist = this.$store.getters.showPlaylist;
     this.eq = this.$store.getters.getEqualiser;
-    
   },
 }
 </script>
@@ -481,6 +571,7 @@ export default {
        background: rgba(0,0,0,0.4);
         width: 100%;
         height: 100%;
+        overflow: hidden !important;
         z-index:2!important;
         position: fixed;
          display: flex!important;
@@ -490,13 +581,138 @@ export default {
         color:#ddd;
       .prt2,.part1{
           margin: 15px;
-          // position:absolute;
+          opacity:0;
           display: flex;
           flex-direction: column!important;
           justify-content: center!important;
           z-index: 3!important;
           align-items: center!important;
+          visibility: hidden!important;
+          transition: 0.3s cubic-bezier(0.445, 0.05, 0.55, 0.95);
         }
+        .prt2.active , .part1.active{
+            opacity:1;
+            visibility: visible !important;
+        }
+      }
+      .EQ{
+        opacity:0;
+        visibility: hidden;
+        transition: 0.3s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+        position: absolute;
+      }
+      .EQ.active{
+         opacity:1;
+        visibility: visible;
+      }
+      .gView{
+        width: 100%;
+        height: 100%;
+        position:absolute;
+        visibility: hidden;
+        left:-5000px;
+        z-index:120px!important;
+        transition: 0.3s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+        // opacity:0;
+      }
+      .gView.active{
+          width: 100%;
+          left:0px;
+             visibility:visible;
+        // opacity:1;
+      }
+       .listView{
+         width: fit-content;
+         height: max-content;
+        position:absolute;
+        visibility: hidden;
+        bottom:-5000px;
+        z-index:120px!important;
+        transition: 0.83s ease-in-out;
+        // opacity:0;
+      }
+        .listView.active{
+        bottom:150px;
+          // width: 100%;
+          left:50px;
+             visibility:visible;
+        // opacity:1;
+      }
+     
+    .options{
+      border: 1px solid #eeeeee77;
+      padding:10px;
+      width:140px;
+      height:100px;
+      border-radius:10px;
+      position: absolute;
+      top: 100px;
+      z-index: 6!important;
+      background: rgba(206, 198, 198, 0.356);
+      backdrop-filter: blur(94px);
+       opacity:0;
+        visibility: hidden;
+        transition: 0.3s ease-in-out;
+      p{
+        margin:10px;
+        padding:5px;
+        transition: 0.3s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+        &:hover{
+          background:#eeeeee50;
+          border-radius:10px;
+          padding:5.3px;
+        }
+      }
+    }
+    .options.active{
+        opacity:1;
+        visibility: visible;
+    }
+    .b{
+      display: flex;
+      flex-direction: row!important;
+      justify-content: space-evenly;
+      button{
+        width: 90px;
+        height: 40px;
+        border: 1px solid #dddddd4f;
+        background: rgba(0,0,0,0.1);
+        color: #eeeeee50;
+        cursor: pointer;
+        font: 400 16px Ubuntu,Arial;
+        transition: 0.3s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+        &:hover{
+             border: 1px solid #dddddd;
+        color: #eee;
+
+        }
+      }
+    }
+      .volume{
+        left: 0px;
+        transition:0.3s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+        position: absolute;
+        visibility: hidden;
+        opacity: 0;
+      }
+      .volume.active{
+        visibility: visible;
+
+        left: 90px;
+        opacity: 1;
+
+      }
+      .room{
+        transition:0.3s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+        opacity:0;
+        position: absolute;
+        bottom:0px;
+        visibility: hidden;
+      }
+      .room.active{
+        bottom: 120px;
+         visibility: visible;
+        opacity: 1;
       }
 @media (max-width:901px) {
    .home{
@@ -556,5 +772,19 @@ export default {
         }
       }
 }
-    
+     .bottom{
+         width: 500px;
+          position: absolute;
+          bottom:100px;
+          z-index: 30!important;
+          right: 10px;
+          visibility: hidden;
+          opacity: 0;
+          transition: 0.3s cubic-bezier(0.045, 0.05, 0.55, 0.95);
+    }
+    .bottom.active{
+       right: 500px;
+        visibility: visible;
+          opacity: 1;
+    }
  </style>

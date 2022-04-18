@@ -10,7 +10,7 @@
     />
 
     <!-- <progress  :max="max" :value="value"></progress> -->
-  <span class="label">{{duration}}</span>
+  <span class="label">- {{duration}}</span>
 </div>
 </template>
 
@@ -50,15 +50,26 @@ export default {
      input{
        width:500px;
        appearance:none;
-       height: 4px;
-       background: #B3A1A1;
+      //  overflow: hidden;
+       border-radius:10px;
+       height: 10px;
+       background: #eee;
+       box-shadow:inset 0px 0px 5px 2px #111111;
        &::-webkit-slider-thumb{
           appearance:none;
-          width:20px;
+          overflow: visible;
+          width:25px;
           border-radius: 50%;
-          height:20px;
-          background: #554E4E;
+          height:25px;
+          background: rgba(109, 109, 92, 0.986);
+         box-shadow:inset -3px 0px 5px -2px #e0cb06,inset -4px 0px 5px -2px #dfdc1f ,inset -3px 0px 10px 2px #27270c;
        }
+      //  &::-webkit-slider-runnable-track{
+      //    background:#bd1010;
+      //    width: 30px;
+      //    height: 4px;
+      //    transform: translateX(-90px);
+      //  }
      }
     }
 @media(max-width:910px){
@@ -83,7 +94,12 @@ export default {
           width:20px;
           border-radius: 50%;
           height:20px;
-          background: #554E4E;
+          background: #bd1010;
+       }
+       &::-webkit-slider-runnable-track{
+         background: #9090;
+         width: 20px;
+         height: 20px;
        }
      }
     }

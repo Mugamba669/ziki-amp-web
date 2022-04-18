@@ -60,6 +60,7 @@ export default {
         }
     },
     mounted(){
+
        const device = this.chooseDevice();
        switch (device) {
            case "tablet":

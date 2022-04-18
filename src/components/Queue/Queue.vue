@@ -109,9 +109,10 @@ export default {
     appearance: none;
     border-radius:10px;
     // margin: 10px;
-    box-shadow: 0px -2px 0px 0px #dddd;
-    background:linear-gradient(-180deg , rgba(224, 217, 217, 0.815),rgba(12, 70, 97, 0.959));
-    width: 4px;
+    backdrop-filter: blur(90px);
+    // box-shadow: 0px -2px 0px 0px #dddd;
+    background:#f8f5f554;
+      width: 4px;
       //  height:px;
   }
       button {

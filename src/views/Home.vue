@@ -134,7 +134,7 @@ import * as mm from  "music-metadata-browser";
 import Lyrics from "@/components/Lyrics/Lyrics.vue";
 import GridView from "@/components/Queue/Grid.vue"
 import BottomSheet from "@/components/model/BottomSheet.vue";
-const { ipcRenderer } = window.require('electron');
+// const { ipcRenderer } = window.require('electron');
 const { Visualizer } = require("../Core/Visualizer");
 const { image } = require("../Core/default");
 export default {
@@ -254,11 +254,11 @@ export default {
     this.showNext = false;
   },
   loadPlaylist(){
-     ipcRenderer.sendSync('openDir');
-    ipcRenderer.on('files',(event,args)=>{
-      console.log(args);
-      event.sender.send("done","am done boss");
-    });
+    //  ipcRenderer.sendSync('openDir');
+    // ipcRenderer.on('files',(event,args)=>{
+    //   console.log(args);
+    //   event.sender.send("done","am done boss");
+    // });
   },
     roomEffectsComponent(){
         // this.ptr1 = !this.ptr1;
@@ -346,7 +346,7 @@ export default {
           const link = document.querySelector("link");
    link.href.replace(this.image,"");
   link.href = this.image;
-  ipcRenderer.sendSync('iconUp',link.href);
+  // ipcRenderer.sendSync('iconUp',link.href);
       const notify = new Notification(this.title,{body:this.artist,icon:this.image});
       notify.onclose = ()=>{
           

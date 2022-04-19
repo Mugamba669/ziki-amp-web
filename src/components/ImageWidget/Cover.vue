@@ -111,7 +111,7 @@ $dur : 50s;
           right: -160px;
           top: 50px;
           display: flex;
-          transform: translateZ(0px) translate(-80px ,-100px) rotate(60deg) scale(1);
+          transform: translateZ(0px) translate(-80px ,-100px) rotate(40deg) scale(1);
           flex-direction: column;
           justify-content:center!important;
           align-items: center!important;
@@ -165,7 +165,7 @@ $dur : 50s;
           // }
         }
          .dj.active{
-            transform: scale(1.1,1.1) rotate(0deg) translateZ(30px);
+            transform: scale(1.03,1.03) rotate(0deg) translateZ(10px);
           }
         // transform-style: preserve-3d;
         center{
@@ -189,10 +189,11 @@ $dur : 50s;
           }
     .container {
          transform-style: preserve-3d;
-        width:200px;
+        // width:200px;
         // transform: translate3d(90px,0px ,0px);
          transition:0.3s ease-in-out;
-        height:200px;
+        width:400px;
+        height:400px;
         border-radius: 50%;
         animation: spin $dur infinite linear;
          animation-play-state: paused;
@@ -211,11 +212,14 @@ $dur : 50s;
         }
    }
     .container.active{
-       width:400px;
         box-shadow: 7px 0px 0px 0px gray,-7px 0px 0px 0px #ddd;
+       width:400px;
         height:400px;
        animation-delay: 5s;
         animation-play-state: running;
+    }
+    .container.shrink{
+       width:400px;
 
     }
 }

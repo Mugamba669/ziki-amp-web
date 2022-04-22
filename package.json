@@ -4,7 +4,8 @@
   "private": true,
   "main": "background.js",
   "scripts": {
-    "build": "vue-cli-service electron:build",
+    "build": "vue-cli-service build",
+    "electron:build": "vue-cli-service electron:build",
     "start": "vue-cli-service electron:serve"
   },
   "author": "Mugamba Bruno <brunohectre@gmail.com>",

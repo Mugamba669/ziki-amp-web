@@ -1,13 +1,15 @@
-// module.exports  = {
-//     
-// }
+// var nodeExternals = require('webpack-node-externals');
 module.exports = {
-     publicPath: process.env.NODE_ENV  ===  'production'  ?  './'  :  '/',
+  
     pluginOptions: {
         electronBuilder: {
             nodeIntegration: true,
+            customFileProtocol: './',
             builderOptions: {
-                productName: "Amp",
+                publish: ['github'],
+                asar: true,
+                appId: 'com.amp.music',
+                productName: 'AmpMusic'
             },
         },
     },

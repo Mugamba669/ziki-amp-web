@@ -5,7 +5,7 @@
          
           <p @click="this.$emit('queuePlay',[list,index])" :class="[list.data.active == true?'active':'']" v-bind:key="index" v-for="(list,index) in queueList">
              <!-- <b class="material-icons mi-dehaze"></b> -->
-              <img :src="list.artwork" class="cover"/>
+              <!-- <img :src="list.artwork" class="cover"/> -->
             <!-- <b class="material-icons mi-music-note"></b> {{(list.data.name).replace(".mp3","")}} -->
             <span>{{list.title}}</span>
             <b class="material-icons mi-play-circle"></b> 

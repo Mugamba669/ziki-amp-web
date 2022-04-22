@@ -1,5 +1,5 @@
 // "use strict";
-
+import { autoUpdater } from "electron-updater"
 import { app, protocol,BrowserWindow, ipcMain ,dialog} from 'electron';
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
@@ -18,6 +18,7 @@ function createWindow() {
     const win = new BrowserWindow({
         height: 600,
         width: 800,
+        darkTheme:true,
         // frame:false,
         alwaysOnTop:true,
         webPreferences: {
@@ -29,7 +30,7 @@ function createWindow() {
             // nodeIntegrationInWorker:process.env.ELECTRON_NODE_INTEGRATION
 
         },
-        icon: join(__dirname, './dist/pAudio.png'),
+        icon:isDevelopment?join(__dirname,'./assets/pAudio.png'):"./pAudio.png",
     });
   
     //    ipcMain.on('openDir',(event,args)=>{
@@ -108,20 +109,18 @@ function createWindow() {
             musixmatch.getLyrics(url).then((lyrics)=>{
             e.sender.send('lyrics',lyrics);
             }).catch((error) => dialog.showErrorBox("Lyrics Error",`${error}`))
-        }).catch((error) => dialog.showErrorBox("Url Error",`${error}`))
+        });
      
      });
-       //updating app icon
-       if (process.env.WEBPACK_DEV_SERVER_URL) {
-        // Load the url of the dev server if in development mode
-         win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
-         console.log(process.env.WEBPACK_DEV_SERVER_URL);
-        // if (!process.env.IS_TEST) win.webContents.openDevTools();
-      } else {
-        createProtocol("app");
-        // Load the index.html when not in development
-        win.loadURL("app://./index.html");
-      }
+     if (process.env.WEBPACK_DEV_SERVER_URL) {
+      // Load the url of the dev server if in development mode
+       win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
+    } else {
+      createProtocol("app");
+      win.loadURL(`file://${__dirname}/index.html`);
+      //  Load the index.html when not in development
+      autoUpdater.checkForUpdatesAndNotify();// for auto updates
+    }
   
 }
 app.whenReady().then(()=>{

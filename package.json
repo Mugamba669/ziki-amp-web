@@ -1,6 +1,6 @@
 {
   "name": "lw-ziki-amp",
-  "version": "0.2.0",
+  "version": "0.1.0",
   "private": true,
   "main": "background.js",
   "scripts": {
@@ -15,6 +15,7 @@
     "cheerio": "^1.0.0-rc.10",
     "core-js": "^3.6.5",
     "electron-devtools-installer": "^3.2.0",
+    "electron-updater": "^5.0.1",
     "media-library": "^1.2.4",
     "vue": "^3.2.31",
     "vue-knob-control": "^1.7.0",
@@ -38,6 +39,7 @@
     "vue-audio-visual": "^2.4.1",
     "vue-cli-plugin-electron-builder": "^2.1.1",
     "vue-cli-plugin-vuetify": "~2.4.6",
-    "vue-tour": "^2.0.0"
+    "vue-tour": "^2.0.0",
+    "webpack-node-externals": "^3.0.0"
   }
 }

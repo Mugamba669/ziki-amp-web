@@ -165,6 +165,7 @@ $dur : 50s;
           // }
         }
          .dj.active{
+           transition-delay: 2s;
             transform: scale(1.03,1.03) rotate(0deg) translateZ(10px);
           }
         // transform-style: preserve-3d;
@@ -176,7 +177,7 @@ $dur : 50s;
                        0px 0px 0px 30px rgba(54, 54, 51, 0.514);
           border-radius:50%;
           z-index: 10!important;
-          transition: $transdur 4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          transition: $transdur 3.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           background:black;
           position: absolute;
           //  animation: bounce 1.5s infinite linear;

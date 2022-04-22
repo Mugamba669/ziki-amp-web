@@ -1,12 +1,11 @@
 {
   "name": "lw-ziki-amp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
-  "main": "frame.js",
+  "main": "background.js",
   "scripts": {
-    "start": "vue-cli-service serve && npm run app",
-    "build": "vue-cli-service build",
-    "app": "electron ."
+    "build": "vue-cli-service electron:build",
+    "start": "vue-cli-service electron:serve"
   },
   "author": "Mugamba Bruno <brunohectre@gmail.com>",
   "dependencies": {
@@ -14,9 +13,10 @@
     "axios": "^0.24.0",
     "cheerio": "^1.0.0-rc.10",
     "core-js": "^3.6.5",
+    "electron-devtools-installer": "^3.2.0",
     "media-library": "^1.2.4",
-    "particles.js": "^2.0.0",
     "vue": "^3.2.31",
+    "vue-knob-control": "^1.7.0",
     "vue-router": "^4.0.0-0",
     "vuetify": "^2.6.3",
     "vuex": "^4.0.0-0"
@@ -28,15 +28,15 @@
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
     "electron": "^16.0.5",
+    "electron-icon-builder": "^2.0.1",
     "material-icons": "^1.10.3",
     "music-metadata-browser": "^2.5.0",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
-    "swiper": "^8.0.6",
     "three": "^0.137.1",
+    "vue-audio-visual": "^2.4.1",
+    "vue-cli-plugin-electron-builder": "^2.1.1",
     "vue-cli-plugin-vuetify": "~2.4.6",
-    "vue-particlejs": "^1.1.0",
-    "vue-tour": "^2.0.0",
-    "ws": "^8.5.0"
+    "vue-tour": "^2.0.0"
   }
 }

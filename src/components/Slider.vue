@@ -10,7 +10,7 @@
     />
 
     <!-- <progress  :max="max" :value="value"></progress> -->
-  <span class="label">- {{duration}}</span>
+  <span class="label">-{{duration}}</span>
 </div>
 </template>
 
@@ -29,8 +29,6 @@ export default {
       this.$emit("updateChange",this.output);
     }
   },
-  created(){
-  }
 }
 </script>
 

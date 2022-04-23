@@ -4,7 +4,7 @@
   "private": true,
   "main": "frame.js",
   "scripts": {
-    "start": "vue-cli-service serve && npm run app",
+    "start": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "app": "electron ."
   },

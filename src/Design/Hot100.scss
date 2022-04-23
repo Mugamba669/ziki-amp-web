@@ -1,0 +1,16 @@
+.hot100{
+    position: absolute;
+    // background-color: antiquewhite;
+    z-index: 10!important;
+    bottom: -100%;
+    visibility: hidden;
+    // width: 200px;
+    transition:0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.hot100.active{
+    visibility: visible;
+    bottom: 10%;
+    width: 1300px;
+
+ 
+}

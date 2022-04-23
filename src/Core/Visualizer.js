@@ -22,7 +22,10 @@ class Visualizer{
         // setup = true;
     }
     // bufferLength
-  
+  /**
+   * 
+   * @param {Number} cancel 
+   */
      barsVisualiser(cancel){
          var renderCanvas = ()=>{
         const anime = window.requestAnimationFrame(renderCanvas);
@@ -66,10 +69,11 @@ class Visualizer{
 
     /**
      * This method outputs the dirty particles visualiser.
+     * @param {Number} cancel
      */
-     dustyParticles(){
+     dustyParticles(cancel){
         var renderDusty = ()=>{
-            window.requestAnimationFrame(renderDusty);
+           let close = window.requestAnimationFrame(renderDusty);
             // this.analyser.getByteTimeDomainData(this.freqDomain)
                this.analyser.getByteFrequencyData(this.freqDomain)
                /**
@@ -101,8 +105,10 @@ class Visualizer{
                 *              */
                this.context.fillRect(barX,barHeight,4,4)
            }
+           return close;
        }
-       renderDusty()
+      let closeAnime = renderDusty()
+      cancel == 1?cancelAnimationFrame(closeAnime):null;
     }
     sineWaveVisualiser(){
         var renderSineWave = ()=>{

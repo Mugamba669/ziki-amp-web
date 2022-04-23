@@ -24,15 +24,14 @@
 
     <div class="more">
         <p>
-            <b>Bass {{Number((_bass/16)*100).toFixed(1)}} dB</b>
-        <input type="range" @input="updateBass" max="16" min="0" step="0.01" v-model="_bass"/>
+            <b>Bass {{Number((_bass/10)*100).toFixed(1)}} dB</b>
+        <input type="range" @input="updateBass" max="10" min="0" step="0.01" v-model="_bass"/>
 
         </p>
 
           <p>
-              <b>Treble {{Number((_treble/16) * 100).toFixed(1)}} dB</b>
-        <input type="range" @input="trebleUpdate" max="16" min="0" step="0.01" v-model="_treble"/>
-
+          <b>Treble {{Number((_treble/8) * 100).toFixed(1)}} dB</b>
+            <input type="range" @input="trebleUpdate" max="6" min="0" step="0.01" v-model="_treble"/>
         </p>
     </div>
 
@@ -42,14 +41,15 @@
 
 <script>
 import Bands from "./Bands.vue";
+import slider from "../widget/slider.vue";
 import { Presets } from "../../Core/Presets"
+import fs from "fs";
 export default {
     name: 'EQ',
-    components:{
-        Bands,
-        Presets,
-    },
+    components:{  Bands,slider, Presets },
     data(){
+        console.log(fs);
+        // console.log()
         return{
             _bass:0,
             _treble:0,
@@ -112,16 +112,16 @@ export default {
     },methods:{
         eqBand(bands,array){
             this.update = array;
-            console.log(array)
+            // console.log(array)
             for (let index = 0; index < bands.length; index++) {
                 bands[index].gain.value = array[index];
                 this.out = array[index];
                 
             }
         },
-        trebleUpdate(){
-              console.log(this._bass);
-            this.$store.commit('tuneTreble',this._treble);
+        trebleUpdate(e){
+            //   console.log(e.value);
+            this.$store.commit('tuneTreble',this.treble);
         },
         updateBass(){
             // console.log(this._bass);

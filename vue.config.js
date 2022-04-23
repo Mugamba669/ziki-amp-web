@@ -4,12 +4,16 @@ module.exports = {
     pluginOptions: {
         electronBuilder: {
             nodeIntegration: true,
-            customFileProtocol: './',
+            customFileProtocol: 'app://./',
             builderOptions: {
                 publish: ['github'],
                 asar: true,
                 appId: 'com.amp.music',
-                productName: 'AmpMusic'
+                productName: 'AmpMusic',
+                linux: {
+                    target:['AppImage','deb']
+                }
+
             },
         },
     },

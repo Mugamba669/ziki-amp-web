@@ -1,4 +1,4 @@
-// "use strict";
+"use strict";
 import { autoUpdater } from "electron-updater"
 import { app, protocol,BrowserWindow, ipcMain ,dialog} from 'electron';
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
@@ -6,7 +6,7 @@ import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 const isDevelopment = process.env.NODE_ENV !== "production";
 import { readdirSync,  statSync, writeFileSync } from "fs";
 import { extname, join } from 'path';
-import { musixmatch } from '4lyrics';
+const { musixmatch } = require('4lyrics');
 import { axios } from 'axios';
 import cheerio from 'cheerio';
 var MediaLibrary = require('media-library');
@@ -30,7 +30,7 @@ function createWindow() {
             // nodeIntegrationInWorker:process.env.ELECTRON_NODE_INTEGRATION
 
         },
-        icon:isDevelopment?join(__dirname,'./assets/pAudio.png'):"./pAudio.png",
+        icon:isDevelopment?join(__dirname,'./assets/pAudio.png'):"app://./pAudio.png",
     });
   
     //    ipcMain.on('openDir',(event,args)=>{
@@ -91,22 +91,23 @@ function createWindow() {
 
     })
        ipcMain.on('dataList',(e,args)=>{
-        var library = new MediaLibrary({
-          // persistent storage location (optional)
-          dataPath: '/home/blabs/Music',
-          // the paths to scan
-          paths: [ '/home/blabs/Music' ]
-        });
-         library.scan().on('done', () => {
-          // listing all tracks
-          library.tracks((err, tracks) => e.sender.send('lib',tracks));
-        });
+        // var library = new MediaLibrary({
+        //   // persistent storage location (optional)
+        //   dataPath: '/home/blabs/Music',
+        //   // the paths to scan
+        //   paths: [ '/home/blabs/Music' ]
+        // });
+        //  library.scan().on('done', () => {
+        //   // listing all tracks
+        //   library.tracks((err, tracks) => e.sender.send('lib',tracks));
+        // });
          
        })
      //***fetch lyrics */
      ipcMain.on('fetchLyrics',(e,data)=>{
         musixmatch.getURL(`${data[0]} ${data[1]}`).then((url)=>{
             musixmatch.getLyrics(url).then((lyrics)=>{
+              console.log(lyrics);
             e.sender.send('lyrics',lyrics);
             }).catch((error) => dialog.showErrorBox("Lyrics Error",`${error}`))
         });
@@ -116,8 +117,8 @@ function createWindow() {
       // Load the url of the dev server if in development mode
        win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
     } else {
-      createProtocol("app");
-      win.loadURL(`file://${__dirname}/index.html`);
+      createProtocol('app');
+      win.loadURL('app://./index.html');
       //  Load the index.html when not in development
       autoUpdater.checkForUpdatesAndNotify();// for auto updates
     }

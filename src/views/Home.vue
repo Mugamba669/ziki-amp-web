@@ -40,7 +40,7 @@
        :class="[listView?'active':'','listView']"
         @closeQueue="closeLQueue"
         @queuePlay="playL"
-        :queueList="current"/>
+        :queueList="playlist"/>
 
          <GridView 
           :class="[queueView?'active':'','gView']"
@@ -508,10 +508,11 @@ export default {
   
   mounted(){
     ipcRenderer.sendSync('dataList');
-    ipcRenderer.on('lib',(e,a)=>{
-      this.current = a;
-      // console.log(a);
-    })
+    
+    // ipcRenderer.on('lib',(e,a)=>{
+    //   this.current = a;
+    //   // console.log(a);
+    // })
 // console.log(new MediaStream().getTracks())
   this.stopAnime = this.displayVisual == true?1:0;
     this.playlist = this.$store.getters.getPlaylist;

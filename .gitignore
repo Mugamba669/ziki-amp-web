@@ -3,7 +3,10 @@ node_modules
 /dist
 /build
 /dist_electron
+<<<<<<< HEAD
 
+=======
+>>>>>>> b297ae8 (modified files)
 # local env files
 .env.local
 .env.*.local

@@ -514,8 +514,7 @@ export default {
                this.showNext = false
             // console.log((monitor));
             }else if(monitor < 30 || monitor > 60){
-               this.showNext = false
-            consol.log((monitor));
+               this.showNext = false;
             }
 
     }

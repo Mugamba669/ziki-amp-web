@@ -553,11 +553,9 @@ export default {
               this.showNext = true;
             //    const notify = new Notification(this.title,{body:this.artist,icon:this.playlist[this.trackId]});
             } else if(monitor == 30){
-               this.showNext = false
-            // console.log((monitor));
+               this.showNext = false;
             }else if(monitor < 30 || monitor > 60){
-               this.showNext = false
-            // consol.log((monitor));
+               this.showNext = false;
             }
 
     }

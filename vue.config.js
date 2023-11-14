@@ -1,20 +1,20 @@
 // var nodeExternals = require('webpack-node-externals');
-module.exports = {
+// module.exports = {
   
-    pluginOptions: {
-        electronBuilder: {
-            nodeIntegration: true,
-            customFileProtocol: 'app://./',
-            builderOptions: {
-                publish: ['github'],
-                asar: true,
-                appId: 'com.amp.music',
-                productName: 'AmpMusic',
-                linux: {
-                    target:['AppImage','deb']
-                }
+//     pluginOptions: {
+//         electronBuilder: {
+//             nodeIntegration: true,
+//             customFileProtocol: 'app://./',
+//             builderOptions: {
+//                 publish: ['github'],
+//                 asar: true,
+//                 appId: 'com.amp.music',
+//                 productName: 'AmpMusic',
+//                 linux: {
+//                     target:['AppImage','deb']
+//                 }
 
-            },
-        },
-    },
-};
+//             },
+//         },
+//     },
+// };

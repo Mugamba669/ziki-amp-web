@@ -48,15 +48,6 @@
 
       <!-- Visulizer -->
     </div>
-
-    <!-- <div :class="[ptr2 ? 'active' : '', 'play-view']">
-    <p v-for="(list,index) in playlist" :key="index" @click="playL([list,index])">
-      <img :src="list.artwork"/> 
-
-    <span>{{list.title}}</span>
-      </p>
-    </div> -->
-    <!-- <router-link to="/hot100">Hot 100</router-link> -->
     <Room
       :class="[roomView ? 'active' : '', 'room']"
       :delays="delayArr"
@@ -106,11 +97,11 @@
         :togglebtn="btnValue"
       />
     </div>
-    <Hot100
+    <!-- <Hot100
       @closeHot="closeHot"
       @triggerResize="resize"
       :class="[showHot100 ? 'active' : '', 'hot100']"
-    />
+    /> -->
     <BottomSheet
       :class="[showNext ? 'active' : '', 'bottom']"
       :playlist="nextTrack"
@@ -138,9 +129,9 @@ import Room from "@/components/Room/Room.vue";
 import * as mm from "music-metadata-browser";
 import Lyrics from "@/components/Lyrics/Lyrics.vue";
 import GridView from "@/components/Queue/Grid.vue";
-import Hot100 from "@/components/Music/Hot100.vue";
+// import Hot100 from "@/components/Music/Hot100.vue";
 import BottomSheet from "@/components/model/BottomSheet.vue";
-import { ipcRenderer } from "electron";
+// import { ipcRenderer } from "electron";
 import { Visualizer } from "../Core/Visualizer";
 import { image } from "../Core/default";
 import { mapGetters, mapMutations } from "vuex";
@@ -558,7 +549,7 @@ export default {
   },
 
   mounted() {
-    ipcRenderer.sendSync("dataList");
+    // ipcRenderer.sendSync("dataList");
 
     // ipcRenderer.on('lib',(e,a)=>{
     //   this.current = a;
@@ -674,7 +665,7 @@ export default {
 </script>
  
  <style lang="scss" scoped>
-@import "../Design/Hot100.scss";
+// @import "../Design/Hot100.scss";
 * {
   user-select: none;
 }

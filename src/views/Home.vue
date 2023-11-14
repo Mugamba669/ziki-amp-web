@@ -49,7 +49,7 @@
       <!-- Visulizer -->
     </div>
 
-  <!-- <div :class="[ptr2 ? 'active' : '', 'play-view']">
+    <!-- <div :class="[ptr2 ? 'active' : '', 'play-view']">
     <p v-for="(list,index) in playlist" :key="index" @click="playL([list,index])">
       <img :src="list.artwork"/> 
 
@@ -66,9 +66,9 @@
 
     <div :class="[ptr2 ? 'active' : '', 'prt2']">
       <Dropdown v-show="displayVisual" @choice="chooseVisual" />
-   
+
       <div class="b">
-        <button v-show="!showEQ"  @click="listShow">Playlist</button>
+        <button v-show="!showEQ" @click="listShow">Playlist</button>
         <button v-show="!showEQ" @click="loadLyrics">Lyrics</button>
         <button v-show="!showEQ" @click="loadHot100">Hot 100</button>
         <button v-show="!showEQ">Visualizer</button>
@@ -140,9 +140,9 @@ import Lyrics from "@/components/Lyrics/Lyrics.vue";
 import GridView from "@/components/Queue/Grid.vue";
 import Hot100 from "@/components/Music/Hot100.vue";
 import BottomSheet from "@/components/model/BottomSheet.vue";
-const { ipcRenderer } = window.require("electron");
-const { Visualizer } = require("../Core/Visualizer");
-const { image } = require("../Core/default");
+import { ipcRenderer } from "electron";
+import { Visualizer } from "../Core/Visualizer";
+import { image } from "../Core/default";
 import { mapGetters, mapMutations } from "vuex";
 export default {
   name: "Home",
@@ -157,7 +157,7 @@ export default {
       feedBackArr: [],
       title: "",
       artist: "",
-      audioSource:"",
+      audioSource: "",
       album: "",
       nPlay: { title: "title", artist: "", album: "", artwork: image },
       nextTrack: { title: "", artist: "", image: image },
@@ -634,13 +634,13 @@ export default {
       }
     };
 
-  navigator.mediaSession.setActionHandler("nexttrack", () => {
-          this.seekNow();
-      });
-      
+    navigator.mediaSession.setActionHandler("nexttrack", () => {
+      this.seekNow();
+    });
+
     navigator.mediaSession.setActionHandler("previoustrack", () => {
-          this.prevSeek();
-      });
+      this.prevSeek();
+    });
     /**
      * Sets up the onplay event listener for the audio player, which changes the state of the audio player
      * and sets up an event listener for the pause button in the media session.
@@ -654,8 +654,7 @@ export default {
       this.showPause = true;
       navigator.mediaSession.setActionHandler("pause", () => {
         this.audio.pause();
-      })
-     
+      });
     };
   },
 
@@ -680,7 +679,7 @@ export default {
   user-select: none;
 }
 
-body{
+body {
   width: 100%;
   height: 100%;
   position: fixed;
@@ -733,54 +732,54 @@ body{
     transition: 0.3s cubic-bezier(0.445, 0.05, 0.55, 0.95);
   }
 
-// .play-view{
-//   width: 600px!important;
-//   height: 600px!important;
-//  margin: 15px;
-//   // border-right: 1px solid #FFFFFF96;
-//     opacity: 0;
-//     display: flex;
-//     flex-direction: column !important;
-//     justify-content: center !important;
-//     z-index: 3 !important;
-//     align-items: center !important;
-//     visibility: hidden !important;
-//     transition: 0.3s cubic-bezier(0.445, 0.05, 0.55, 0.95);
-//   overflow-y: scroll;
-//   p{
-//    width: 100%;
-//       line-height: -20px;
-//       // box-shadow: -4px -0px 0px 0px #eeee;
-//       background:rgba($color: #42424254, $alpha:0.4);
-//       padding: 4px;
-//       border-radius:5px;
-      
-//       display: flex;
-//       cursor: pointer;
-//       margin:5px;
-//       flex-direction:row;
-//       transition:0.3s ease-in-out;
-//       transform:scale(1,1);
-//       justify-content: space-around!important;
-//       align-items: center;
-//         span{
-//         width: 300px;
-//         margin-left: 5px;
-//         text-align: left;
-//         font:300 14px Ubuntu,Arial;
-//         white-space: nowrap;
-//         overflow: hidden;
-//         text-overflow: ellipsis;
-//       }
-//     img{
-//       width: 50px;
-//       height: 50px;
-//         margin-left: 5px;
-//         border-radius: 50%;
-//       object-fit: cover;
-//     }
-//   }
-// }
+  // .play-view{
+  //   width: 600px!important;
+  //   height: 600px!important;
+  //  margin: 15px;
+  //   // border-right: 1px solid #FFFFFF96;
+  //     opacity: 0;
+  //     display: flex;
+  //     flex-direction: column !important;
+  //     justify-content: center !important;
+  //     z-index: 3 !important;
+  //     align-items: center !important;
+  //     visibility: hidden !important;
+  //     transition: 0.3s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  //   overflow-y: scroll;
+  //   p{
+  //    width: 100%;
+  //       line-height: -20px;
+  //       // box-shadow: -4px -0px 0px 0px #eeee;
+  //       background:rgba($color: #42424254, $alpha:0.4);
+  //       padding: 4px;
+  //       border-radius:5px;
+
+  //       display: flex;
+  //       cursor: pointer;
+  //       margin:5px;
+  //       flex-direction:row;
+  //       transition:0.3s ease-in-out;
+  //       transform:scale(1,1);
+  //       justify-content: space-around!important;
+  //       align-items: center;
+  //         span{
+  //         width: 300px;
+  //         margin-left: 5px;
+  //         text-align: left;
+  //         font:300 14px Ubuntu,Arial;
+  //         white-space: nowrap;
+  //         overflow: hidden;
+  //         text-overflow: ellipsis;
+  //       }
+  //     img{
+  //       width: 50px;
+  //       height: 50px;
+  //         margin-left: 5px;
+  //         border-radius: 50%;
+  //       object-fit: cover;
+  //     }
+  //   }
+  // }
 
   .prt2.active,
   .part1.active {

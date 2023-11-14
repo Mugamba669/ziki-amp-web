@@ -9,8 +9,7 @@ import { extname, join } from 'path';
 const { musixmatch } = require('4lyrics');
 import { axios } from 'axios';
 import cheerio from 'cheerio';
-var MediaLibrary = require('media-library');
-
+// var MediaLibrary = require('media-library');
 protocol.registerSchemesAsPrivileged([
   { scheme: "app", privileges: { secure: true, standard: true } },
 ]);
@@ -28,11 +27,9 @@ function createWindow() {
             // enableBlinkFeatures:process.env.ELECTRON_NODE_INTEGRATION,
             // nodeIntegrationInSubFrames:process.env.ELECTRON_NODE_INTEGRATION,
             // nodeIntegrationInWorker:process.env.ELECTRON_NODE_INTEGRATION
-
         },
         icon:isDevelopment?join(__dirname,'./assets/pAudio.png'):"app://./pAudio.png",
     });
-  
     //    ipcMain.on('openDir',(event,args)=>{
     //        let temp = [];
     //         let db =[];
@@ -86,9 +83,7 @@ function createWindow() {
               writeFileSync("stream.json",JSON.stringify(stream));
             });
         //    e.sender.send('stream',dom);
-
          });
-
     })
        ipcMain.on('dataList',(e,args)=>{
         // var library = new MediaLibrary({

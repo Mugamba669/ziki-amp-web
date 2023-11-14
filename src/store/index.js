@@ -12,7 +12,7 @@ axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 export default createStore({
   state: {
     volume:0.17,lyrics:'',
-    playlist:[],
+    playlist:[],queue:[],
     reduceCount:0,
     player:audio,
     delays:eq.getDelayBands(),
@@ -37,12 +37,15 @@ export default createStore({
       state.playlist = [...state.playlist,payload];
       // localStorage.setItem("playlist",JSON.stringify(state.playlist));
     },
+    loadQueue(state,payload){
+      state.queue = payload;
+    },
     dataList(state,payload){
       var library = new MediaLibrary({
         // persistent storage location (optional)
-        dataPath: '/home/blabs/Music',
+        dataPath: '/',
         // the paths to scan
-        paths: [ '/home/blabs/Music' ]
+        paths: [ '/' ]
       });
 
       library.scan().on('done', () => {
@@ -99,9 +102,10 @@ export default createStore({
     // console.log(payload)
 }
   },
-  
+  //  // "start": "vue-cli-service electron:serve"
 
   getters:{
+    getQueue:(state) => state.queue,
     getVolume : (state) => state.volume,
     getPlaylist:(state) => state.playlist,
     getPlayer: (state) => state.player,

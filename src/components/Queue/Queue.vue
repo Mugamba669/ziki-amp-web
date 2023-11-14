@@ -1,6 +1,10 @@
 <template>
   <div class="queue">
     <center>Your WishList </center>
+    <div class="search">
+      <label for="search" class="material-icons mi-search"></label>
+      <input type="text" class="search-field" @input="searchQuery" />
+    </div>
       <div ref='scrolls' class="conatiner">
          
           <p @click="this.$emit('queuePlay',[list,index])"  v-bind:key="index" v-for="(list,index) in queueList">
@@ -29,7 +33,18 @@ export default {
   props: {
     queueList:Array,
   },mounted(){
-    // this.$refs['scrolls'].scrollTo = 16;
+    
+  },
+  methods:{
+    searchQuery(e){
+      this.$emit('searchQuery',e.target.value)
+    },
+    playSong(list,index){
+      this.$emit('queuePlay',[list,index])
+    },
+    closeQueue(){
+      this.$emit('closeQueue')
+    }
   }
 };
 </script>
@@ -263,5 +278,28 @@ export default {
          transform: scale(1.1,1.1);
        }
     }
+}
+.search{
+  display: flex;
+  flex-direction: row;
+  justify-items: auto;
+  justify-content: space-around;
+  align-items: center;
+  align-content: center;
+  .search-field{
+    appearance: none;
+    overflow: unset;
+    outline: none;
+    background: #5D5B5B0A;
+    backdrop-filter: blur(90px);
+    margin: 10px;
+    width: 80%;
+    border-radius: 10px;
+    font: 200 14px Arial;
+    padding: 6px;
+    color: #eee;
+    border: 0px solid #eee;
+
+  }
 }
 </style>

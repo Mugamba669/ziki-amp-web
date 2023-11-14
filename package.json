@@ -6,6 +6,7 @@
   "scripts": {
     "build": "vue-cli-service build",
     "electron:build": "vue-cli-service electron:build",
+   
     "start": "vue-cli-service electron:serve"
   },
   "author": "Mugamba Bruno <brunohectre@gmail.com>",
@@ -15,12 +16,9 @@
     "cheerio": "^1.0.0-rc.10",
     "core-js": "^3.6.5",
     "electron-devtools-installer": "^3.2.0",
-    "electron-updater": "^5.0.1",
     "media-library": "^1.2.4",
     "vue": "^3.2.31",
-    "vue-knob-control": "^1.7.0",
     "vue-router": "^4.0.0-0",
-    "vuetify": "^2.6.3",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {
@@ -31,15 +29,13 @@
     "@vue/compiler-sfc": "^3.0.0",
     "electron": "^16.0.5",
     "electron-icon-builder": "^2.0.1",
+    "electron-updater": "^6.1.1",
     "material-icons": "^1.10.3",
     "music-metadata-browser": "^2.5.0",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
-    "three": "^0.137.1",
     "vue-audio-visual": "^2.4.1",
     "vue-cli-plugin-electron-builder": "^2.1.1",
-    "vue-cli-plugin-vuetify": "~2.4.6",
-    "vue-tour": "^2.0.0",
     "webpack-node-externals": "^3.0.0"
   }
 }

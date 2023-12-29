@@ -53,19 +53,28 @@
 
 <script>
 import Bands from "./Bands.vue";
-import slider from "../widget/slider.vue";
+// import slider from "../widget/slider.vue";
 import { Presets } from "../../Core/Presets";
 import fs from "fs";
+import { mapGetters } from "vuex";
 export default {
   name: "EQ",
-  components: { Bands, slider, Presets },
+  components: { Bands, Presets },
+  computed: {
+    ...mapGetters(["bandGains"]),
+    bands() {
+      return this.bandGains;
+    },
+  },
+
   data() {
     console.log(fs);
     // console.log()
     return {
+      ...mapGetters(["bandGains"]),
       _bass: 0,
       _treble: 0,
-      update: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+      update: [],
       presets: [
         {
           name: "Normal",
@@ -136,6 +145,9 @@ export default {
   },
   props: {
     bandSet: Array,
+  },
+  mounted() {
+    this.update = this.bands;
   },
   methods: {
     eqBand(bands, array) {

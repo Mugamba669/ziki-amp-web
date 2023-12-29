@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "Bands",
   props: {
@@ -28,12 +29,13 @@ export default {
   },
   data() {
     return {
+      ...mapGetters(),
       value: this.bandValue,
     };
   },
   methods: {
     updateBand() {
-      this.$store.commit("updateBands", [this.id, this.value]);
+      this.$store.commit("updateBands", [this.id, this.bandValue]);
     },
   },
 };

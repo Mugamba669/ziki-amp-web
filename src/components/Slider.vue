@@ -1,13 +1,13 @@
 <template>
   <div class="slider">
-    <span class="label">{{ currentValue }}</span>
+    <span class="label">{{ currentTime }}</span>
     <input
       type="range"
       @input="updateSlider"
-      v-model="value"
+      v-model="progress"
       min="0"
       step="0.01"
-      :max="Number(max)"
+      :max="Number(progMax)"
     />
 
     <!-- <progress  :max="max" :value="value"></progress> -->
@@ -16,22 +16,45 @@
 </template>
 
 <script>
+import Slider from "primevue/slider";
+import { mapGetters } from "vuex";
+import { audio } from "../store";
 export default {
   name: "Slider",
-  props: {
-    max: Number,
-    currentValue: String,
-    output: Number,
-    duration: String,
+  components: {
+    Slider,
   },
+
   data() {
     return {
-      value: this.output,
+      currentTime: "",
+      progMax: 0,
+      progress: 0,
+      duration: "",
+    };
+  },
+  mounted() {
+    // console.log(localStorage);
+    setInterval(() => {
+      this.progress = audio.currentTime;
+      this.progMax = audio.duration;
+    }, 500);
+
+    audio.ontimeupdate = () => {
+      /**Display the track's current time */
+      const min = Math.floor((audio.currentTime / 60) % 60);
+      const sec = Math.floor(audio.currentTime % 60);
+      this.currentTime = sec < 10 ? min + ":0" + sec : min + ":" + sec;
+
+      /**Display the track duration */
+      const dmin = Math.floor(((audio.duration - audio.currentTime) / 60) % 60);
+      const dsec = Math.floor((audio.duration - audio.currentTime) % 60);
+      this.duration = dsec < 10 ? dmin + ":0" + dsec : dmin + ":" + dsec;
     };
   },
   methods: {
     updateSlider() {
-      this.$emit("updateChange", this.value);
+      this.$emit("updateChange", this.position);
     },
   },
 };

@@ -9,7 +9,7 @@ class Equalizer{
 
         this.audio = audio;
         this.audioCtx = new AudioContext();
-        this.analyser = new AnalyserNode(this.audioCtx,{maxDecibels:-15,minDecibels:-75,smoothingTimeConstant:0.8});
+        this.analyser = new AnalyserNode(this.audioCtx,{maxDecibels:-15,minDecibels:-75,smoothingTimeConstant:0.88});
         // super(this.analyser,canvas,context)
        
         this.source = new MediaElementAudioSourceNode(this.audioCtx,{mediaElement:this.audio});

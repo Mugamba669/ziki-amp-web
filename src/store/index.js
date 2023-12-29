@@ -5,7 +5,7 @@ import * as id3 from "music-metadata-browser";
 import axios from "axios";
 
 // import MediaLibrary from "media-library";
-const audio = new Audio();
+export const audio = new Audio();
 const eq = new Equalizer(audio);
 axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
 export default createStore({
@@ -15,12 +15,14 @@ export default createStore({
     playlist: [],
     queue: [],
     reduceCount: 0,
+    currentTime: 0,
     player: audio,
     delays: eq.getDelayBands(),
     feedback: eq.getFeedBack(),
     bands: eq.getBands(),
     bass: eq.getBass(),
     treble: eq.getTreble(),
+    bandGains: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
     equalizer: eq,
     Id3: id3,
     counter: 0,
@@ -37,6 +39,10 @@ export default createStore({
     },
     loadQueue(state, payload) {
       state.queue = payload;
+    },
+    setCurrentTime(state, payload) {
+      state.currentTime = payload;
+      console.log(payload);
     },
     dataList(state, payload) {
       // var library = new MediaLibrary({
@@ -57,6 +63,9 @@ export default createStore({
     },
     nowPlaying(state, payload) {
       state.now = payload;
+    },
+    updateBands(state, payload) {
+      state.bandGains = payload;
     },
     fetchLyrics(state, payload) {
       // ipcRenderer.send("fetchLyrics", payload);
@@ -115,5 +124,7 @@ export default createStore({
     getId3: (state) => state.Id3,
     reduceCount: (state) => state.reduceCount,
     getCount: (state) => state.counter,
+    bandGains: (state) => state.bandGains,
+    currentTime: (state) => state.currentTime,
   },
 });

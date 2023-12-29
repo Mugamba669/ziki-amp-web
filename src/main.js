@@ -1,12 +1,10 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
-
+import { createApp } from "vue";
+import App from "./App.vue";
+import router from "./router";
+import store from "./store";
+import "primevue/resources/themes/lara-light-green/theme.css";
+import PrimeVue from "primevue/config";
 import "material-icons/css/material-icons.min.css";
-import './registerServiceWorker'
+import "./registerServiceWorker";
 
-createApp(App).use(store).use(router).mount('#app');
-
-
-
+createApp(App).use(PrimeVue).use(store).use(router).mount("#app");

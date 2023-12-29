@@ -4,7 +4,7 @@ import { Equalizer } from '../Core/Equalizer';
 const { image } = require("../Core/default");
 import * as id3 from "music-metadata-browser";
 import axios from 'axios';
-const { ipcRenderer } = window.require('electron');
+
 import MediaLibrary from 'media-library';
 const audio = new Audio();
 const eq = new Equalizer(audio);

@@ -4,7 +4,7 @@ const { image } = require("../Core/default");
 import * as id3 from "music-metadata-browser";
 import axios from "axios";
 
-import MediaLibrary from "media-library";
+// import MediaLibrary from "media-library";
 const audio = new Audio();
 const eq = new Equalizer(audio);
 axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
@@ -59,8 +59,8 @@ export default createStore({
       state.now = payload;
     },
     fetchLyrics(state, payload) {
-      ipcRenderer.send("fetchLyrics", payload);
-      console.log(payload);
+      // ipcRenderer.send("fetchLyrics", payload);
+      // console.log(payload);
     },
     changeFeedBack(state, payload) {
       state.feedback[payload[0]].gain.value = payload[1];
@@ -86,8 +86,8 @@ export default createStore({
       // console.log(payload)
     },
     streamMusic(state, payload) {
-      ipcRenderer.sendSync("hot100", payload);
-      console.log(payload);
+      // ipcRenderer.sendSync("hot100", payload);
+      // console.log(payload);
     },
     playStream(state, payload) {
       state.player.src = payload;

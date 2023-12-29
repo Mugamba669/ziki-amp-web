@@ -7,13 +7,13 @@
     </span>
     <input
       type="range"
-      v-model="bandValue"
+      v-model="value"
       @input="updateBand"
       max="15"
       min="-15"
       step="0.01"
     />
-    <span class="label">{{ Number(bandValue).toFixed(1) }}</span>
+    <span class="label">{{ Number(value).toFixed(1) }}</span>
   </div>
 </template>
 
@@ -26,9 +26,14 @@ export default {
     frequency: Number,
     bandGain: Number,
   },
+  data() {
+    return {
+      value: this.bandValue,
+    };
+  },
   methods: {
     updateBand() {
-      this.$store.commit("updateBands", [this.id, this.bandValue]);
+      this.$store.commit("updateBands", [this.id, this.value]);
     },
   },
 };

@@ -1,0 +1,33 @@
+{
+  "name": "lw-ziki-amp",
+  "version": "0.1.2",
+  "private": true,
+  "author": "Mugamba Bruno <brunohectre@gmail.com>",
+  "scripts": {
+    "start": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "4lyrics": "^1.1.61",
+    "axios": "^0.24.0",
+    "cheerio": "^1.0.0-rc.10",
+    "core-js": "^3.6.5",
+    "register-service-worker": "^1.7.2",
+    "vue": "^3.2.31",
+    "vue-router": "^4.0.0-0",
+    "vuex": "^4.0.0-0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0",
+    "material-icons": "^1.10.3",
+    "music-metadata-browser": "^2.5.0",
+    "sass": "^1.26.5",
+    "sass-loader": "^8.0.2",
+    "vue-audio-visual": "^2.4.1",
+    "webpack-node-externals": "^3.0.0"
+  }
+}

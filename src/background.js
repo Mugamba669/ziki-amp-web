@@ -37,7 +37,7 @@
 //     //         var recursiveFolders = (dir)=>{
 //     //             var store = readdirSync(dir);
 //     //             store.forEach((track,index)=>{
-//     //                 //  
+//     //                 //
 //     //                 let newPath = dir+'/'+track;
 //     //                 if(statSync(newPath).isDirectory() == true){
 //     //                      recursiveFolders(newPath);
@@ -67,7 +67,7 @@
 //            axios.get(url).then((response)=>{
 //               var dom = response.data;
 //             //   console.log(dom);
-              
+
 //               const ch = cheerio.load(dom);
 //               let trackList = ch('.hot100')
 //               // let trackPic = ch('img.imagefillstr');
@@ -96,7 +96,7 @@
 //         //   // listing all tracks
 //         //   library.tracks((err, tracks) => e.sender.send('lib',tracks));
 //         // });
-         
+
 //        })
 //      //***fetch lyrics */
 //      ipcMain.on('fetchLyrics',(e,data)=>{
@@ -106,7 +106,7 @@
 //             e.sender.send('lyrics',lyrics);
 //             }).catch((error) => dialog.showErrorBox("Lyrics Error",`${error}`))
 //         });
-     
+
 //      });
 //      if (process.env.WEBPACK_DEV_SERVER_URL) {
 //       // Load the url of the dev server if in development mode
@@ -117,7 +117,7 @@
 //       //  Load the index.html when not in development
 //       autoUpdater.checkForUpdatesAndNotify();// for auto updates
 //     }
-  
+
 // }
 // app.whenReady().then(()=>{
 //     if (isDevelopment && !process.env.IS_TEST) {

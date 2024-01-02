@@ -1,14 +1,11 @@
-import { app } from "electron";
-import { existsSync, writeFileSync } from "fs"
+import { app } from 'electron'
+import { existsSync, writeFileSync } from 'fs'
 
-
-const appStore = app.getPath('userData');
-const downloads = app.getPath('music');
+const appStore = app.getPath('userData')
+const downloads = app.getPath('music')
 
 if (existsSync(`${appStore}/store.json`) == false) {
-   writeFileSync(`${appStore}/store.json`,{data:[]});
+  writeFileSync(`${appStore}/store.json`, { data: [] })
 }
 
-export{
-    appStore,downloads
-}
+export { appStore, downloads }

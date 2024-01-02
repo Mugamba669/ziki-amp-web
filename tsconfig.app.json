@@ -2,9 +2,11 @@
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "include": [
     "env.d.ts",
+    "polyfill.ts",
     "src/**/*",
     "src/**/*.vue",
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "src/**/*.js"
   ],
   "exclude": [
     "src/**/__tests__/*"
@@ -12,6 +14,7 @@
   "compilerOptions": {
     "composite": true,
     "noEmit": true,
+    "allowJs": true,
     "baseUrl": ".",
     "paths": {
       "@/*": [

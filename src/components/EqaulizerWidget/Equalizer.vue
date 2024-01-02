@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-reserved-keys -->
 <template>
   <div class="widget">
     <div class="equalizer">
@@ -13,11 +14,7 @@
     <div class="side">
       <button class="closeEQ" @click="this.$emit('closeEQ')">Close</button>
       <select ref="choice" @change="updateBand">
-        <option
-          v-for="(preset, index) in presets"
-          v-bind:key="index"
-          :value="preset.value"
-        >
+        <option v-for="(preset, index) in presets" v-bind:key="index" :value="preset.value">
           {{ preset.name }}
         </option>
       </select>
@@ -25,213 +22,219 @@
 
     <div class="more">
       <p>
-        <b>Bass {{ Number((_bass / 10) * 100).toFixed(1) }} dB</b>
-        <input
-          type="range"
-          @input="updateBass"
-          max="10"
-          min="0"
-          step="0.01"
-          v-model="_bass"
+        <b>Bass </b>
+        <knob
+          @change="updateBass"
+          :max="10"
+          :min="0"
+          :step="0.01"
+          :size="150"
+          :valueTemplate="`${Math.floor((bass / 10) * 100)} dB`"
+          v-model="bass"
+          v-bind:strokeWidth="10"
         />
       </p>
 
       <p>
-        <b>Treble {{ Number((_treble / 8) * 100).toFixed(1) }} dB</b>
-        <input
-          type="range"
-          @input="trebleUpdate"
-          max="6"
-          min="0"
-          step="0.01"
-          v-model="_treble"
+        <b>Treble</b>
+        <knob
+          @change="trebleUpdate"
+          :size="150"
+          :valueTemplate="`${Math.floor((treble / 6) * 100)} dB`"
+          :max="6"
+          :min="0"
+          :step="0.01"
+          v-model="treble"
+          rangeColor="#000"
+          valueColor="orange"
+          textColor="#fff"
+          v-bind:strokeWidth="10"
         />
+        <!-- <input type="range"  max="6" min="0" step="0.01" v-model="treble" /> -->
       </p>
     </div>
   </div>
 </template>
 
 <script>
-import Bands from "./Bands.vue";
+import Bands from './Bands.vue'
+import Knob from 'primevue/knob'
 // import slider from "../widget/slider.vue";
-import { Presets } from "../../Core/Presets";
-import fs from "fs";
-import { mapGetters } from "vuex";
+import { Presets } from '../../Core/Presets'
+
+import { mapGetters } from 'vuex'
 export default {
-  name: "EQ",
-  components: { Bands, Presets },
+  name: 'V-EQ',
+  components: { Bands, Knob },
   computed: {
-    ...mapGetters(["bandGains"]),
+    ...mapGetters(['bandGains']),
     bands() {
-      return this.bandGains;
-    },
+      return this.bandGains
+    }
   },
 
   data() {
-    console.log(fs);
-    // console.log()
     return {
-      ...mapGetters(["bandGains"]),
-      _bass: 0,
-      _treble: 0,
+      bass: 0,
+      treble: 0,
       update: [],
       presets: [
         {
-          name: "Normal",
-          value: "normal",
+          name: 'Normal',
+          value: 'normal'
         },
         {
-          name: "Bass",
-          value: "bass",
+          name: 'Bass',
+          value: 'bass'
         },
         {
-          name: "BassTreble",
-          value: "bt",
+          name: 'BassTreble',
+          value: 'bt'
         },
         {
-          name: "Rock",
-          value: "rock",
+          name: 'Rock',
+          value: 'rock'
         },
         {
-          name: "Classic",
-          value: "classic",
+          name: 'Classic',
+          value: 'classic'
         },
         {
-          name: "Soft bass",
-          value: "soft_b",
+          name: 'Soft bass',
+          value: 'soft_b'
         },
         {
-          name: "Dance",
-          value: "dance",
+          name: 'Dance',
+          value: 'dance'
         },
         {
-          name: "Pop",
-          value: "pop",
+          name: 'Pop',
+          value: 'pop'
         },
         {
-          name: "Soft Treble",
-          value: "soft_t",
+          name: 'Soft Treble',
+          value: 'soft_t'
         },
         {
-          name: "Treble",
-          value: "treble",
+          name: 'Treble',
+          value: 'treble'
         },
         {
-          name: "Reggea",
-          value: "reg",
+          name: 'Reggea',
+          value: 'reg'
         },
         {
-          name: "Techno",
-          value: "tec",
+          name: 'Techno',
+          value: 'tec'
         },
         {
-          name: "Loud",
-          value: "loud",
+          name: 'Loud',
+          value: 'loud'
         },
         {
-          name: "Live",
-          value: "live",
+          name: 'Live',
+          value: 'live'
         },
         {
-          name: "Flat",
-          value: "flat",
+          name: 'Flat',
+          value: 'flat'
         },
         {
-          name: "Folk",
-          value: "folk",
-        },
-      ],
-    };
+          name: 'Folk',
+          value: 'folk'
+        }
+      ]
+    }
   },
   props: {
-    bandSet: Array,
+    bandSet: Array
   },
   mounted() {
-    this.update = this.bands;
+    this.update = this.bands
   },
   methods: {
     eqBand(bands, array) {
-      this.update = array;
+      this.update = array
       // console.log(array)
       for (let index = 0; index < bands.length; index++) {
-        bands[index].gain.value = array[index];
-        this.out = array[index];
+        bands[index].gain.value = array[index]
+        this.out = array[index]
       }
     },
-    trebleUpdate(e) {
+    trebleUpdate() {
       //   console.log(e.value);
-      this.$store.commit("tuneTreble", this.treble);
+      this.$store.commit('tuneTreble', this.treble)
     },
     updateBass() {
-      // console.log(this._bass);
-      this.$store.commit("tuneBass", this._bass);
+      // console.log(this.bass);
+      this.$store.commit('tuneBass', this.bass)
     },
     updateBand() {
-      switch (this.$refs["choice"].value) {
-        case "normal":
-          this.eqBand(this.bandSet, Presets.Normal);
-          break;
+      switch (this.$refs['choice'].value) {
+        case 'normal':
+          this.eqBand(this.bandSet, Presets.Normal)
+          break
 
-        case "bass":
-          this.eqBand(this.bandSet, Presets.Bass);
-          break;
-        case "soft_b":
-          this.eqBand(this.bandSet, Presets.SoftBass);
-          break;
-        case "classic":
-          this.eqBand(this.bandSet, Presets.Classic);
-          break;
-        case "rock":
-          this.eqBand(this.bandSet, Presets.Rock);
-          break;
-        case "pop":
-          this.eqBand(this.bandSet, Presets.Pop);
-          break;
-        case "soft_t":
-          this.eqBand(this.bandSet, Presets.SoftTreble);
-          break;
+        case 'bass':
+          this.eqBand(this.bandSet, Presets.Bass)
+          break
+        case 'soft_b':
+          this.eqBand(this.bandSet, Presets.SoftBass)
+          break
+        case 'classic':
+          this.eqBand(this.bandSet, Presets.Classic)
+          break
+        case 'rock':
+          this.eqBand(this.bandSet, Presets.Rock)
+          break
+        case 'pop':
+          this.eqBand(this.bandSet, Presets.Pop)
+          break
+        case 'soft_t':
+          this.eqBand(this.bandSet, Presets.SoftTreble)
+          break
 
-        case "treble":
-          this.eqBand(this.bandSet, Presets.Treble);
-          break;
-        case "tec":
-          this.eqBand(this.bandSet, Presets.Techno);
-          break;
+        case 'treble':
+          this.eqBand(this.bandSet, Presets.Treble)
+          break
+        case 'tec':
+          this.eqBand(this.bandSet, Presets.Techno)
+          break
 
-        case "reg":
-          this.eqBand(this.bandSet, Presets.Reggae);
-          break;
+        case 'reg':
+          this.eqBand(this.bandSet, Presets.Reggae)
+          break
 
-        case "flat":
-          this.eqBand(this.bandSet, Presets.Flat);
-          break;
+        case 'flat':
+          this.eqBand(this.bandSet, Presets.Flat)
+          break
 
-        case "folk":
-          this.eqBand(this.bandSet, Presets.Folk);
-          break;
+        case 'folk':
+          this.eqBand(this.bandSet, Presets.Folk)
+          break
 
-        case "loud":
-          this.eqBand(this.bandSet, Presets.Loud);
-          break;
+        case 'loud':
+          this.eqBand(this.bandSet, Presets.Loud)
+          break
 
-        case "bt":
-          this.eqBand(this.bandSet, Presets.BassTreble);
-          break;
+        case 'bt':
+          this.eqBand(this.bandSet, Presets.BassTreble)
+          break
 
-        case "dance":
-          this.eqBand(this.bandSet, Presets.Dance);
-          break;
+        case 'dance':
+          this.eqBand(this.bandSet, Presets.Dance)
+          break
 
-        case "live":
-          this.eqBand(this.bandSet, Presets.Live);
-          break;
+        case 'live':
+          this.eqBand(this.bandSet, Presets.Live)
+          break
 
         default:
-          break;
+          break
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -325,7 +328,9 @@ export default {
       padding: 10px;
       border-radius: 10px;
       transform: scale(1, 1);
-      font: 300 16px Ubuntu, Arial;
+      font:
+        300 16px Ubuntu,
+        Arial;
       transition: 0.3s ease-in-out;
       cursor: pointer;
       bottom: 10px;

@@ -26,28 +26,26 @@
 </template>
 
 <script>
-import GridView from "@/components/Queue/Grid.vue";
+// import GridView from '@/components/Queue/Grid.vue'
 export default {
-  name: "Queue",
-  components: {
-    GridView,
-  },
+  name: 'V-Queue',
+  components: {},
   props: {
-    queueList: Array,
+    queueList: Array
   },
   mounted() {},
   methods: {
     searchQuery(e) {
-      this.$emit("searchQuery", e.target.value);
+      this.$emit('searchQuery', e.target.value)
     },
     playSong(list, index) {
-      this.$emit("queuePlay", [list, index]);
+      this.$emit('queuePlay', [list, index])
     },
     closeQueue() {
-      this.$emit("closeQueue");
-    },
-  },
-};
+      this.$emit('closeQueue')
+    }
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -97,7 +95,9 @@ export default {
       span {
         width: 300px;
         text-align: left;
-        font: 300 14px Ubuntu, Arial;
+        font:
+          300 14px Ubuntu,
+          Arial;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -108,7 +108,9 @@ export default {
       background: rgba($color: #cabcbc, $alpha: 0.6);
     }
     p:hover {
-      box-shadow: -4px 0px 0px 0px #eeee, 4px 0px 0px 0px #eeee;
+      box-shadow:
+        -4px 0px 0px 0px #eeee,
+        4px 0px 0px 0px #eeee;
       // transform:scale(1.01,1.01);
       background: rgba($color: #cabcbc, $alpha: 0.3);
     }
@@ -177,7 +179,9 @@ export default {
         span {
           width: 300px;
           text-align: left;
-          font: 300 14px Ubuntu, Arial;
+          font:
+            300 14px Ubuntu,
+            Arial;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -244,7 +248,9 @@ export default {
         span {
           width: 300px;
           text-align: left;
-          font: 300 14px Ubuntu, Arial;
+          font:
+            300 14px Ubuntu,
+            Arial;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;

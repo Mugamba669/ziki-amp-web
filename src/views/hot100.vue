@@ -1,8 +1,7 @@
 <template>
   <div class="hot100">
     <button>
-  <router-link to="/player">Home</router-link>
-
+      <router-link to="/player">Home</router-link>
     </button>
 
     hot 100
@@ -17,22 +16,18 @@
 
 <script lang="js">
 export default {
-  name: "Hot100",
+  name: 'Hot-100',
   components: {},
   data() {
     return {
-      siteUrl: "https://www.nowviba.com/music/pages/top100.php",
-      streams: [],
-    };
+      siteUrl: 'https://www.nowviba.com/music/pages/top100.php',
+      streams: []
+    }
   },
   methods: {},
-  mounted() {
-  },
-  created() {
- 
-  },
-};
+  mounted() {},
+  created() {}
+}
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

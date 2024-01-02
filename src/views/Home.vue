@@ -4,18 +4,9 @@
   </div>
   <div class="home">
     <div :class="[ptr1 ? 'active' : '', 'part1']">
-      <Cover
-        v-if="!queueView"
-        v-show="showCover"
-        :source="image"
-        :playing="checker"
-      />
+      <Cover v-if="!queueView" v-show="showCover" :source="image" :playing="checker" />
 
-      <EQ
-        :class="[showEQ ? 'active' : '', 'EQ']"
-        @closeEQ="closeEQ"
-        :bandSet="eqBands"
-      />
+      <EQ :class="[showEQ ? 'active' : '', 'EQ']" @closeEQ="closeEQ" :bandSet="eqBands" />
 
       <Loader
         v-if="!queueView"
@@ -68,13 +59,7 @@
         <p @click="listShow">ListView</p>
         <p @click="gridShow">GirdView</p>
       </div>
-      <Details
-        v-show="showCover"
-        :title="title"
-        :artist="artist"
-        :album="album"
-        :size="size"
-      />
+      <v-details v-show="showCover" :title="title" :artist="artist" :album="album" :size="size" />
       <Slider
         v-show="showCover"
         @updateChange="updateSlider"
@@ -115,28 +100,34 @@
   </div>
 </template>
 <script>
-import Slider from "@/components/Slider.vue"; // @ is an alias to /src
-import Cover from "@/components/ImageWidget/Cover.vue"; // @ is an alias to /src
-import Details from "@/components/Details/Details.vue";
-import Control from "@/components/ControlWidget/Control.vue";
-import Loader from "@/components/loader/Loader.vue";
-import Volume from "@/components/VolumeControl/Volume.vue";
-import EQ from "@/components/EqaulizerWidget/Equalizer.vue";
-import Queue from "@/components/Queue/Queue.vue";
-import Search from "@/components/Search/Search.vue";
-import Dropdown from "@/components/Dropdown/Dropdown.vue";
-import Room from "@/components/Room/Room.vue";
-import * as mm from "music-metadata-browser";
-import Lyrics from "@/components/Lyrics/Lyrics.vue";
-import GridView from "@/components/Queue/Grid.vue";
-// import Hot100 from "@/components/Music/Hot100.vue";
-import BottomSheet from "@/components/model/BottomSheet.vue";
+import Slider from '@/components/Slider.vue' // @ is an alias to /src
+import Cover from '@/components/ImageWidget/Cover.vue' // @ is an alias to /src
+import VDetails from '@/components/Details/Details.vue'
+import Control from '@/components/ControlWidget/Control.vue'
+import Loader from '@/components/loader/Loader.vue'
+import Volume from '@/components/VolumeControl/Volume.vue'
+import EQ from '@/components/EqaulizerWidget/Equalizer.vue'
+import Queue from '@/components/Queue/Queue.vue'
+// import Search from '@/components/Search/Search.vue'
+import Dropdown from '@/components/Dropdown/Dropdown.vue'
+import Room from '@/components/Room/Room.vue'
 
-import { Visualizer } from "../Core/Visualizer";
-import { image } from "../Core/default";
-import { mapGetters, mapMutations } from "vuex";
+// import { Buffer } from 'buffer'
+// window.Buffer = Buffer
+// import { parseBlob } from 'music-metadata-browser'
+import Lyrics from '@/components/Lyrics/Lyrics.vue'
+import GridView from '@/components/Queue/Grid.vue'
+
+import BottomSheet from '@/components/model/BottomSheet.vue'
+import parse, { parseV2Tag } from 'id3-parser'
+import { convertFileToBuffer } from 'id3-parser/lib/util'
+import { Visualizer } from '../Core/Visualizer'
+import { defaultArtwork } from '../Core/default'
+import { mapGetters, mapMutations } from 'vuex'
+// import { fromFile } from 'id3js'
+
 export default {
-  name: "Home",
+  name: 'V-Home',
   data() {
     return {
       displayVisual: false,
@@ -146,12 +137,12 @@ export default {
       current: [],
       delayArr: [],
       feedBackArr: [],
-      title: "",
-      artist: "",
-      audioSource: "",
-      album: "",
-      nPlay: { title: "title", artist: "", album: "", artwork: image },
-      nextTrack: { title: "", artist: "", image: image },
+      title: '',
+      artist: '',
+      audioSource: '',
+      album: '',
+      nPlay: { title: 'title', artist: '', album: '', artwork: defaultArtwork.image },
+      nextTrack: { title: '', artist: '', image: defaultArtwork.image },
       showEQ: false,
       showCover: true,
       showLyrics: false,
@@ -159,18 +150,18 @@ export default {
       ptr1: true,
       ptr2: true,
       showNext: false,
-      image: image,
+      image: defaultArtwork.image,
       size: 0,
       curlTime: 0,
       roomView: false,
       progress: 0,
       progMax: 1,
       trackData: File,
-      durlTime: "",
+      durlTime: '',
       showPlay: true,
       showPause: false,
       showOpt: false,
-      btnValue: "EQ",
+      btnValue: 'EQ',
       queueView: false,
       showV: false,
       vol: 0,
@@ -189,440 +180,430 @@ export default {
       frameResize: false,
       vise: null,
       eq: null,
-      lyrics: "",
-      audioSrc: "",
-    };
+      lyrics: '',
+      audioSrc: ''
+    }
   },
   components: {
     Slider,
     Loader,
     Lyrics,
     Cover,
-    Details,
-
+    VDetails,
     BottomSheet,
     GridView,
     Control,
-    Lyrics,
     Volume,
     Queue,
     Dropdown,
     EQ,
-    Room,
-    Search,
+    Room
   },
   methods: {
-    ...mapGetters(["getQueue"]),
-    ...mapMutations(["loadQueue"]),
-
+    ...mapGetters(['getQueue']),
+    ...mapMutations(['loadQueue']),
+    uint8ArrayToBase64(uint8Array, type) {
+      let binary = ''
+      for (let i = 0; i < uint8Array.length; i++) {
+        binary += String.fromCharCode(uint8Array[i])
+      }
+      return `data:${type};base64,${btoa(binary)}`
+    },
     loadTrack(value) {
       for (let i = 0; i < value.length; i++) {
-        mm.parseBlob(value[i]).then((meta) => {
-          const raw = meta.common.picture[0].data;
-          var data = new Uint8Array(raw);
-          const blob = new Blob([data]);
-          const imageURL = URL.createObjectURL(blob);
-          const processed = {
-            id: i + 1,
-            data: value[i],
-            active: false,
-            artwork: raw == undefined || raw == null ? image : imageURL,
-            title:
-              meta.common.title == null || meta.common.title == undefined
-                ? value[i].name.replace(".mp3", "")
-                : meta.common.title,
-            artist:
-              meta.common.artist == null || meta.common.artist == undefined
-                ? "Unknown artist"
-                : meta.common.artist,
-          };
-          this.playlist = [...this.playlist, processed];
-          // update store
-          this.loadQueue(this.playlist);
-          this.$store.commit("updatePlaylist", processed);
-        });
-        // localStorage.setItem(i,{id:i,data:value[i],active:false});
+        // ID3.loadTags(
+        //   value[i].name,
+        //   function () {
+        //     var tags = ID3.getAllTags(value[i].name)
+        //     console.log(tags.comment + ' - ' + tags.track + ', ' + tags.lyrics)
+        //   },
+        //   {
+        //     dataReader: ID3.FileAPIReader(value[i])
+        //   }
+        // )
+        // fromFile(value[i]).then((tag) => {
+        convertFileToBuffer(value[i])
+          .then(parseV2Tag)
+          .then((meta) => {
+            // console.log(tag)
+
+            let data = meta.image.data
+            // var data = new Uint8Array(raw)
+            // let blob = new Blob([data])
+            // let imageURL = this.uint8ArrayToBase64(data, meta.image.mime)
+            // Convert Uint8Array to Blob
+            const blob = new Blob([data], { type: 'image/png' }) // Adjust the MIME type accordingly
+
+            // Create a data URL from the Blob
+            const imageURL = URL.createObjectURL(blob)
+            // console.log(imageURL)
+            let processed = {
+              id: i + 1,
+              data: value[i],
+              active: false,
+              artwork: data == undefined || data == null ? image : imageURL,
+              title:
+                meta.title == null || meta.title == undefined
+                  ? value[i].name.replace('.mp3', '')
+                  : meta.title,
+              artist:
+                meta.artist == null || meta.artist == undefined ? 'Unknown artist' : meta.artist
+            }
+            this.playlist = [...this.playlist, processed]
+            // update store
+            this.loadQueue(this.playlist)
+            this.$store.commit('updatePlaylist', processed)
+          })
+
+        localStorage.setItem(i, { id: i, data: value[i], active: false })
       }
-      this.ptr2 = false;
-      this.queueView = !this.queueView;
+      this.ptr2 = false
+      this.queueView = !this.queueView
     },
     searchQuery(query) {
       // this.playlist = this.$store.getters.getPlaylist;
-      if (query != "") {
+      if (query != '') {
         this.playlist = this.getQueue().filter((track) => {
-          return track.title.toLowerCase().includes(query.toLowerCase());
-        });
+          return track.title.toLowerCase().includes(query.toLowerCase())
+        })
       } else {
-        this.playlist = this.getQueue();
+        this.playlist = this.getQueue()
       }
     },
     viewOpt() {
-      this.showOpt = true;
+      this.showOpt = true
     },
     resize() {
-      this.frameResize = !this.frameResize;
+      this.frameResize = !this.frameResize
     },
     closeHot() {
-      this.showHot100 = !this.showHot100;
+      this.showHot100 = !this.showHot100
     },
     liveS(query) {
       /// to perform a live search
       this.playlist = this.playlist.filter((song) => {
         return song.findIndex((data) => {
-          data.name == query;
-        });
-      });
+          data.name == query
+        })
+      })
       // console.log(this.playlist);
     },
     toggleVisualWidget() {
-      this.displayVisual = !this.displayVisual;
-      this.stopAnime = this.displayVisual == true ? 1 : 0;
+      this.displayVisual = !this.displayVisual
+      this.stopAnime = this.displayVisual == true ? 1 : 0
     },
     closeB() {
-      this.showNext = false;
+      this.showNext = false
     },
     loadLyrics() {
-      this.$store.commit("fetchLyrics", [this.title, this.artist]);
-      this.lyrics = "";
-      this.showLyrics = !this.showLyrics;
+      this.$store.commit('fetchLyrics', [this.title, this.artist])
+      this.lyrics = ''
+      this.showLyrics = !this.showLyrics
     },
     closeLyrics() {
-      this.showLyrics = !this.showLyrics;
+      this.showLyrics = !this.showLyrics
     },
     roomEffectsComponent() {
       // this.ptr1 = !this.ptr1;
       // this.ptr2 = !this.ptr2;
-      this.roomView = !this.roomView;
+      this.roomView = !this.roomView
     },
     closeRoom() {
-      this.roomEffectsComponent();
+      this.roomEffectsComponent()
     },
     loadSingle(file) {
-      let id = 0;
+      let id = 0
       const listTile = {
         id: id,
         data: file,
-        active: false,
-      };
-      this.playlist = [...this.playlist, listTile];
-      this.commonComand(file);
-      this.showPlay = !this.showPlay;
-      this.showPause = !this.showPause;
-      id++;
+        active: false
+      }
+      this.playlist = [...this.playlist, listTile]
+      this.commonComand(file)
+      this.showPlay = !this.showPlay
+      this.showPause = !this.showPause
+      id++
     },
     closeEQ() {
-      this.showEQ = !this.showEQ;
-      this.showCover = !this.showCover;
+      this.showEQ = !this.showEQ
+      this.showCover = !this.showCover
     },
     playTrack() {
-      this.showPlay = !this.showPlay;
-      this.showPause = !this.showPause;
-      this.audio.play();
+      this.showPlay = !this.showPlay
+      this.showPause = !this.showPause
+      this.audio.play()
     },
     pauseNow() {
-      this.showPlay = !this.showPlay;
-      this.showPause = !this.showPause;
-      this.audio.pause();
+      this.showPlay = !this.showPlay
+      this.showPause = !this.showPause
+      this.audio.pause()
     },
     shuffleTracks() {
-      this.shuffle = !this.shuffle;
+      this.shuffle = !this.shuffle
     },
     changeVol(vol) {
-      this.audio.volume = vol;
+      this.audio.volume = vol
       // this.vol = vol;
     },
     closeVol() {
-      this.showV = !this.showV;
+      this.showV = !this.showV
     },
     showVol() {
-      this.showV = !this.showV;
+      this.showV = !this.showV
     },
     getTitle(file) {
       mm.parseBlob(file).then((meta) => {
         // console.log(meta.common);
-      });
+      })
     },
     imageProcess(buffer) {
-      var data = new Uint8Array(buffer);
-      const blob = new Blob([data]);
-      return URL.createObjectURL(blob);
+      var data = new Uint8Array(buffer)
+      const blob = new Blob([data])
+      return URL.createObjectURL(blob)
     },
     commonComand(track) {
-      const url = URL.createObjectURL(track);
-      this.audioSource = url;
+      const url = URL.createObjectURL(track)
+      this.audioSource = url
       // this.audioSrc = url;
-      this.audio.src = url;
-      this.audio.play();
-      this.size = track.size / 1000000;
-      mm.parseBlob(track).then((meta) => {
-        // console.log(meta);
-        this.title =
-          meta.common.title == null || meta.common.title == undefined
-            ? track.name.replace(".mp3", "")
-            : meta.common.title;
-        this.artist =
-          meta.common.artist == null || meta.common.artist == undefined
-            ? "Unknown artist"
-            : meta.common.artist;
-        this.album =
-          meta.common.album == null || meta.common.album == undefined
-            ? "Unknown album"
-            : meta.common.album;
-        this.bufferArray = meta.common.picture[0].data;
-        document.querySelector(
-          "title"
-        ).textContent = `${this.title} - ${this.artist}`;
-        const imageURL = this.imageProcess(this.bufferArray);
-        /**
-         * Track infor processed
-         */
+      this.audio.src = url
+      this.audio.play()
+      this.size = track.size / 1000000
+      convertFileToBuffer(track)
+        .then(parse)
+        .then((meta) => {
+          console.log(meta)
 
-        this.image =
-          this.bufferArray == undefined || this.bufferArray == null
-            ? image
-            : imageURL;
-        document.querySelector("body").style.backgroundImage =
-          this.bufferArray == undefined || this.bufferArray == null
-            ? "url(" + image + ")"
-            : "url(" + imageURL + ")";
+          // console.log(meta);
+          this.title =
+            meta.title == null || meta.title == undefined
+              ? track.name.replace('.mp3', '')
+              : meta.title
+          this.artist =
+            meta.artist == null || meta.artist == undefined ? 'Unknown artist' : meta.artist
+          this.album = meta.album == null || meta.album == undefined ? 'Unknown album' : meta.album
+          this.bufferArray = meta.image.data
+          document.querySelector('title').textContent = `${this.title} - ${this.artist}`
+          const imageURL = this.imageProcess(this.bufferArray)
+          /**
+           * Track infor processed
+           */
 
-        this.image =
-          this.bufferArray == undefined ||
-          this.bufferArray == "" ||
-          this.bufferArray == null
-            ? image
-            : imageURL;
+          this.image =
+            this.bufferArray == undefined || this.bufferArray == null
+              ? defaultArtwork.image
+              : imageURL
+          document.querySelector('body').style.backgroundImage =
+            this.bufferArray == undefined || this.bufferArray == null
+              ? 'url(' + idefaultArtwork.image + ')'
+              : 'url(' + imageURL + ')'
 
-        document.querySelector("body").style.backgroundImage =
-          this.bufferArray == undefined ||
-          this.bufferArray == "" ||
-          this.bufferArray == null
-            ? "url(" + image + ")"
-            : "url(" + imageURL + ")";
+          this.image =
+            this.bufferArray == undefined || this.bufferArray == '' || this.bufferArray == null
+              ? defaultArtwork.image
+              : imageURL
 
-        const link = document.querySelector("link");
-        link.href.replace(this.image, "");
-        link.href = this.image;
-        const notify = new Notification(this.title, {
-          body: this.artist,
-          icon: this.image,
-        });
-        notify.onclose = () => {};
-        const currentTrack = {
-          title: this.title,
-          artist: this.artist,
-          album: this.album,
-          artwork: this.image,
-        };
+          document.querySelector('body').style.backgroundImage =
+            this.bufferArray == undefined || this.bufferArray == '' || this.bufferArray == null
+              ? 'url(' + defaultArtwork.image + ')'
+              : 'url(' + imageURL + ')'
 
-        this.$store.commit("nowPlaying", currentTrack);
+          const link = document.querySelector('link')
+          link.href.replace(this.image, '')
+          link.href = this.image
+          const notify = new Notification(this.title, {
+            body: this.artist,
+            icon: this.image
+          })
+          notify.onclose = () => {}
+          const currentTrack = {
+            title: this.title,
+            artist: this.artist,
+            album: this.album,
+            artwork: this.image
+          }
 
-        // console.log(link.href)
-      });
+          this.$store.commit('nowPlaying', currentTrack)
+
+          // console.log(link.href)
+        })
     },
     seekNow() {
-      this.countPlay += 1;
-      this.commonComand(this.playlist[this.countPlay].data);
-      this.executeNext(this.playlist[this.countPlay + 1].data);
-      this.toggleList(this.countPlay);
+      this.countPlay += 1
+      this.commonComand(this.playlist[this.countPlay].data)
+      this.executeNext(this.playlist[this.countPlay + 1].data)
+      this.toggleList(this.countPlay)
     },
     prevSeek() {
-      this.countPlay -= 1;
-      this.commonComand(this.playlist[this.countPlay].data);
-      this.toggleList(this.countPlay);
-      this.executeNext(this.playlist[this.countPlay + 1].data);
+      this.countPlay -= 1
+      this.commonComand(this.playlist[this.countPlay].data)
+      this.toggleList(this.countPlay)
+      this.executeNext(this.playlist[this.countPlay + 1].data)
     },
     repeatTrack() {
-      this.loop = !this.loop;
+      this.loop = !this.loop
       // toggle audio repeat
-      this.audio.loop = this.loop == true ? true : false;
+      this.audio.loop = this.loop == true ? true : false
     },
     updateSlider(value) {
-      this.audio.currentTime = value;
+      this.audio.currentTime = value
     },
     toggleEQ() {
-      this.showEQ = !this.showEQ;
-      this.showCover = !this.showCover;
+      this.showEQ = !this.showEQ
+      this.showCover = !this.showCover
     },
     executeNext(file) {
       mm.parseBlob(file).then((meta) => {
-        const buff = meta.common.picture[0].data;
+        const buff = meta.common.picture[0].data
         this.nextTrack.image =
-          buff == null || buff == undefined
-            ? this.image
-            : this.imageProcess(buff);
+          buff == null || buff == undefined ? this.image : this.imageProcess(buff)
         this.nextTrack.title =
           meta.common.title == null || meta.common.title == undefined
-            ? track.name.replace(".mp3", "")
-            : meta.common.title;
+            ? track.name.replace('.mp3', '')
+            : meta.common.title
         this.nextTrack.artist =
           meta.common.artist == null || meta.common.artist == undefined
-            ? "Unknown artist"
-            : meta.common.artist;
-      });
+            ? 'Unknown artist'
+            : meta.common.artist
+      })
     },
     listShow() {
-      this.showOpt = false;
-      this.listView = !this.listView;
+      this.showOpt = false
+      this.listView = !this.listView
     },
     gridShow() {
-      this.showOpt = false;
-      this.showQueue();
+      this.showOpt = false
+      this.showQueue()
     },
     playQueue(queue) {
-      this.commonComand(queue[0].data);
-      this.countPlay = queue[1];
-      this.closeQueue();
-      this.toggleList(queue[1]);
-      this.executeNext(this.playlist[this.countPlay + 1]); // console.log(this.getTitle(queue[0].data));
+      this.commonComand(queue[0].data)
+      this.countPlay = queue[1]
+      this.closeQueue()
+      this.toggleList(queue[1])
+      this.executeNext(this.playlist[this.countPlay + 1]) // console.log(this.getTitle(queue[0].data));
     },
     playL(queue) {
-      this.commonComand(queue[0].data);
-      this.countPlay = queue[1];
-      this.closeLQueue();
-      this.toggleList(queue[1]);
+      this.commonComand(queue[0].data)
+      this.countPlay = queue[1]
+      this.closeLQueue()
+      this.toggleList(queue[1])
       // this.listView = !this.listView;
-      this.executeNext(this.playlist[this.countPlay + 1]); // console.log(this.getTitle(queue[0].data));
+      this.executeNext(this.playlist[this.countPlay + 1]) // console.log(this.getTitle(queue[0].data));
     },
-    toggleList(id) {
-      // console.log(id);
-      //  this.playlist = this.playlist.map((track) => console.log(track.id) /*track.id == id?{...track,active:!track.active}:track*/)
-    },
-    loadHot100() {
-      this.showHot100 = !this.showHot100;
-      this.$store.commit(
-        "streamMusic",
-        `https://www.nowviba.com/music/pages/top100.php`
-      );
-    },
+
     showQueue() {
-      this.ptr2 = false;
-      this.queueView = !this.queueView;
-      this.playlist = this.$store.getters.getPlaylist;
+      this.ptr2 = false
+      this.queueView = !this.queueView
+      this.playlist = this.$store.getters.getPlaylist
     },
     closeQueue() {
-      this.ptr2 = true;
-      this.queueView = !this.queueView;
+      this.ptr2 = true
+      this.queueView = !this.queueView
     },
     closeLQueue() {
       // this.ptr1 = true;
-      this.listView = !this.listView;
+      this.listView = !this.listView
     },
     chooseVisual(eventValue) {
       switch (parseInt(eventValue)) {
         case 1:
-          this.vise.barsVisualiser(this.stopAnime);
-          break;
+          this.vise.barsVisualiser(this.stopAnime)
+          break
 
         case 2:
-          this.vise.dustyParticles(this.stopAnime);
-          break;
+          this.vise.dustyParticles(this.stopAnime)
+          break
         case 3:
-          this.vise.histogramVisualiser(this.stopAnime);
-          break;
+          this.vise.histogramVisualiser(this.stopAnime)
+          break
 
         case 4:
-          this.vise.sineWaveVisualiser(this.stopAnime);
-          break;
+          this.vise.sineWaveVisualiser(this.stopAnime)
+          break
         case 5:
-          this.vise.rippleWaveVisualiser(this.stopAnime);
-          break;
+          this.vise.rippleWaveVisualiser(this.stopAnime)
+          break
 
         case 6:
-          this.vise.glassTilesVisualiser(this.stopAnime);
-          break;
+          this.vise.glassTilesVisualiser(this.stopAnime)
+          break
 
         case 7:
-          this.vise.floatingBars(this.stopAnime);
-          break;
+          this.vise.floatingBars(this.stopAnime)
+          break
 
         case 8:
-          this.vise.colorstetchVisualiser();
-          break;
+          this.vise.colorstetchVisualiser()
+          break
       }
-    },
+    }
   },
 
   mounted() {
     // ...mapMutations(),
     // console.log(new MediaStream().getTracks())
-    this.stopAnime = this.displayVisual == true ? 1 : 0;
-    this.playlist = this.$store.getters.getPlaylist;
-    this.nPlay = this.$store.getters.getNowPlaying;
-    document.querySelector("body").style.backgroundImage =
-      "url(" + this.nPlay.artwork + ")";
+    this.stopAnime = this.displayVisual == true ? 1 : 0
+    this.playlist = this.$store.getters.getPlaylist
+    this.nPlay = this.$store.getters.getNowPlaying
+    document.querySelector('body').style.backgroundImage = 'url(' + this.nPlay.artwork + ')'
     // this.$
     /**default volume = 0.17 */
 
     /**  Canvas */
-    this.canvas = this.$refs["canvas"];
-    this.context = this.$refs["canvas"].getContext("2d");
+    this.canvas = this.$refs['canvas']
+    this.context = this.$refs['canvas'].getContext('2d')
 
-    this.vise = new Visualizer(this.eq.analyser, this.canvas, this.context);
+    this.vise = new Visualizer(this.eq.analyser, this.canvas, this.context)
 
-    this.eq.startEq();
-    this.eqBands = this.eq.getBands();
-    this.delayArr = this.eq.getDelayBands();
-    this.feedBackArr = this.eq.getFeedBack();
+    this.eq.startEq()
+    this.eqBands = this.eq.getBands()
+    this.delayArr = this.eq.getDelayBands()
+    this.feedBackArr = this.eq.getFeedBack()
 
     // console.log(localStorage);
     setInterval(() => {
-      this.progress = this.audio.currentTime;
-      this.progMax = this.audio.duration;
-    }, 500);
+      this.progress = this.audio.currentTime
+      this.progMax = this.audio.duration
+    }, 500)
 
     this.audio.ontimeupdate = () => {
-      /**Display the track's current time */
-      const min = Math.floor((this.audio.currentTime / 60) % 60);
-      const sec = Math.floor(this.audio.currentTime % 60);
-      this.curlTime = sec < 10 ? min + ":0" + sec : min + ":" + sec;
-      this.$store.commit("setCurrentTime", this.curlTime);
-      /**Display the track duration */
-      const dmin = Math.floor(
-        ((this.audio.duration - this.audio.currentTime) / 60) % 60
-      );
-      const dsec = Math.floor(
-        (this.audio.duration - this.audio.currentTime) % 60
-      );
-      this.durlTime = dsec < 10 ? dmin + ":0" + dsec : dmin + ":" + dsec;
       /**Logic for next track */
-      const monitor = Math.floor(this.audio.duration - this.audio.currentTime);
+      const monitor = Math.floor(this.audio.duration - this.audio.currentTime)
       if (monitor == 60) {
-        this.showNext = true;
+        this.showNext = true
         //    const notify = new Notification(this.title,{body:this.artist,icon:this.playlist[this.trackId]});
       } else if (monitor == 30) {
-        this.showNext = false;
+        this.showNext = false
       } else if (monitor < 30 || monitor > 60) {
-        this.showNext = false;
+        this.showNext = false
       }
-    };
+    }
 
     this.audio.onpause = () => {
-      this.checker = false;
-    };
+      this.checker = false
+    }
 
     this.audio.onended = () => {
-      this.checker = false;
-      this.showLyrics = false;
+      this.checker = false
+      this.showLyrics = false
       if (this.shuffle == true) {
-        this.countPlay = Math.floor(Math.random() * this.playlist.length);
-        this.commonComand(this.playlist[this.countPlay].data);
-        this.executeNext(this.playlist[this.countPlay + 1].data);
+        this.countPlay = Math.floor(Math.random() * this.playlist.length)
+        this.commonComand(this.playlist[this.countPlay].data)
+        this.executeNext(this.playlist[this.countPlay + 1].data)
       } else {
-        this.countPlay += 1;
-        this.commonComand(this.playlist[this.countPlay].data);
-        this.executeNext(this.playlist[this.countPlay + 1].data);
-        this.toggleList(this.countPlay);
+        this.countPlay += 1
+        this.commonComand(this.playlist[this.countPlay].data)
+        this.executeNext(this.playlist[this.countPlay + 1].data)
+        this.toggleList(this.countPlay)
       }
-    };
+    }
 
-    navigator.mediaSession.setActionHandler("nexttrack", () => {
-      this.seekNow();
-    });
+    navigator.mediaSession.setActionHandler('nexttrack', () => {
+      this.seekNow()
+    })
 
-    navigator.mediaSession.setActionHandler("previoustrack", () => {
-      this.prevSeek();
-    });
+    navigator.mediaSession.setActionHandler('previoustrack', () => {
+      this.prevSeek()
+    })
     /**
      * Sets up the onplay event listener for the audio player, which changes the state of the audio player
      * and sets up an event listener for the pause button in the media session.
@@ -631,28 +612,28 @@ export default {
      * @return {void} This function does not return anything.
      */
     this.audio.onplay = () => {
-      this.checker = true;
-      this.showPlay = false;
-      this.showPause = true;
-      navigator.mediaSession.setActionHandler("pause", () => {
-        this.audio.pause();
-      });
-    };
+      this.checker = true
+      this.showPlay = false
+      this.showPause = true
+      navigator.mediaSession.setActionHandler('pause', () => {
+        this.audio.pause()
+      })
+    }
   },
 
   created() {
-    this.audio = this.$store.getters.getPlayer;
-    this.audio.volume = this.$store.getters.getVolume;
-    this.eq = this.$store.getters.getEqualiser;
-    this.stopAnime = this.displayVisual == true ? 1 : 0;
+    this.audio = this.$store.getters.getPlayer
+    this.audio.volume = this.$store.getters.getVolume
+    this.eq = this.$store.getters.getEqualiser
+    this.stopAnime = this.displayVisual == true ? 1 : 0
     /**listen for incomming lyrics */
 
-    console.log(this.$store.getters.getPlaylist);
-  },
-};
+    console.log(this.$store.getters.getPlaylist)
+  }
+}
 </script>
- 
- <style lang="scss" scoped>
+
+<style lang="scss" scoped>
 // @import "../Design/Hot100.scss";
 * {
   user-select: none;
@@ -984,3 +965,4 @@ body {
   opacity: 1;
 }
 </style>
+@/modules/id3/dist/id3.js

@@ -1,28 +1,30 @@
 <template lang="html">
-    <div>
-        <label>{{Number(tune).toFixed(2)}} dB</label>
-      <input type="range" max="5" step="0.01" min="0" @input="changeTuner" v-model="value"/>
-    </div>
+  <div>
+    <label>{{ Number(tune).toFixed(2) }} dB</label>
+    <knob max="5" step="0.01" min="0" @chnage="changeTuner" v-model="value" />
+  </div>
 </template>
 <script>
+import Knob from 'primevue/knob'
 export default {
-  name: "Tuner",
+  name: 'V-Tuner',
+  components: { Knob },
   props: {
     tune: Number,
-    delay: Number,
+    delay: Number
   },
   data() {
     return {
-      value: this.tune,
-    };
+      value: this.tune
+    }
   },
   methods: {
     changeTuner() {
-      this.$store.commit("changeDelays", [this.delay, this.value]);
+      this.$store.commit('changeDelays', [this.delay, this.value])
       // this.$store.commit('',{node:this.delay.delayTime.value,value:this.tune});
-    },
-  },
-};
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
 div {
@@ -39,7 +41,7 @@ div {
     padding: 5px;
     transform: rotate(90deg);
   }
-  [type="range"] {
+  [type='range'] {
     appearance: none;
     margin: 30px;
     width: 250px;

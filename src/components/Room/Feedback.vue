@@ -1,36 +1,38 @@
 <template lang="html">
-    <div>
-        <label>{{Number(valueTune).toFixed(2)}} dB</label>
-     <input type="range" max="1" step="0.01" min="0" @input="changeTuner" v-model="value"/>
-    </div>
+  <div>
+    <label>{{ Number(valueTune).toFixed(2) }} dB</label>
+    <knob max="1" step="0.01" min="0" @change="changeTuner" v-model="value" />
+  </div>
 </template>
 <script>
+import Knob from 'primevue/knob'
 export default {
-  name: "Feedback",
+  name: 'V-Feedback',
+  components: { Knob },
   props: {
     valueTune: Number,
-    feedback: Number,
+    feedback: Number
   },
   data() {
     return {
-      value: this.valueTune,
-    };
+      value: this.valueTune
+    }
   },
   methods: {
     changeTuner() {
-      this.$store.commit("changeFeedBack", [this.feedback, this.value]);
+      this.$store.commit('changeFeedBack', [this.feedback, this.value])
 
       //   this.feedback.gain.value = this.valueTune;
-    },
-  },
-};
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
 div {
   // transform: rotate(90deg);
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   label {
     font: 300 12px Arial;
@@ -41,7 +43,7 @@ div {
     padding: 5px;
     transform: rotate(90deg);
   }
-  [type="range"] {
+  [type='range'] {
     appearance: none;
     width: 250px;
     background: #736cdd;

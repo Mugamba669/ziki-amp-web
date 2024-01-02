@@ -1,44 +1,34 @@
 <template>
   <div class="bands">
     <span class="label">
-      {{
-        frequency > 500 ? frequency.toString().replace("000", "k") : frequency
-      }}Hz
+      {{ frequency > 500 ? frequency.toString().replace('000', 'k') : frequency }}Hz
     </span>
-    <input
-      type="range"
-      v-model="value"
-      @input="updateBand"
-      max="15"
-      min="-15"
-      step="0.01"
-    />
+    <input type="range" v-model="value" @input="updateBand" max="15" min="-15" step="0.01" />
     <span class="label">{{ Number(value).toFixed(1) }}</span>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 export default {
-  name: "Bands",
+  name: 'Eq-Bands',
   props: {
     id: Number,
     bandValue: Number,
     frequency: Number,
-    bandGain: Number,
+    bandGain: Number
   },
   data() {
     return {
-      ...mapGetters(),
-      value: this.bandValue,
-    };
+      value: this.bandValue
+    }
   },
   methods: {
     updateBand() {
-      this.$store.commit("updateBands", [this.id, this.bandValue]);
-    },
-  },
-};
+      this.$store.commit('updateBands', [this.id, this.bandValue])
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -114,4 +104,3 @@ export default {
   }
 }
 </style>
-

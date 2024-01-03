@@ -143,6 +143,7 @@ export default {
       // console.log(array)
       for (let index = 0; index < bands.length; index++) {
         bands[index].gain.value = array[index];
+        bands[index].Q.vaue = array[index] / 2;
         this.out = array[index];
       }
     },

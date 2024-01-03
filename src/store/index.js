@@ -59,8 +59,7 @@ export default createStore({
       state.now = payload;
     },
     fetchLyrics(state, payload) {
-      // ipcRenderer.send("fetchLyrics", payload);
-      // console.log(payload);
+    
     },
     changeFeedBack(state, payload) {
       state.feedback[payload[0]].gain.value = payload[1];
@@ -72,6 +71,7 @@ export default createStore({
     },
     updateBands(state, payload) {
       state.bands[payload[0]].gain.value = payload[1];
+      state.bands[payload[0]].gain.value = payload[1] /2;
     },
     tuneBass(state, payload) {
       // console.log('payload '+payload);
@@ -86,8 +86,7 @@ export default createStore({
       // console.log(payload)
     },
     streamMusic(state, payload) {
-      // ipcRenderer.sendSync("hot100", payload);
-      // console.log(payload);
+      
     },
     playStream(state, payload) {
       state.player.src = payload;

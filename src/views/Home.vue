@@ -129,9 +129,7 @@ import Room from "@/components/Room/Room.vue";
 import * as mm from "music-metadata-browser";
 import Lyrics from "@/components/Lyrics/Lyrics.vue";
 import GridView from "@/components/Queue/Grid.vue";
-// import Hot100 from "@/components/Music/Hot100.vue";
 import BottomSheet from "@/components/model/BottomSheet.vue";
-// import { ipcRenderer } from "electron";
 import { Visualizer } from "../Core/Visualizer";
 import { image } from "../Core/default";
 import { mapGetters, mapMutations } from "vuex";
@@ -402,7 +400,6 @@ export default {
         const link = document.querySelector("link");
         link.href.replace(this.image, "");
         link.href = this.image;
-        // ipcRenderer.sendSync('iconUp',link.href);
         const notify = new Notification(this.title, {
           body: this.artist,
           icon: this.image,
@@ -494,10 +491,7 @@ export default {
         "streamMusic",
         `https://www.nowviba.com/music/pages/top100.php`
       );
-      //**load online streams */
-      //  ipcRenderer.on('stream',(e,streams)=>{
-
-      // })
+  
     },
     showQueue() {
       this.ptr2 = false;
@@ -548,12 +542,6 @@ export default {
   },
 
   mounted() {
-    // ipcRenderer.sendSync("dataList");
-
-    // ipcRenderer.on('lib',(e,a)=>{
-    //   this.current = a;
-    //   // console.log(a);
-    // })
     // console.log(new MediaStream().getTracks())
     this.stopAnime = this.displayVisual == true ? 1 : 0;
     this.playlist = this.$store.getters.getPlaylist;
@@ -654,10 +642,6 @@ export default {
     this.eq = this.$store.getters.getEqualiser;
     this.stopAnime = this.displayVisual == true ? 1 : 0;
     /**listen for incomming lyrics */
-    ipcRenderer.on("lyrics", (e, lyrics) => {
-      this.lyrics = lyrics;
-      //  console.log(lyrics);
-    });
     console.log(this.$store.getters.getPlaylist);
   },
 };

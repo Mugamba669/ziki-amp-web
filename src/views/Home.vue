@@ -199,7 +199,6 @@ export default {
     Lyrics,
     Cover,
     Details,
-    Hot100,
     BottomSheet,
     GridView,
     Control,

@@ -4,7 +4,7 @@
     <input
       type="range"
       @input="updateSlider"
-      v-model="output"
+      v-model="value"
       min="0"
       step="0.01"
       :max="Number(max)"
@@ -29,11 +29,15 @@ export default {
       value: this.$props.output,
     };
   },
+  mounted(){
+    this.value = this.$props.output;
+  },
   methods: {
     updateSlider() {
-      this.$emit("updateChange", this.output);
+      this.$emit("updateChange", this.value);
     },
   },
+  
 };
 </script>
 

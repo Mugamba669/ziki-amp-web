@@ -28,8 +28,11 @@ export default {
   },
   data() {
     return {
-      value: this.bandValue,
+      value: this.$props.bandGain,
     };
+  },
+  mounted(){
+    this.value = this.$props.bandGain;
   },
   methods: {
     updateBand() {

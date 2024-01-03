@@ -5,7 +5,7 @@
         :key="index"
         :id="index"
         :frequency="band.frequency.value"
-        :bandValue="update[index]"
+        :bandGain="update[index]"
         v-for="(band, index) in bandSet"
       />
     </div>

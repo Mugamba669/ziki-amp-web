@@ -5,8 +5,8 @@ import * as id3 from "music-metadata-browser";
 import axios from "axios";
 
 // import MediaLibrary from "media-library";
-const audio = new Audio();
-const eq = new Equalizer(audio);
+export const audio = new Audio();
+export const eq = new Equalizer(audio);
 axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
 export default createStore({
   state: {

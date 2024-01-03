@@ -1,44 +1,62 @@
 <template>
   <div class="slider">
-    <span class="label">{{ currentValue }}</span>
+    <span class="label">{{ currentTime }}</span>
     <input
       type="range"
       @input="updateSlider"
-      v-model="value"
+      v-model="progress"
       min="0"
       step="0.01"
-      :max="Number(max)"
+      :max="Number(progMax)"
     />
-
     <!-- <progress  :max="max" :value="value"></progress> -->
     <span class="label">-{{ duration }}</span>
   </div>
 </template>
 
 <script>
+
+
+import { audio } from '../store'
 export default {
-  name: "Slider",
-  props: {
-    max: Number,
-    currentValue: String,
-    output: Number,
-    duration: String,
+  name: 'V-SSlider',
+  components: {
+    
   },
+
   data() {
     return {
-      value: this.$props.output,
-    };
+      currentTime: '',
+      progMax: 0,
+      progress: 0,
+      duration: ''
+    }
   },
-  mounted(){
-    this.value = this.$props.output;
+  mounted() {
+    // console.log(localStorage);
+    setInterval(() => {
+      this.progress = audio.currentTime
+      this.progMax = audio.duration
+    }, 500)
+
+    audio.ontimeupdate = () => {
+      /**Display the track's current time */
+      const min = Math.floor((audio.currentTime / 60) % 60)
+      const sec = Math.floor(audio.currentTime % 60)
+      this.currentTime = sec < 10 ? min + ':0' + sec : min + ':' + sec
+
+      /**Display the track duration */
+      const dmin = Math.floor(((audio.duration - audio.currentTime) / 60) % 60)
+      const dsec = Math.floor((audio.duration - audio.currentTime) % 60)
+      this.duration = dsec < 10 ? dmin + ':0' + dsec : dmin + ':' + dsec
+    }
   },
   methods: {
     updateSlider() {
-      this.$emit("updateChange", this.value);
-    },
-  },
-  
-};
+      this.$emit('updateChange', this.position)
+    }
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -69,8 +87,10 @@ export default {
       border-radius: 50%;
       height: 25px;
       background: rgba(109, 109, 92, 0.986);
-      box-shadow: inset -3px 0px 5px -2px #e0cb06,
-        inset -4px 0px 5px -2px #dfdc1f, inset -3px 0px 10px 2px #27270c;
+      box-shadow:
+        inset -3px 0px 5px -2px #e0cb06,
+        inset -4px 0px 5px -2px #dfdc1f,
+        inset -3px 0px 10px 2px #27270c;
     }
     //  &::-webkit-slider-runnable-track{
     //    background:#bd1010;
@@ -86,7 +106,9 @@ export default {
     flex-direction: row;
     justify-content: center;
     .label {
-      font: 300 15px Ubuntu, Arial;
+      font:
+        300 15px Ubuntu,
+        Arial;
       margin: 8px;
       background: #222;
       border-radius: 5px;
@@ -119,7 +141,9 @@ export default {
     flex-direction: row;
     justify-content: center;
     .label {
-      font: 300 15px Ubuntu, Arial;
+      font:
+        300 15px Ubuntu,
+        Arial;
       margin: 8px;
       background: #222;
       border-radius: 5px;

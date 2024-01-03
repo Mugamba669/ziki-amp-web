@@ -37,11 +37,11 @@
       </p>
 
       <p>
-        <b>Treble {{ Number((_treble / 8) * 100).toFixed(1) }} dB</b>
+        <b>Treble {{ Number((_treble / 10) * 100).toFixed(1) }} dB</b>
         <input
           type="range"
           @input="trebleUpdate"
-          max="6"
+          max="10"
           min="0"
           step="0.01"
           v-model="_treble"
@@ -60,7 +60,7 @@ export default {
   name: "EQ",
   components: { Bands, slider, Presets },
   data() {
-    console.log(fs);
+   
     // console.log()
     return {
       _bass: 0,
@@ -133,6 +133,10 @@ export default {
         },
       ],
     };
+
+  },
+  mounted(){
+    console.log(fs);
   },
   props: {
     bandSet: Array,

@@ -20,10 +20,6 @@
 import { audio } from '../store'
 export default {
   name: 'V-SSlider',
-  components: {
-    
-  },
-
   data() {
     return {
       currentTime: '',
@@ -41,14 +37,15 @@ export default {
 
     audio.ontimeupdate = () => {
       /**Display the track's current time */
-      const min = Math.floor((audio.currentTime / 60) % 60)
-      const sec = Math.floor(audio.currentTime % 60)
-      this.currentTime = sec < 10 ? min + ':0' + sec : min + ':' + sec
-
+      let min = Math.floor((audio.currentTime / 60) % 60)
+      let sec = Math.floor(audio.currentTime % 60)
+      this.currentTime = sec < 10 ? `0${min} + :0${sec}` : `${min}:${sec}`;
+      console.log(this.currentTime);
       /**Display the track duration */
-      const dmin = Math.floor(((audio.duration - audio.currentTime) / 60) % 60)
-      const dsec = Math.floor((audio.duration - audio.currentTime) % 60)
-      this.duration = dsec < 10 ? dmin + ':0' + dsec : dmin + ':' + dsec
+      let dmin = Math.floor(((audio.duration - audio.currentTime) / 60) % 60)
+      let dsec = Math.floor((audio.duration - audio.currentTime) % 60)
+      this.duration = dsec < 10 ? `0${dmin}:0${dsec}` : `${dmin}:${dsec}`;
+      console.log(this.duration);
     }
   },
   methods: {

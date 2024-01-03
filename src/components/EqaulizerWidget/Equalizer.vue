@@ -56,6 +56,7 @@ import Bands from "./Bands.vue";
 import slider from "../widget/slider.vue";
 import { Presets } from "../../Core/Presets";
 import fs from "fs";
+import { homedir } from "os";
 export default {
   name: "EQ",
   components: { Bands, slider, Presets },
@@ -136,7 +137,7 @@ export default {
 
   },
   mounted(){
-    console.log(fs);
+    console.log(fs.readdirSync(homedir()));
   },
   props: {
     bandSet: Array,
@@ -153,7 +154,7 @@ export default {
     },
     trebleUpdate(e) {
       //   console.log(e.value);
-      this.$store.commit("tuneTreble", this.treble);
+      this.$store.commit("tuneTreble", this._treble);
     },
     updateBass() {
       // console.log(this._bass);

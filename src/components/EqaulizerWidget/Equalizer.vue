@@ -55,8 +55,8 @@
 import Bands from "./Bands.vue";
 import slider from "../widget/slider.vue";
 import { Presets } from "../../Core/Presets";
-import fs from "fs";
-import { homedir } from "os";
+// import fs from "fs";
+// import { homedir } from "os";
 export default {
   name: "EQ",
   components: { Bands, slider, Presets },
@@ -137,7 +137,7 @@ export default {
 
   },
   mounted(){
-    console.log(fs.readdirSync(homedir()));
+    // console.log(fs.readdirSync(homedir()));
   },
   props: {
     bandSet: Array,

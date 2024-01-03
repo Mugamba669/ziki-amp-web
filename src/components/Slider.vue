@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     updateSlider() {
-      this.$emit('updateChange', this.position)
+      this.$emit('updateChange', this.progress)
     }
   }
 }

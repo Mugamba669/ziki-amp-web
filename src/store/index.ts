@@ -6,8 +6,12 @@ import { Buffer } from 'buffer'
 window.Buffer = Buffer
 import * as id3 from 'music-metadata-browser'
 import type SongInfo from '@/interfaces/song_info'
+import axios from 'axios';
+import { Convert } from '@/interfaces/lyrics';
+import { ConvertHot100, type SongMetaData } from '@/interfaces/hot100';
 
 export const audio = new Audio() as HTMLAudioElement
+audio.crossOrigin = "anonymous";
 const eq = new Equalizer()
 
 export default createStore({
@@ -16,6 +20,7 @@ export default createStore({
     lyrics: '',
     playlist: [] as SongInfo[],
     queue: [] as SongInfo[],
+    hot100: [] as SongMetaData[],
 
     reduceCount: 0,
     currentTime: 0,
@@ -29,6 +34,7 @@ export default createStore({
     equalizer: eq,
     Id3: id3,
     counter: 0,
+
     now: { title: 'title', artist: '', album: '', artwork: defaultArtwork.image }
   },
   mutations: {
@@ -50,7 +56,34 @@ export default createStore({
     setCurrentTime(state: any, payload: number) {
       state.currentTime = payload
     },
+    fetchLyrics(state: any, payload: string[]) {
+      axios
+        .get(`http://15.237.71.190:5054/get/songLyrics/${payload[0].replace(' ', '_')}/${payload[1].replace(' ', '_').split('-')[0]}`, {
+          withCredentials: true,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE",
+            "Access-Control-Allow-Headers": "Content-Type",
+          },
 
+        })
+        .then((response) => {
+          state.lyrics = Convert.toLyricsModel(JSON.stringify(response.data)).lyrics
+        })
+    },
+    fetchHot100UgSongs(state: any, payload: any) {
+
+      axios.get(`http://127.0.0.1:5054/get/hot100`).then((response) => {
+        // console.log(response.data)
+        if (response.status === 200) {
+          const songs = ConvertHot100.toHot100(JSON.stringify(response.data)).songs;
+          console.log(songs)
+          state.hot100 = songs;
+        } else {
+          alert('failed to load Hot 100 Ug Songs')
+        }
+      });
+    },
     loadPlaylist(state: any, payload: SongInfo[]) {
       console.log(payload)
       state.playlist = payload
@@ -79,9 +112,9 @@ export default createStore({
       state.counter = payload
     },
 
-    playStream(state: any, payload: String) {
-      state.player.src = payload
-      state.player.crossOrigin = 'anonymous'
+    playHot100(state: any, payload: String) {
+      console.log(payload);
+      state.player.src = payload;
       state.player.play()
     },
     decreaseCount(state: any, payload: any) {
@@ -102,6 +135,8 @@ export default createStore({
     getId3: (state: any) => state.Id3,
     reduceCount: (state: any) => state.reduceCount,
     getCount: (state: any) => state.counter,
-    currentTime: (state: any) => state.currentTime
+    currentTime: (state: any) => state.currentTime,
+    lyrics: (state: any) => state.lyrics,
+    hot100: (state: any) => state.hot100 as SongMetaData[],
   }
 })

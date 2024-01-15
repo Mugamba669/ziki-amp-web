@@ -82,11 +82,12 @@
         :togglebtn="btnValue"
       />
     </div>
-    <!-- <Hot100
+
+    <v-hot100
       @closeHot="closeHot"
       @triggerResize="resize"
       :class="[showHot100 ? 'active' : '', 'hot100']"
-    /> -->
+    />
     <BottomSheet
       :class="[showNext ? 'active' : '', 'bottom']"
       :playlist="nextTrack"
@@ -95,7 +96,8 @@
     <Lyrics
       @closeL="closeLyrics"
       :class="[showLyrics ? 'active' : '', 'lyrics']"
-      :content="lyrics"
+      :title="lyrics"
+      :artist="artist"
     />
   </div>
 </template>
@@ -108,24 +110,17 @@ import Loader from '@/components/loader/Loader.vue'
 import Volume from '@/components/VolumeControl/Volume.vue'
 import EQ from '@/components/EqaulizerWidget/Equalizer.vue'
 import Queue from '@/components/Queue/Queue.vue'
-// import Search from '@/components/Search/Search.vue'
 import Dropdown from '@/components/Dropdown/Dropdown.vue'
 import Room from '@/components/Room/Room.vue'
-
-// import { Buffer } from 'buffer'
-// window.Buffer = Buffer
-// import { parseBlob } from 'music-metadata-browser'
 import Lyrics from '@/components/Lyrics/Lyrics.vue'
 import GridView from '@/components/Queue/Grid.vue'
-
 import BottomSheet from '@/components/model/BottomSheet.vue'
 import parse, { parseV2Tag } from 'id3-parser'
 import { convertFileToBuffer } from 'id3-parser/lib/util'
 import { Visualizer } from '../Core/Visualizer'
 import { defaultArtwork } from '../Core/default'
 import { mapGetters, mapMutations } from 'vuex'
-// import { fromFile } from 'id3js'
-
+import VHot100 from '@/components/hot/hot100.vue'
 export default {
   name: 'V-Home',
   data() {
@@ -189,6 +184,7 @@ export default {
     Loader,
     Lyrics,
     Cover,
+    VHot100,
     VDetails,
     BottomSheet,
     GridView,
@@ -201,7 +197,11 @@ export default {
   },
   methods: {
     ...mapGetters(['getQueue']),
-    ...mapMutations(['loadQueue']),
+    ...mapMutations(['loadQueue', 'fetchHot100UgSongs']),
+    loadHot100() {
+      this.showHot100 = !this.showHot100
+      this.fetchHot100UgSongs()
+    },
     uint8ArrayToBase64(uint8Array, type) {
       let binary = ''
       for (let i = 0; i < uint8Array.length; i++) {
@@ -217,10 +217,7 @@ export default {
             console.log(meta.image.mime)
 
             let data = meta.image.data
-            // var data = new Uint8Array(raw)
-            // let blob = new Blob([data])
-            // let imageURL = this.uint8ArrayToBase64(data, meta.image.mime)
-            // Convert Uint8Array to Blob
+
             const blob = new Blob([data], { type: meta.image.mime }) // Adjust the MIME type accordingly
 
             // Create a data URL from the Blob
@@ -615,16 +612,12 @@ export default {
     this.audio = this.$store.getters.getPlayer
     this.audio.volume = this.$store.getters.getVolume
     this.eq = this.$store.getters.getEqualiser
-    // this.stopAnime = this.displayVisual == true ? 1 : 0
-    /**listen for incomming lyrics */
-
-    // console.log(this.$store.getters.getPlaylist)
   }
 }
 </script>
 
 <style lang="scss" scoped>
-// @import "../Design/Hot100.scss";
+@import '../Design/Hot100.scss';
 * {
   user-select: none;
 }
@@ -847,9 +840,7 @@ body {
     background: rgba(0, 0, 0, 0.1);
     color: #eeeeee50;
     cursor: pointer;
-    font:
-      400 16px Ubuntu,
-      Arial;
+    font: 400 16px Ubuntu, Arial;
     transition: 0.3s cubic-bezier(0.445, 0.05, 0.55, 0.95);
     &:hover {
       border: 1px solid #dddddd;

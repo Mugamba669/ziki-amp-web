@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <center ref="center">
-      <pre>{{ content == '' ? 'Please wait as we load your lyrics...' : content }}</pre>
+      <pre>{{ lyrics == '' ? 'Please wait as we load your lyrics...' : lyrics }}</pre>
     </center>
     <button class="count" @click="increaseCount">+</button>
     <button class="dcount" @click="decreaseCount">-</button>
@@ -15,7 +15,8 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'V-Lyrics',
   props: {
-    content: String
+    title: String,
+    artist: String
   },
   data() {
     return {
@@ -25,7 +26,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getPlayer'])
+    ...mapGetters(['getPlayer', 'lyrics'])
   },
   created() {
     const player = this.getPlayer
@@ -34,10 +35,6 @@ export default {
       console.log(val)
       this.$refs['center'].scroll({ behavior: 'smooth', top: val / 40 })
     }
-
-    axios.get(`http://15.190.273:5050/getLyrics/`).then((response) => {
-      console.log(response.json())
-    })
   },
   methods: {
     increaseCount() {

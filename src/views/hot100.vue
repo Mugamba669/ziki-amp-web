@@ -3,14 +3,7 @@
     <button>
       <router-link to="/player">Home</router-link>
     </button>
-
     hot 100
-    <!-- <div class="container">
-         <div class="stream" v-bind:key="stream" v-for="stream in streams">
-            <img :src="stream.url" :alt="stream.title">
-        </div>
-      </div>
-         -->
   </div>
 </template>
 

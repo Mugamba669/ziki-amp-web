@@ -211,28 +211,17 @@ export default {
     },
     loadTrack(value) {
       for (let i = 0; i < value.length; i++) {
-        // ID3.loadTags(
-        //   value[i].name,
-        //   function () {
-        //     var tags = ID3.getAllTags(value[i].name)
-        //     console.log(tags.comment + ' - ' + tags.track + ', ' + tags.lyrics)
-        //   },
-        //   {
-        //     dataReader: ID3.FileAPIReader(value[i])
-        //   }
-        // )
-        // fromFile(value[i]).then((tag) => {
         convertFileToBuffer(value[i])
           .then(parseV2Tag)
           .then((meta) => {
-            // console.log(tag)
+            console.log(meta.image.mime)
 
             let data = meta.image.data
             // var data = new Uint8Array(raw)
             // let blob = new Blob([data])
             // let imageURL = this.uint8ArrayToBase64(data, meta.image.mime)
             // Convert Uint8Array to Blob
-            const blob = new Blob([data], { type: 'image/png' }) // Adjust the MIME type accordingly
+            const blob = new Blob([data], { type: meta.image.mime }) // Adjust the MIME type accordingly
 
             // Create a data URL from the Blob
             const imageURL = URL.createObjectURL(blob)
@@ -352,9 +341,9 @@ export default {
       this.showV = !this.showV
     },
     getTitle(file) {
-      mm.parseBlob(file).then((meta) => {
-        // console.log(meta.common);
-      })
+      // mm.parseBlob(file).then((meta) => {
+      //   // console.log(meta.common);
+      // })
     },
     imageProcess(buffer) {
       var data = new Uint8Array(buffer)
@@ -394,7 +383,7 @@ export default {
               : imageURL
           document.querySelector('body').style.backgroundImage =
             this.bufferArray == undefined || this.bufferArray == null
-              ? 'url(' + idefaultArtwork.image + ')'
+              ? 'url(' + defaultArtwork.image + ')'
               : 'url(' + imageURL + ')'
 
           this.image =
@@ -411,7 +400,7 @@ export default {
           link.href.replace(this.image, '')
           link.href = this.image
           const notify = new Notification(this.title, {
-            body: this.artist,
+            body: `${this.artist} - ${this.album}`,
             icon: this.image
           })
           notify.onclose = () => {}
@@ -431,12 +420,12 @@ export default {
       this.countPlay += 1
       this.commonComand(this.playlist[this.countPlay].data)
       this.executeNext(this.playlist[this.countPlay + 1].data)
-      this.toggleList(this.countPlay)
+      // this.toggleList(this.countPlay)
     },
     prevSeek() {
       this.countPlay -= 1
       this.commonComand(this.playlist[this.countPlay].data)
-      this.toggleList(this.countPlay)
+      // this.toggleList(this.countPlay)
       this.executeNext(this.playlist[this.countPlay + 1].data)
     },
     repeatTrack() {
@@ -445,6 +434,7 @@ export default {
       this.audio.loop = this.loop == true ? true : false
     },
     updateSlider(value) {
+      console.log(value)
       this.audio.currentTime = value
     },
     toggleEQ() {
@@ -452,19 +442,19 @@ export default {
       this.showCover = !this.showCover
     },
     executeNext(file) {
-      mm.parseBlob(file).then((meta) => {
-        const buff = meta.common.picture[0].data
-        this.nextTrack.image =
-          buff == null || buff == undefined ? this.image : this.imageProcess(buff)
-        this.nextTrack.title =
-          meta.common.title == null || meta.common.title == undefined
-            ? track.name.replace('.mp3', '')
-            : meta.common.title
-        this.nextTrack.artist =
-          meta.common.artist == null || meta.common.artist == undefined
-            ? 'Unknown artist'
-            : meta.common.artist
-      })
+      // mm.parseBlob(file).then((meta) => {
+      //   const buff = meta.common.picture[0].data
+      //   this.nextTrack.image =
+      //     buff == null || buff == undefined ? this.image : this.imageProcess(buff)
+      //   this.nextTrack.title =
+      //     meta.common.title == null || meta.common.title == undefined
+      //       ? track.name.replace('.mp3', '')
+      //       : meta.common.title
+      //   this.nextTrack.artist =
+      //     meta.common.artist == null || meta.common.artist == undefined
+      //       ? 'Unknown artist'
+      //       : meta.common.artist
+      // })
     },
     listShow() {
       this.showOpt = false
@@ -478,14 +468,14 @@ export default {
       this.commonComand(queue[0].data)
       this.countPlay = queue[1]
       this.closeQueue()
-      this.toggleList(queue[1])
+      // this.toggleList(queue[1])
       this.executeNext(this.playlist[this.countPlay + 1]) // console.log(this.getTitle(queue[0].data));
     },
     playL(queue) {
       this.commonComand(queue[0].data)
       this.countPlay = queue[1]
       this.closeLQueue()
-      this.toggleList(queue[1])
+      // this.toggleList(queue[1])
       // this.listView = !this.listView;
       this.executeNext(this.playlist[this.countPlay + 1]) // console.log(this.getTitle(queue[0].data));
     },
@@ -593,7 +583,7 @@ export default {
         this.countPlay += 1
         this.commonComand(this.playlist[this.countPlay].data)
         this.executeNext(this.playlist[this.countPlay + 1].data)
-        this.toggleList(this.countPlay)
+        // this.toggleList(this.countPlay)
       }
     }
 
@@ -625,10 +615,10 @@ export default {
     this.audio = this.$store.getters.getPlayer
     this.audio.volume = this.$store.getters.getVolume
     this.eq = this.$store.getters.getEqualiser
-    this.stopAnime = this.displayVisual == true ? 1 : 0
+    // this.stopAnime = this.displayVisual == true ? 1 : 0
     /**listen for incomming lyrics */
 
-    console.log(this.$store.getters.getPlaylist)
+    // console.log(this.$store.getters.getPlaylist)
   }
 }
 </script>
@@ -857,7 +847,9 @@ body {
     background: rgba(0, 0, 0, 0.1);
     color: #eeeeee50;
     cursor: pointer;
-    font: 400 16px Ubuntu, Arial;
+    font:
+      400 16px Ubuntu,
+      Arial;
     transition: 0.3s cubic-bezier(0.445, 0.05, 0.55, 0.95);
     &:hover {
       border: 1px solid #dddddd;

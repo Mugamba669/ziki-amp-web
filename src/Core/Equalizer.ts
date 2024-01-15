@@ -1,5 +1,20 @@
 import { audio } from '../store'
 export class Equalizer {
+  audio: HTMLAudioElement
+  audioCtx: AudioContext
+  analyser: AnalyserNode
+  source: MediaElementAudioSourceNode
+  merger: any
+  splitter: any
+  delays: DelayNode[]
+  feedback: GainNode[]
+  bands: BiquadFilterNode[]
+  bass: BiquadFilterNode
+  bassBooster: GainNode
+  treble: BiquadFilterNode
+  trebleBooster: GainNode
+  roomEffect: () => void
+  connects: () => void
   /**
    *
    * @param {HTMLAudioElement} audio
@@ -58,7 +73,7 @@ export class Equalizer {
       new BiquadFilterNode(this.audioCtx, { type: 'peaking', frequency: 16000, gain: 0 })
     ]
     // base nknob
-    this.bass = new BiquadFilterNode(this.audioCtx, { type: 'lowpass', frequency: 80, gain: 0 })
+    this.bass = new BiquadFilterNode(this.audioCtx, { type: 'lowpass', frequency: 60, gain: 0 })
     this.bassBooster = new GainNode(this.audioCtx, { gain: 0 })
     /**
      * Stereo band boost

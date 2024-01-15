@@ -1,14 +1,14 @@
 <template lang="html">
   <div>
     <label>{{ Number(valueTune).toFixed(2) }} dB</label>
-    <knob max="1" step="0.01" min="0" @change="changeTuner" v-model="value" />
+    <slider class="sslider" :max="2" :step="0.01" :min="0" @change="changeTuner" v-model="value" />
   </div>
 </template>
 <script>
-import Knob from 'primevue/knob'
+import Slider from 'primevue/slider'
 export default {
   name: 'V-Feedback',
-  components: { Knob },
+  components: { Slider },
   props: {
     valueTune: Number,
     feedback: Number
@@ -29,36 +29,23 @@ export default {
 </script>
 <style lang="scss" scoped>
 div {
-  // transform: rotate(90deg);
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: row-reverse;
+  justify-content: center;
+  margin: 10px;
   align-items: center;
+  .sslider {
+    width: 200px;
+    height: 2px;
+  }
   label {
     font: 300 12px Arial;
-    margin: 8px;
+    margin: 15px;
     background: #222;
     color: #fff;
     border-radius: 10px;
     padding: 5px;
     transform: rotate(90deg);
-  }
-  [type='range'] {
-    appearance: none;
-    width: 250px;
-    background: #736cdd;
-    // overflow: hidden;
-    border-radius: 10px;
-    height: 5px;
-    margin: 30px;
-    &::-webkit-slider-thumb {
-      appearance: none;
-      width: 20px;
-      background: #1506e7;
-      cursor: pointer;
-      height: 20px;
-      border-radius: 10px;
-    }
   }
 }
 </style>

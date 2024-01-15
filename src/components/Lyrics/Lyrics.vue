@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+import { mapGetters } from 'vuex'
 export default {
   name: 'V-Lyrics',
   props: {
@@ -18,16 +20,24 @@ export default {
   data() {
     return {
       monitor: 0,
-      count: 0
+      count: 0,
+      player: 0
     }
   },
+  computed: {
+    ...mapGetters(['getPlayer'])
+  },
   created() {
-    const player = this.$store.getters.getPlayer
+    const player = this.getPlayer
     player.ontimeupdate = () => {
-      let val = Math.floor(player.duration * player.currenTime)
+      let val = player.currentTime
       console.log(val)
       this.$refs['center'].scroll({ behavior: 'smooth', top: val / 40 })
     }
+
+    axios.get(`http://15.190.273:5050/getLyrics/`).then((response) => {
+      console.log(response.json())
+    })
   },
   methods: {
     increaseCount() {

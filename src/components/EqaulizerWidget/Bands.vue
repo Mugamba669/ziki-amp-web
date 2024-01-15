@@ -1,37 +1,60 @@
 <template>
   <div class="bands">
+    <!-- {{ bandGain }} -->
     <span class="label">
       {{ frequency > 500 ? frequency.toString().replace('000', 'k') : frequency }}Hz
     </span>
-    <input type="range" v-model="value" @input="updateBand" max="15" min="-15" step="0.01" />
+    <slider
+      class="band-slider"
+      v-model="value"
+      @change="bandChange"
+      :max="15"
+      :min="-15"
+      :step="0.01"
+    />
     <span class="label">{{ Number(value).toFixed(1) }}</span>
   </div>
 </template>
 
 <script>
+import Slider from 'primevue/slider'
 import { mapGetters } from 'vuex'
 export default {
   name: 'Eq-Bands',
+  components: {
+    Slider
+  },
+  computed: {
+    ...mapGetters(['getBands'])
+  },
   props: {
     id: Number,
-    bandValue: Number,
     frequency: Number,
     bandGain: Number
   },
   data() {
     return {
-      value: this.bandValue
+      value: 0
     }
   },
+  mounted() {
+    setInterval(() => {
+      this.value = this.getBands[this.id]
+    }, 500)
+  },
   methods: {
-    updateBand() {
-      this.$store.commit('updateBands', [this.id, this.bandValue])
+    bandChange() {
+      this.$emit('bandChange', [this.$props.id, this.value])
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.band-slider {
+  width: 400px;
+  height: 2px;
+}
 .bands {
   display: flex;
   flex-direction: row;

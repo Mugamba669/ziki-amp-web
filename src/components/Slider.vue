@@ -1,6 +1,6 @@
 <template>
   <div class="slider">
-    <span class="label">{{ currentTime }}</span>
+    <span class="label" v-text="currentTime" />
     <!-- <input
       type="range"
       @input="updateSlider"
@@ -9,16 +9,30 @@
       step="0.01"
       :max="Number(progMax)"
     /> -->
-    <Slider valueColor="red" />
+    <br />
+    <slider
+      class="track-slider"
+      rangeColor="#000"
+      valueColor="orange"
+      @change="updateSlider"
+      show-stops="true"
+      show-input="true"
+      v-model="progress"
+      :min="0"
+      v-bind:step="0.01"
+      :max="Number(progMax)"
+    />
     <!-- <progress  :max="max" :value="value"></progress> -->
-    <span class="label">-{{ duration }}</span>
+    <span class="label" v-text="duration" />
   </div>
 </template>
 
 <script>
 import Slider from 'primevue/slider'
+import Knob from 'primevue/knob'
 
-import { audio } from '../store'
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'V-SSlider',
   components: {
@@ -30,31 +44,42 @@ export default {
       currentTime: '',
       progMax: 0,
       progress: 0,
-      duration: ''
+      duration: '',
+      player: null
     }
   },
+  computed: {
+    ...mapGetters(['getPlayer'])
+  },
+  created() {
+    this.player = this.getPlayer
+  },
   mounted() {
-    // console.log(localStorage);
-    setInterval(() => {
-      this.progress = audio.currentTime
-      this.progMax = audio.duration
+    setTimeout(() => {
+      // console.log(localStorage);
+      setInterval(() => {
+        this.progress = this.player.currentTime
+        this.progMax = this.player.duration
+      }, 500)
+
+      this.player.ontimeupdate = () => {
+        /**Display the track's current time */
+        let min = Math.floor((this.player.currentTime / 60) % 60)
+        let sec = Math.floor(this.player.currentTime % 60)
+        this.currentTime = sec < 10 ? `${min}:0${sec}` : `${min}:${sec}`
+        // console.log(this.currentTime)
+
+        /**Display the track duration */
+        let dmin = Math.floor(((this.player.duration - this.player.currentTime) / 60) % 60)
+        let dsec = Math.floor((this.player.duration - this.player.currentTime) % 60)
+        this.duration = dsec < 10 ? dmin + ':0' + dsec : dmin + ':' + dsec
+        // console.log(this.duration)
+      }
     }, 500)
-
-    audio.ontimeupdate = () => {
-      /**Display the track's current time */
-      const min = Math.floor((audio.currentTime / 60) % 60)
-      const sec = Math.floor(audio.currentTime % 60)
-      this.currentTime = sec < 10 ? min + ':0' + sec : min + ':' + sec
-
-      /**Display the track duration */
-      const dmin = Math.floor(((audio.duration - audio.currentTime) / 60) % 60)
-      const dsec = Math.floor((audio.duration - audio.currentTime) % 60)
-      this.duration = dsec < 10 ? dmin + ':0' + dsec : dmin + ':' + dsec
-    }
   },
   methods: {
     updateSlider() {
-      this.$emit('updateChange', this.position)
+      this.$emit('updateChange', this.progress)
     }
   }
 }
@@ -66,6 +91,14 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  width: 100%;
+  .track-slider {
+    width: 400px;
+    height: 2px;
+    padding: 1px;
+    margin: 10px;
+    color: #000;
+  }
   .label {
     font: 300 14px Arial;
     background: #000;
@@ -73,7 +106,7 @@ export default {
     padding: 10px;
     margin: 8px;
   }
-  input {
+  /* input {
     width: 500px;
     appearance: none;
     //  overflow: hidden;
@@ -88,18 +121,16 @@ export default {
       border-radius: 50%;
       height: 25px;
       background: rgba(109, 109, 92, 0.986);
-      box-shadow:
-        inset -3px 0px 5px -2px #e0cb06,
-        inset -4px 0px 5px -2px #dfdc1f,
+      box-shadow: inset -3px 0px 5px -2px #e0cb06, inset -4px 0px 5px -2px #dfdc1f,
         inset -3px 0px 10px 2px #27270c;
-    }
-    //  &::-webkit-slider-runnable-track{
-    //    background:#bd1010;
-    //    width: 30px;
-    //    height: 4px;
-    //    transform: translateX(-90px);
-    //  }
-  }
+    }*/
+  //  &::-webkit-slider-runnable-track{
+  //    background:#bd1010;
+  //    width: 30px;
+  //    height: 4px;
+  //    transform: translateX(-90px);
+  //  }
+  //}
 }
 @media (max-width: 910px) {
   .slider {

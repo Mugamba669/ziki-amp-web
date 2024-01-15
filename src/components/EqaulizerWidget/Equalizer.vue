@@ -1,18 +1,26 @@
 <!-- eslint-disable vue/no-reserved-keys -->
 <template>
   <div class="widget">
+    <!-- <tab-view>
+      <TabPanel header="Room effects" />
+      <TabPanel header="Equalizer" />
+      <TabPanel header="Compressor" />
+    </tab-view>
+    <TabMenu></TabMenu> -->
     <div class="equalizer">
       <Bands
         :key="index"
         :id="index"
         :frequency="band.frequency.value"
-        :bandValue="update[index]"
+        :bandGain="update[index]"
         v-for="(band, index) in bandSet"
+        @bandChange="updateBandGain"
       />
     </div>
     <!-- </div> -->
     <div class="side">
       <button class="closeEQ" @click="this.$emit('closeEQ')">Close</button>
+
       <select ref="choice" @change="updateBand">
         <option v-for="(preset, index) in presets" v-bind:key="index" :value="preset.value">
           {{ preset.name }}
@@ -25,12 +33,15 @@
         <b>Bass </b>
         <knob
           @change="updateBass"
-          :max="10"
+          :max="15"
           :min="0"
           :step="0.01"
           :size="150"
-          :valueTemplate="`${Math.floor((bass / 10) * 100)} dB`"
+          :valueTemplate="`${Math.floor((bass / 15) * 100)} dB`"
           v-model="bass"
+          rangeColor="#232323"
+          valueColor="orange"
+          textColor="#fff"
           v-bind:strokeWidth="10"
         />
       </p>
@@ -59,17 +70,24 @@
 <script>
 import Bands from './Bands.vue'
 import Knob from 'primevue/knob'
+import TabView from 'primevue/tabview'
+
 // import slider from "../widget/slider.vue";
 import { Presets } from '../../Core/Presets'
-
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
+import TabPanel from 'primevue/tabpanel'
+import TabMenu from 'primevue/tabmenu'
 export default {
   name: 'V-EQ',
-  components: { Bands, Knob },
+  components: {
+    Bands,
+    Knob
+    // TabPanel, TabView, TabMenu
+  },
   computed: {
-    ...mapGetters(['bandGains']),
+    ...mapGetters(['getBands']),
     bands() {
-      return this.bandGains
+      return this.getBands
     }
   },
 
@@ -77,7 +95,7 @@ export default {
     return {
       bass: 0,
       treble: 0,
-      update: [],
+      update: this.getBands,
       presets: [
         {
           name: 'Normal',
@@ -153,21 +171,27 @@ export default {
     this.update = this.bands
   },
   methods: {
+    ...mapMutations(['updateBands', 'updateGains', 'tuneBass', 'tuneTreble']),
     eqBand(bands, array) {
       this.update = array
-      // console.log(array)
+      this.updateGains(array)
       for (let index = 0; index < bands.length; index++) {
         bands[index].gain.value = array[index]
+        // bands[index].Q.value = array[index] / 2
         this.out = array[index]
       }
     },
+    updateBandGain(gain) {
+      console.log(gain)
+      this.updateBands([gain[0], gain[1]])
+    },
     trebleUpdate() {
       //   console.log(e.value);
-      this.$store.commit('tuneTreble', this.treble)
+      this.tuneTreble(this.treble)
     },
     updateBass() {
       // console.log(this.bass);
-      this.$store.commit('tuneBass', this.bass)
+      this.tuneBass(this.bass)
     },
     updateBand() {
       switch (this.$refs['choice'].value) {

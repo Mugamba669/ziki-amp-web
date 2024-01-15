@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h2>Welcome to Lw-Amp Web</h2>
+    <h2>Welcome to Hype Muzik Web</h2>
     <img :src="[image]" alt="" srcset="" />
     <p v-show="!btn">Loading....</p>
     <progress ref="progress" v-show="!btn" value="0" max="100" min="0"></progress>

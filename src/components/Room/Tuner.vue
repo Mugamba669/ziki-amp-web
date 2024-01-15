@@ -1,14 +1,14 @@
 <template lang="html">
   <div>
     <label>{{ Number(tune).toFixed(2) }} dB</label>
-    <knob max="5" step="0.01" min="0" @chnage="changeTuner" v-model="value" />
+    <slider class="sslider" :max="5" :step="0.01" :min="0" @change="changeTuner" v-model="value" />
   </div>
 </template>
 <script>
-import Knob from 'primevue/knob'
+import Slider from 'primevue/slider'
 export default {
   name: 'V-Tuner',
-  components: { Knob },
+  components: { Slider },
   props: {
     tune: Number,
     delay: Number
@@ -31,32 +31,20 @@ div {
   display: flex;
   flex-direction: row-reverse;
   justify-content: center;
+  margin: 10px;
   align-items: center;
+  .sslider {
+    width: 200px;
+    height: 2px;
+  }
   label {
     font: 300 12px Arial;
-    margin: 8px;
+    margin: 15px;
     background: #222;
     color: #fff;
     border-radius: 10px;
     padding: 5px;
     transform: rotate(90deg);
-  }
-  [type='range'] {
-    appearance: none;
-    margin: 30px;
-    width: 250px;
-    background: #736cdd;
-    // overflow: hidden;
-    border-radius: 10px;
-    height: 5px;
-    &::-webkit-slider-thumb {
-      appearance: none;
-      cursor: pointer;
-      width: 20px;
-      background: #1506e7;
-      height: 20px;
-      border-radius: 10px;
-    }
   }
 }
 </style>

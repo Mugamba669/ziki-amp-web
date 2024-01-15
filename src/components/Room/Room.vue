@@ -1,5 +1,7 @@
 <template>
   <div class="container">
+    <!-- <h2>ROOM EFFECTS</h2> -->
+    <br />
     <div class="presets">
       <dropdown
         v-model="presetValue"
@@ -7,7 +9,7 @@
         :options="presets"
         optionLabel="name"
         placeholder="Select a preset"
-        class="w-full md:w-14rem"
+        class="w-40 md:w-14rem"
       />
 
       <!-- <select ref="choose" @change="getRoomPreset">
@@ -18,24 +20,30 @@
         <option value="great">Great Hall</option>
         <option value="echo">Echo</option>
         <option value="reset">No preset</option>
-      </select> -->
-      <Toast />
+      </select>
+      <Toast /> -->
       <div>
-        <!-- <v-button @click="this.$emit('closeRoom')" label="Close" severity="danger" /> -->
+        <br />
         <v-button
+          outlined="true"
+          size="2"
+          @click="this.$emit('closeRoom')"
+          label="Close"
+          severity="danger"
+        />
+        <!-- <v-button
           icon="pi pi-times"
           @click="this.$emit('closeRoom')"
           severity="danger"
           label="Close"
           aria-label="Cancel"
-        />
+        /> -->
       </div>
     </div>
+
     <div class="nodes">
       <Tuner v-for="(delay, index) in delays" :key="index" :tune="d[index]" :delay="index" />
-    </div>
-    <br />
-    <div class="nodes">
+
       <Feedback
         v-for="(feed, index) in feedback"
         :key="feed"
@@ -52,15 +60,18 @@ import Feedback from './Feedback.vue'
 import { Rooms } from '../../Core/Presets'
 import VButton from 'primevue/button'
 import Dropdown from 'primevue/dropdown'
-import Toast from 'primevue/toast'
+// import Toast from 'primevue/toast'
+import { mapGetters } from 'vuex'
 export default {
   name: 'V-Room',
   components: {
     Tuner,
     VButton,
     Feedback,
-    Dropdown,
-    Toast
+    Dropdown
+  },
+  computed: {
+    ...mapGetters(['getDelays', 'getFeedback'])
   },
   props: {
     delays: Array,
@@ -104,29 +115,29 @@ export default {
       console.log(this.presetValue.value)
       switch (this.presetValue.value) {
         case 'echo':
-          this.manuplateFeedBack(this.$store.getters.getFeedback, Rooms.Echo.feedback)
-          this.manuplateDelay(this.$store.getters.getDelays, Rooms.Echo.delay)
+          this.manuplateFeedBack(this.getFeedback, Rooms.Echo.feedback)
+          this.manuplateDelay(this.getDelays, Rooms.Echo.delay)
           break
         case 'scene':
-          this.manuplateFeedBack(this.$store.getters.getFeedback, Rooms.Scene.feedback)
-          this.manuplateDelay(this.$store.getters.getDelays, Rooms.Scene.delay)
+          this.manuplateFeedBack(this.getFeedback, Rooms.Scene.feedback)
+          this.manuplateDelay(this.getDelays, Rooms.Scene.delay)
           break
         case 'auditorium':
-          this.manuplateFeedBack(this.$store.getters.getFeedback, Rooms.Audit.feedback)
-          this.manuplateDelay(this.$store.getters.getDelays, Rooms.Audit.delay)
+          this.manuplateFeedBack(this.getFeedback, Rooms.Audit.feedback)
+          this.manuplateDelay(this.getDelays, Rooms.Audit.delay)
           break
         case 'great':
-          this.manuplateFeedBack(this.$store.getters.getFeedback, Rooms.GtH.feedback)
-          this.manuplateDelay(this.$store.getters.getDelays, Rooms.GtH.delay)
+          this.manuplateFeedBack(this.getFeedback, Rooms.GtH.feedback)
+          this.manuplateDelay(this.getDelays, Rooms.GtH.delay)
           break
         case 'smallroom':
-          this.manuplateFeedBack(this.$store.getters.getFeedback, Rooms.Sm.feedback)
-          this.manuplateDelay(this.$store.getters.getDelays, Rooms.Sm.delay)
+          this.manuplateFeedBack(this.getFeedback, Rooms.Sm.feedback)
+          this.manuplateDelay(this.getDelays, Rooms.Sm.delay)
           break
 
         case 'reset':
-          this.manuplateFeedBack(this.$store.getters.getFeedback, Rooms.Preset.feedback)
-          this.manuplateDelay(this.$store.getters.getDelays, Rooms.Preset.delay)
+          this.manuplateFeedBack(this.getFeedback, Rooms.Preset.feedback)
+          this.manuplateDelay(this.getDelays, Rooms.Preset.delay)
           break
       }
     }
@@ -168,13 +179,9 @@ export default {
     }
   }
   .nodes {
-    width: 100%;
-    // transform: rotate(-90deg);
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    // grid-template-rows: 200px minmax(2px) 3fr;
-    height: 100px;
+    transform: rotate(-90deg);
+    // // grid-template-rows: 200px minmax(2px) 3fr;
+    // height: 100px;
   }
 }
 </style>

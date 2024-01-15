@@ -1,4 +1,4 @@
-import { createStore } from 'vuex'
+import { createStore } from 'vuex';
 import { Equalizer } from '../Core/Equalizer'
 import { defaultArtwork } from '../Core/default'
 // import axios from 'axios'

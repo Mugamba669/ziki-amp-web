@@ -1,5 +1,12 @@
 {
   "files": [],
+  "compilerOptions": {
+    "types": [
+      "vuex"
+    ]
+    // other options...
+  },
+  // other configurations...
   "references": [
     {
       "path": "./tsconfig.node.json"

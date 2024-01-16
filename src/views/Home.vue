@@ -47,13 +47,12 @@
     />
 
     <div :class="[ptr2 ? 'active' : '', 'prt2']">
-      <Dropdown v-show="displayVisual" @choice="chooseVisual" />
-
+      <dropdown class="d-class" v-show="displayVisual" @choice="chooseVisual" />
       <div class="b">
         <button v-show="!showEQ" @click="listShow">Playlist</button>
         <button v-show="!showEQ" @click="loadLyrics">Lyrics</button>
         <button v-show="!showEQ" @click="loadHot100">Hot 100</button>
-        <button v-show="!showEQ">Visualizer</button>
+        <button v-show="!showEQ" @click="toggleVisualWidget">Visualizer</button>
       </div>
       <div :class="[showOpt ? 'active' : '', 'options']">
         <p @click="listShow">ListView</p>
@@ -272,7 +271,6 @@ export default {
           data.name == query
         })
       })
-      // console.log(this.playlist);
     },
     toggleVisualWidget() {
       this.displayVisual = !this.displayVisual
@@ -493,29 +491,29 @@ export default {
     chooseVisual(eventValue) {
       switch (parseInt(eventValue)) {
         case 1:
-          this.vise.barsVisualiser(this.stopAnime)
+          this.vise.barsVisualiser(0)
           break
 
         case 2:
-          this.vise.dustyParticles(this.stopAnime)
+          this.vise.dustyParticles(0)
           break
         case 3:
-          this.vise.histogramVisualiser(this.stopAnime)
+          this.vise.histogramVisualiser(0)
           break
 
         case 4:
-          this.vise.sineWaveVisualiser(this.stopAnime)
+          this.vise.sineWaveVisualiser(0)
           break
         case 5:
-          this.vise.rippleWaveVisualiser(this.stopAnime)
+          this.vise.rippleWaveVisualiser(0)
           break
 
         case 6:
-          this.vise.glassTilesVisualiser(this.stopAnime)
+          this.vise.glassTilesVisualiser(0)
           break
 
         case 7:
-          this.vise.floatingBars(this.stopAnime)
+          this.vise.floatingBars(0)
           break
 
         case 8:
@@ -664,7 +662,7 @@ body {
   .part1 {
     //  width: 600px !important;
     margin: 15px;
-    height: 600px;
+    height: 100%;
     opacity: 0;
     display: flex;
     flex-direction: column !important;
@@ -728,6 +726,14 @@ body {
   .part1.active {
     opacity: 1;
     visibility: visible !important;
+  }
+}
+.prt2 {
+  .d-class {
+    position: fixed;
+    top: 100px;
+    width: 800px;
+    right: 0;
   }
 }
 .EQ {

@@ -48,7 +48,7 @@ export default createStore({
     },
     updatePlaylist(state: any, payload: SongInfo) {
       state.playlist = [...state.playlist, payload]
-      // localStorage.setItem("playlist",JSON.stringify(state:any.playlist));
+
     },
     loadQueue(state: any, payload: any) {
       state.queue = payload
@@ -73,7 +73,15 @@ export default createStore({
     },
     fetchHot100UgSongs(state: any, payload: any) {
 
-      axios.get(`http://127.0.0.1:5054/get/hot100`).then((response) => {
+      axios.get(`http://15.237.71.190:5054/get/hot100`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET",
+          "Access-Control-Allow-Headers": "Content-Type",
+        },
+        withCredentials: true,
+
+      }).then((response) => {
         // console.log(response.data)
         if (response.status === 200) {
           const songs = ConvertHot100.toHot100(JSON.stringify(response.data)).songs;

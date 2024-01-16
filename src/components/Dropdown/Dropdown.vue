@@ -27,17 +27,22 @@ export default {
 <style lang="scss">
 .dropdown {
   width: 100%;
+  background: transparent;
   select {
-    width: 100%;
+    width: 50%;
     padding: 10px;
-    font:
-      200 17px Ubuntu,
-      Arial;
-    border: none;
-    border-radius: 10px;
-    background: #eeeeee3b;
+    font: 100 15px Arial;
+    border: 0.1px solid#EEEEEE66;
+    border-radius: 2px;
+    background: transparent;
     outline: none;
+    color: #eeeeee66;
+    transition: 0.3s ease-in-out;
     cursor: pointer;
+    &:hover {
+      border: 0.1px solid #eee;
+      color: #eee;
+    }
     option {
       appearance: none;
       background: #eeeeee3b;

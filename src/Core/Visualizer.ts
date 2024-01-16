@@ -348,7 +348,7 @@ export class Visualizer {
     let btick = 0
     let buffer1: HTMLCanvasElement
     let buffer2: HTMLCanvasElement
-    const setup = false
+    // const setup = false
 
     /**
      *
@@ -409,11 +409,11 @@ export class Visualizer {
         const t = h / 2 - 256 / 2
         bctx2.moveTo(l, t + 128 - this.freqDomain[0] + 100)
 
-        for (var i = 0; i < this.freqDomain.length / 2; i++) {
+        for (let i = 0; i < this.freqDomain.length / 2; i++) {
           bctx2.lineTo(l + i * 4, t + 128 - this.freqDomain[i] + 10)
         }
 
-        for (var i = this.freqDomain.length / 2 - 1; i >= 0; i--) {
+        for (let i = this.freqDomain.length / 2 - 1; i >= 0; i--) {
           const max = this.freqDomain.length / 2 - 1
           bctx2.lineTo(l + (max - i) * 4, t + 128 - this.freqDomain[i] + 100)
         }

@@ -190,8 +190,12 @@ $dur : 50s;
           }
     .container {
          transform-style: preserve-3d;
-        // width:200px;
-        // transform: translate3d(90px,0px ,0px);
+         display: flex;
+        justify-items: center;
+        align-content: center;
+        align-items: center;
+        flex-direction: column;
+      
          transition:0.3s ease-in-out;
         width:400px;
         height:400px;
@@ -203,12 +207,12 @@ $dur : 50s;
         img{ 
         
           cursor:grab;
-          width:100%;
+          width:100%!important;
           height:100%;
           transform: rotate3d(70deg);
 
           position: relative;
-           object-fit:contain!important;
+           object-fit:cover!important;
 
         }
    }
@@ -344,8 +348,8 @@ $dur : 50s;
         img{ 
           width:100%;
           height:100%;
-        //    box-shadow: 0px -2px 3px 2px gray;
-           object-fit:contain!important;
+           box-shadow: 0px -2px 3px 2px gray;
+           object-fit:cover!important;
         }
    }
     .container.active{

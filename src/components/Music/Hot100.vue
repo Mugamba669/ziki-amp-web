@@ -42,7 +42,7 @@ export default {
         }
     },
       created(){
-           this.songs = (JSON.parse(readFileSync("/home/blabs/Desktop/vue/ziki-amp-web/stream.json")));
+           this.songs = [];//(JSON.parse(readFileSync("../../../stream.json")));
         }
 }
 </script>
@@ -54,7 +54,7 @@ export default {
         box-shadow:inset 0px 0px 10px 0px #eee;
         backdrop-filter: blur(20px);
         border-radius:10px;
-            // position: absolute
+            // position: absolutes
         .search{
             width: inherit !important;
             height: 100px;

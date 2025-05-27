@@ -15,9 +15,7 @@
   </div>
 </template>
 
-<script>
-import axios from "axios";
-import MediaLibrary from "media-library";
+<script lang="js">
 export default {
   name: "Hot100",
   components: {},
@@ -31,9 +29,7 @@ export default {
   mounted() {
   },
   created() {
-  //  axios.get('https://www.nowviba.com/music/pages/top100.php/').then((data) => console.log(data.data));
-
-    console.log(process.env);
+ 
   },
 };
 </script>

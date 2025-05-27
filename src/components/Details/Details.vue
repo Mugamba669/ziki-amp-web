@@ -2,13 +2,14 @@
     <div class="container">
             <p class="title">{{(title).replace(".mp3","")}}</p>
             <!-- <div class="more"> -->
-                <marquee direction="left" behavior="slow"  class="more">
+                <!-- <marquee direction="left" behavior="slow"  class="more"> -->
+                <span  class="more">
                     {{artist}}
                     <span>|</span>
                     {{album}}
                     <span>|</span>
                     {{(Number(size).toFixed(2))+" MB"}}
-                </marquee>
+                </span>
             <!-- </div> -->
             <!-- <marquee behavior="slow" direction="alternate"></marquee> loop='3'-->
     </div>
@@ -47,16 +48,18 @@ export default {
         justify-content:center;
         align-items:center;
         .title{
-            width:300px;
+            width:600px;
             text-align:center;
             overflow:hidden;
             white-space: nowrap;
-            text-overflow: ellipsis;
+            // text-overflow: ellipsis;
             font:100 32px Ubuntu,Arial;
         }
         .more{
+            text-align: center;
             margin: 4px;
-            width: 300px;
+            width: 600px;
+            font: 100 15px Ubuntu,Arial;
         }
         
     }
